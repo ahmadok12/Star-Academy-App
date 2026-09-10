@@ -58,35 +58,45 @@ export default function AdminTabHub({
       title: 'Timetable',
       subtitle: `${timetables.length} Timetables`,
       description: 'Weekly class schedule & period slots',
-      icon: Calendar
+      icon: Calendar,
+      color: 'bg-blue-50 text-blue-600 border-blue-100',
+      badgeColor: 'bg-blue-50 text-blue-700 border-blue-100'
     },
     {
       id: 'datesheet',
       title: 'Datesheet',
       subtitle: `${datesheets.length} Datesheets`,
       description: 'Exam dates, subject papers & timings',
-      icon: FileSpreadsheet
+      icon: FileSpreadsheet,
+      color: 'bg-purple-50 text-purple-600 border-purple-100',
+      badgeColor: 'bg-purple-50 text-purple-700 border-purple-100'
     },
     {
       id: 'marksheet',
       title: 'Marksheet',
       subtitle: `${marksheets.length} Marksheets`,
       description: 'Exam marks, grades & student ranking',
-      icon: Award
+      icon: Award,
+      color: 'bg-emerald-50 text-emerald-600 border-emerald-100',
+      badgeColor: 'bg-emerald-50 text-emerald-700 border-emerald-100'
     },
     {
       id: 'sos',
       title: 'Scheme of Study (SOS)',
       subtitle: `${schemes.length} Schemes`,
       description: 'Curriculum distribution & syllabus guide',
-      icon: BookOpen
+      icon: BookOpen,
+      color: 'bg-amber-50 text-amber-600 border-amber-100',
+      badgeColor: 'bg-amber-50 text-amber-700 border-amber-100'
     },
     {
       id: 'teacher_attendance',
       title: 'Teacher Attendance',
       subtitle: `${teacherAttendanceSessions.length} Sessions`,
       description: 'Mark & track daily faculty attendance',
-      icon: GraduationCap
+      icon: GraduationCap,
+      color: 'bg-rose-50 text-rose-600 border-rose-100',
+      badgeColor: 'bg-rose-50 text-rose-700 border-rose-100'
     }
   ];
 

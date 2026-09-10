@@ -48,28 +48,36 @@ export default function BankingTabHub({
       title: 'List of Banks',
       subtitle: `${banks.length} Accounts`,
       description: 'Bank balances, accounts & cash counter',
-      icon: Landmark
+      icon: Landmark,
+      color: 'bg-blue-50 text-blue-600 border-blue-100',
+      badgeColor: 'bg-blue-50 text-blue-700 border-blue-100'
     },
     {
       id: 'transfers',
       title: 'Bank to Bank Transfer',
       subtitle: `${transfers.length} Transfers`,
       description: 'Move funds between academy bank accounts',
-      icon: ArrowRightLeft
+      icon: ArrowRightLeft,
+      color: 'bg-purple-50 text-purple-600 border-purple-100',
+      badgeColor: 'bg-purple-50 text-purple-700 border-purple-100'
     },
     {
       id: 'expenses',
       title: 'Expenses',
       subtitle: `${chargedExpenses.length} Records`,
       description: 'Utilities, bills, maintenance & stationary',
-      icon: Receipt
+      icon: Receipt,
+      color: 'bg-rose-50 text-rose-600 border-rose-100',
+      badgeColor: 'bg-rose-50 text-rose-700 border-rose-100'
     },
     {
       id: 'payroll',
       title: 'Teacher Payroll',
       subtitle: `${teacherSalaries.length} Records`,
       description: 'Pay faculty salaries & view payroll receipts',
-      icon: Banknote
+      icon: Banknote,
+      color: 'bg-emerald-50 text-emerald-600 border-emerald-100',
+      badgeColor: 'bg-emerald-50 text-emerald-700 border-emerald-100'
     }
   ];
 
@@ -168,13 +176,13 @@ export default function BankingTabHub({
               key={item.id}
               type="button"
               onClick={() => setSubPage(item.id)}
-              className="bg-white p-5 rounded-2xl border border-slate-200 hover:border-slate-400 shadow-2xs hover:shadow-xs transition-all text-left flex flex-col justify-between group min-h-[145px] cursor-pointer"
+              className="bg-white p-5 rounded-2xl border border-slate-200/80 hover:border-blue-300 shadow-2xs hover:shadow-md transition-all text-left flex flex-col justify-between group min-h-[145px] cursor-pointer"
             >
               <div className="flex items-start justify-between w-full">
-                <div className="w-11 h-11 rounded-xl bg-slate-100 border border-slate-200/80 text-slate-700 flex items-center justify-center group-hover:bg-slate-900 group-hover:text-white transition-colors">
+                <div className={`w-11 h-11 rounded-xl border flex items-center justify-center transition-all ${item.color}`}>
                   <Icon className="w-5 h-5" />
                 </div>
-                <div className="w-7 h-7 rounded-lg bg-slate-50 group-hover:bg-slate-200/70 text-slate-400 group-hover:text-slate-800 flex items-center justify-center transition-colors">
+                <div className="w-7 h-7 rounded-lg bg-slate-50 group-hover:bg-blue-50 text-slate-400 group-hover:text-blue-600 flex items-center justify-center transition-colors">
                   <ChevronRight className="w-4 h-4" />
                 </div>
               </div>
@@ -183,7 +191,7 @@ export default function BankingTabHub({
                 <h3 className="text-sm md:text-base font-bold text-slate-900 leading-tight">
                   {item.title}
                 </h3>
-                <span className="inline-block px-2.5 py-0.5 mt-1 rounded-md bg-slate-100 text-slate-700 text-xs font-semibold">
+                <span className={`inline-block px-2.5 py-0.5 mt-1 rounded-full text-xs font-semibold border ${item.badgeColor}`}>
                   {item.subtitle}
                 </span>
                 <p className="text-xs md:text-sm text-slate-500 font-normal mt-1 leading-relaxed">

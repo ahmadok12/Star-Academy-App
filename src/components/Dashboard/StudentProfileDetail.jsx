@@ -24,9 +24,10 @@ import {
   XCircle,
   AlertTriangle,
   Download,
-  MessageCircle
+  MessageCircle,
+  Printer
 } from 'lucide-react';
-import { exportStudentProfilePDF, shareStudentProfileWhatsApp } from '../../utils/exportShareUtils';
+import { exportStudentProfilePDF, printStudentProfile, shareStudentProfileWhatsApp } from '../../utils/exportShareUtils';
 
 export default function StudentProfileDetail({
   student,
@@ -165,7 +166,16 @@ export default function StudentProfileDetail({
         <div className="flex items-center gap-2">
           <button
             type="button"
-            onClick={() => exportStudentProfilePDF(student)}
+            onClick={() => printStudentProfile(student, { attendanceSessions, marksheets, feeVouchers, banks })}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold shadow-2xs transition-all cursor-pointer"
+            title="Print Preview Complete Profile"
+          >
+            <Printer className="w-3.5 h-3.5" />
+            <span>Print Preview</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => exportStudentProfilePDF(student, { attendanceSessions, marksheets, feeVouchers, banks })}
             className="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-white hover:bg-slate-50 text-slate-800 text-xs font-bold border border-slate-200 shadow-2xs transition-all cursor-pointer"
             title="Download Profile PDF"
           >
@@ -174,21 +184,21 @@ export default function StudentProfileDetail({
           </button>
           <button
             type="button"
-            onClick={() => shareStudentProfileWhatsApp(student)}
+            onClick={() => shareStudentProfileWhatsApp(student, { attendanceSessions, marksheets, feeVouchers, banks })}
             className="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-2xs transition-all cursor-pointer"
             title="Share Profile on WhatsApp"
           >
             <MessageCircle className="w-3.5 h-3.5" />
             <span>WhatsApp</span>
           </button>
-          <span className="px-3 py-1 rounded-full bg-indigo-50 text-indigo-700 text-[11px] font-extrabold border border-indigo-100">
+          <span className="px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-[11px] font-extrabold border border-blue-100">
             {student.academicYear || currentSession}
           </span>
         </div>
       </div>
 
       {/* Profile Header Hero Card */}
-      <div className="bg-gradient-to-br from-indigo-700 via-indigo-600 to-brand-800 text-white rounded-3xl p-5 shadow-lg relative overflow-hidden">
+      <div className="bg-gradient-to-br from-blue-700 via-blue-600 to-blue-800 text-white rounded-3xl p-5 shadow-md relative overflow-hidden">
         <div className="relative z-10 flex flex-col sm:flex-row items-center sm:items-start gap-4 text-center sm:text-left">
           <img
             src={student.pic || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=256'}
@@ -765,13 +775,21 @@ export default function StudentProfileDetail({
       {/* Bottom Floating Action Bar */}
       <div className="sticky bottom-4 z-20 bg-white/95 backdrop-blur-md p-3.5 rounded-3xl border border-slate-200 shadow-xl flex items-center justify-between gap-3 flex-wrap">
         <div className="text-xs font-bold text-slate-800 flex items-center gap-2">
-          <GraduationCap className="w-4 h-4 text-indigo-600" />
+          <GraduationCap className="w-4 h-4 text-blue-600" />
           <span>{student.firstName} {student.lastName} ({student.id})</span>
         </div>
         <div className="flex items-center gap-2 flex-1 sm:flex-initial justify-end">
           <button
             type="button"
-            onClick={() => exportStudentProfilePDF(student)}
+            onClick={() => printStudentProfile(student, { attendanceSessions, marksheets, feeVouchers, banks })}
+            className="flex-1 sm:flex-initial py-2 px-3.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold flex items-center justify-center gap-1.5 transition-colors shadow-2xs cursor-pointer"
+          >
+            <Printer className="w-3.5 h-3.5" />
+            <span>Print Preview</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => exportStudentProfilePDF(student, { attendanceSessions, marksheets, feeVouchers, banks })}
             className="flex-1 sm:flex-initial py-2 px-3.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold flex items-center justify-center gap-1.5 transition-colors border border-slate-300/80 cursor-pointer shadow-2xs"
           >
             <Download className="w-3.5 h-3.5 text-slate-600" />
@@ -779,7 +797,7 @@ export default function StudentProfileDetail({
           </button>
           <button
             type="button"
-            onClick={() => shareStudentProfileWhatsApp(student)}
+            onClick={() => shareStudentProfileWhatsApp(student, { attendanceSessions, marksheets, feeVouchers, banks })}
             className="flex-1 sm:flex-initial py-2 px-3.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold flex items-center justify-center gap-1.5 transition-colors shadow-2xs cursor-pointer"
           >
             <MessageCircle className="w-3.5 h-3.5" />

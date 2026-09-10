@@ -13,10 +13,12 @@ import {
   Filter,
   X,
   Download,
-  MessageCircle
+  MessageCircle,
+  Printer
 } from 'lucide-react';
 import {
   exportStudentProfilePDF,
+  printStudentProfile,
   shareStudentProfileWhatsApp
 } from '../../utils/exportShareUtils';
 
@@ -274,6 +276,15 @@ export default function StudentProfileDirectory({
                   <div className="flex items-center gap-1.5 flex-wrap">
                     <button
                       type="button"
+                      onClick={() => printStudentProfile(student)}
+                      title="Print Preview Student Profile"
+                      className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-blue-50 hover:bg-blue-100 active:bg-blue-200 text-blue-700 text-xs font-bold border border-blue-200 transition-all cursor-pointer shadow-2xs"
+                    >
+                      <Printer className="w-3.5 h-3.5 text-blue-600" />
+                      <span>Print</span>
+                    </button>
+                    <button
+                      type="button"
                       onClick={() => exportStudentProfilePDF(student)}
                       title="Download Student Profile PDF"
                       className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-slate-50 hover:bg-slate-100 active:bg-slate-200 text-slate-700 text-xs font-bold border border-slate-200 transition-all cursor-pointer shadow-2xs"
@@ -293,7 +304,7 @@ export default function StudentProfileDirectory({
                     <button
                       type="button"
                       onClick={() => onSelectStudent(student)}
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white text-xs font-bold shadow-2xs hover:shadow-sm transition-all cursor-pointer"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white text-xs font-bold shadow-2xs hover:shadow-sm transition-all cursor-pointer"
                     >
                       <Eye className="w-3.5 h-3.5" />
                       <span>View</span>

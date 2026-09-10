@@ -14,6 +14,8 @@ import {
   PanelLeftOpen
 } from 'lucide-react';
 
+import { STAR_ACADEMY_LOGO_URL } from '../../constants/logoData';
+
 export default function DesktopSidebar({
   activeTab,
   onNavigate,
@@ -67,16 +69,16 @@ export default function DesktopSidebar({
 
   return (
     <aside
-      className={`bg-white border-r border-slate-200 flex flex-col transition-all duration-300 select-none z-30 shrink-0 ${
+      className={`bg-white border-r border-slate-200/80 flex flex-col transition-all duration-300 select-none z-30 shrink-0 ${
         isCollapsed ? 'w-20' : 'w-72'
       }`}
     >
       {/* Top Header / Branding */}
-      <div className="p-4 border-b border-slate-200 flex items-center justify-between gap-3">
+      <div className="p-4 border-b border-slate-100 flex items-center justify-between gap-3">
         {!isCollapsed && (
           <div className="flex items-center gap-3 min-w-0">
-            <div className="w-10 h-10 rounded-xl bg-slate-900 text-white flex items-center justify-center shrink-0 shadow-xs">
-              <GraduationCap className="w-5 h-5" />
+            <div className="w-10 h-10 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center shrink-0 shadow-2xs p-1">
+              <img src={STAR_ACADEMY_LOGO_URL} alt="Star Academy Logo" className="w-full h-full object-contain" />
             </div>
             <div className="min-w-0">
               <h1 className="text-base font-bold text-slate-900 tracking-tight leading-tight truncate">
@@ -90,8 +92,8 @@ export default function DesktopSidebar({
         )}
 
         {isCollapsed && (
-          <div className="w-10 h-10 rounded-xl bg-slate-900 text-white flex items-center justify-center shadow-xs mx-auto">
-            <GraduationCap className="w-5 h-5" />
+          <div className="w-10 h-10 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center shadow-2xs mx-auto p-1">
+            <img src={STAR_ACADEMY_LOGO_URL} alt="Star Academy Logo" className="w-full h-full object-contain" />
           </div>
         )}
 
@@ -106,10 +108,10 @@ export default function DesktopSidebar({
       </div>
 
       {/* Main Tab Navigation Buttons Only */}
-      <div className="flex-1 overflow-y-auto p-3 space-y-1.5">
+      <div className="flex-1 overflow-y-auto p-3 space-y-1">
         {!isCollapsed && (
-          <div className="px-3 pt-2 pb-1 text-xs font-bold uppercase tracking-wider text-slate-400">
-            Navigation
+          <div className="px-3 pt-2 pb-1.5 text-[11px] font-bold uppercase tracking-wider text-slate-400">
+            Main Menu
           </div>
         )}
 
@@ -122,25 +124,25 @@ export default function DesktopSidebar({
               key={tab.id}
               type="button"
               onClick={() => onNavigate(tab.id, null)}
-              className={`w-full flex items-center justify-between p-3 rounded-xl text-left transition-all cursor-pointer group ${
+              className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-left transition-all cursor-pointer group ${
                 isActive
-                  ? 'bg-slate-900 text-white font-semibold shadow-xs'
-                  : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900 font-medium'
+                  ? 'bg-blue-50 text-blue-600 font-semibold'
+                  : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900 font-medium'
               }`}
               title={tab.label}
             >
               <div className="flex items-center gap-3 min-w-0">
                 <div
-                  className={`w-9 h-9 rounded-lg flex items-center justify-center shrink-0 transition-colors ${
+                  className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 transition-colors ${
                     isActive
-                      ? 'bg-white/15 text-white'
-                      : 'bg-slate-100 text-slate-600 group-hover:bg-slate-200/80 group-hover:text-slate-900'
+                      ? 'bg-blue-600 text-white shadow-2xs'
+                      : 'bg-slate-100/80 text-slate-500 group-hover:bg-slate-200/70 group-hover:text-slate-800'
                   }`}
                 >
-                  <TabIcon className="w-5 h-5" />
+                  <TabIcon className="w-4 h-4" />
                 </div>
                 {!isCollapsed && (
-                  <span className="text-sm font-semibold truncate tracking-tight">
+                  <span className="text-sm truncate tracking-tight">
                     {tab.label}
                   </span>
                 )}
@@ -148,10 +150,10 @@ export default function DesktopSidebar({
 
               {!isCollapsed && tab.badge && (
                 <span
-                  className={`px-2 py-0.5 rounded-md text-xs font-medium shrink-0 transition-colors ${
+                  className={`px-2 py-0.5 rounded-full text-xs font-medium shrink-0 transition-colors ${
                     isActive
-                      ? 'bg-white/20 text-white'
-                      : 'bg-slate-100 text-slate-600 border border-slate-200'
+                      ? 'bg-blue-200/60 text-blue-800'
+                      : 'bg-slate-100 text-slate-600 border border-slate-200/60'
                   }`}
                 >
                   {tab.badge}
@@ -163,15 +165,15 @@ export default function DesktopSidebar({
       </div>
 
       {/* Bottom Sidebar Footer */}
-      <div className="p-3 border-t border-slate-200 space-y-2 bg-slate-50/50">
+      <div className="p-3 border-t border-slate-100 space-y-2 bg-slate-50/50">
         {/* View Mode Toggle: Desktop Workspace vs Mobile Phone Frame */}
-        <div className="bg-white p-1 rounded-xl border border-slate-200 flex items-center justify-between gap-1 shadow-2xs">
+        <div className="bg-white p-1 rounded-xl border border-slate-200/80 flex items-center justify-between gap-1 shadow-2xs">
           <button
             type="button"
             onClick={() => setIsFrameMode(false)}
             className={`flex-1 py-1.5 px-2 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
               !isFrameMode
-                ? 'bg-slate-900 text-white shadow-2xs'
+                ? 'bg-blue-600 text-white shadow-2xs'
                 : 'text-slate-600 hover:text-slate-900'
             }`}
             title="Desktop Workspace Mode"
@@ -184,7 +186,7 @@ export default function DesktopSidebar({
             onClick={() => setIsFrameMode(true)}
             className={`flex-1 py-1.5 px-2 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
               isFrameMode
-                ? 'bg-slate-900 text-white shadow-2xs'
+                ? 'bg-blue-600 text-white shadow-2xs'
                 : 'text-slate-600 hover:text-slate-900'
             }`}
             title="Mobile Phone Frame Mode"
@@ -198,7 +200,7 @@ export default function DesktopSidebar({
         <button
           type="button"
           onClick={onOpenSettings}
-          className="w-full py-2 px-3 rounded-xl bg-white hover:bg-slate-100 border border-slate-200 text-slate-700 text-sm font-medium flex items-center justify-center gap-2 transition-all cursor-pointer shadow-2xs"
+          className="w-full py-2 px-3 rounded-xl bg-white hover:bg-slate-50 border border-slate-200/80 text-slate-700 text-sm font-medium flex items-center justify-center gap-2 transition-all cursor-pointer shadow-2xs"
           title="Academy Settings & Curriculums"
         >
           <Settings className="w-4 h-4 text-slate-500" />

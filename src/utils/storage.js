@@ -16,7 +16,8 @@ const STORAGE_KEYS = {
   MARKSHEETS: 'star_academy_marksheets_v2',
   ACADEMIC_SESSION: 'star_academy_academic_session_v1',
   ACADEMIC_SESSIONS_LIST: 'star_academy_academic_sessions_list_v1',
-  SCHEMES_OF_STUDY: 'star_academy_schemes_of_study_v1'
+  SCHEMES_OF_STUDY: 'star_academy_schemes_of_study_v1',
+  INQUIRIES: 'star_academy_inquiries_v1'
 };
 
 // Generates 5 students for each of the 12 class-subject combinations (60 students total)
@@ -61,8 +62,8 @@ const FEMALE_AVATARS = [
 const CLASS_CONFIGS = [
   { studentClass: '9th', subjects: ['Science', 'Computer'] },
   { studentClass: '10th', subjects: ['Science', 'Computer'] },
-  { studentClass: 'FSc Part 1', subjects: ['Med', 'Eng', 'ICS - Physics', 'ICS - Statistics', 'FA IT'] },
-  { studentClass: 'FSc Part 2', subjects: ['Med', 'Eng', 'ICS - Physics', 'ICS - Statistics', 'FA IT'] },
+  { studentClass: 'FSc Part 1', subjects: ['Pre- Medical', 'Pre-Engineering', 'ICS - Physics', 'ICS - Statistics', 'FA IT'] },
+  { studentClass: 'FSc Part 2', subjects: ['Pre- Medical', 'Pre-Engineering', 'ICS - Physics', 'ICS - Statistics', 'FA IT'] },
 ];
 
 export function buildDemoStudents() {
@@ -120,8 +121,8 @@ export function buildDemoStudents() {
   const pastClasses = [
     { cls: '10th', sec: 'Science' },
     { cls: '10th', sec: 'Computer' },
-    { cls: 'FSc Part 2', sec: 'Med' },
-    { cls: 'FSc Part 2', sec: 'Eng' }
+    { cls: 'FSc Part 2', sec: 'Pre- Medical' },
+    { cls: 'FSc Part 2', sec: 'Pre-Engineering' }
   ];
   pastClasses.forEach(({ cls, sec }, pIdx) => {
     for (let j = 0; j < 2; j++) {
@@ -250,9 +251,9 @@ export const INITIAL_ATTENDANCE = [
     id: 'ATT-20260908-02',
     date: '2026-09-08',
     studentClass: 'FSc Part 1',
-    subject: 'Med',
+    subject: 'Pre- Medical',
     createdAt: '2026-09-08T10:15:00Z',
-    records: INITIAL_STUDENTS.filter(s => s.studentClass === 'FSc Part 1' && s.subject === 'Med' && s.academicYear === '2026 - 27').map((s, idx) => ({
+    records: INITIAL_STUDENTS.filter(s => s.studentClass === 'FSc Part 1' && s.subject === 'Pre- Medical' && s.academicYear === '2026 - 27').map((s, idx) => ({
       studentId: s.id,
       studentName: `${s.firstName} ${s.lastName}`,
       gender: s.gender,
@@ -274,11 +275,23 @@ export function getStudents() {
       localStorage.setItem(STORAGE_KEYS.STUDENTS, JSON.stringify(INITIAL_STUDENTS));
       return INITIAL_STUDENTS;
     }
-    // Ensure every student has academicYear assigned
-    return parsed.map(s => ({
-      ...s,
-      academicYear: s.academicYear || DEFAULT_ACADEMIC_SESSION
-    }));
+    // Ensure every student has academicYear assigned and normalize Med / Eng to Pre- Medical / Pre-Engineering
+    return parsed.map(s => {
+      let subject = s.subject;
+      if (subject === 'Med' || subject === 'Pre Medical') subject = 'Pre- Medical';
+      else if (subject === 'Eng' || subject === 'Pre Engineering') subject = 'Pre-Engineering';
+
+      let section = s.section || subject;
+      if (section === 'Med' || section === 'Pre Medical') section = 'Pre- Medical';
+      else if (section === 'Eng' || section === 'Pre Engineering') section = 'Pre-Engineering';
+
+      return {
+        ...s,
+        subject,
+        section,
+        academicYear: s.academicYear || DEFAULT_ACADEMIC_SESSION
+      };
+    });
   } catch (e) {
     console.error('Failed to load students from localStorage', e);
     return INITIAL_STUDENTS;
@@ -319,7 +332,16 @@ export function getAttendanceSessions() {
       localStorage.setItem(STORAGE_KEYS.ATTENDANCE, JSON.stringify(INITIAL_ATTENDANCE));
       return INITIAL_ATTENDANCE;
     }
-    return JSON.parse(raw);
+    const parsed = JSON.parse(raw);
+    return parsed.map(sess => {
+      let subject = sess.subject;
+      if (subject === 'Med' || subject === 'Pre Medical') subject = 'Pre- Medical';
+      else if (subject === 'Eng' || subject === 'Pre Engineering') subject = 'Pre-Engineering';
+      return {
+        ...sess,
+        subject
+      };
+    });
   } catch (e) {
     console.error('Failed to load attendance from localStorage', e);
     return INITIAL_ATTENDANCE;
@@ -915,7 +937,12 @@ export function getFeeVouchers() {
       localStorage.setItem(STORAGE_KEYS.FEE_VOUCHERS, JSON.stringify(INITIAL_FEE_VOUCHERS));
       return INITIAL_FEE_VOUCHERS;
     }
-    return parsed;
+    return parsed.map(v => {
+      let section = v.section;
+      if (section === 'Med' || section === 'Pre Medical') section = 'Pre- Medical';
+      else if (section === 'Eng' || section === 'Pre Engineering') section = 'Pre-Engineering';
+      return { ...v, section };
+    });
   } catch (e) {
     console.error('Failed to load fee vouchers', e);
     return INITIAL_FEE_VOUCHERS;
@@ -1244,11 +1271,15 @@ export const INITIAL_CURRICULUM_SUBJECTS = {
   '9th_Computer': ['Physics', 'Chemistry', 'Computer', 'Math', 'Eng', 'Urdu', 'Pak Studies', 'Tarjama tul Quran'],
   '10th_Science': ['Physics', 'Chemistry', 'Bio', 'Math', 'Eng', 'Urdu', 'Islamiyat', 'Tarjama tul Quran'],
   '10th_Computer': ['Physics', 'Chemistry', 'Computer', 'Math', 'Eng', 'Urdu', 'Pak Studies', 'Tarjama tul Quran'],
+  'FSc Part 1_Pre- Medical': ['Physics', 'Chemistry', 'Bio', 'Eng', 'Urdu', 'Islamiyat', 'Tarjama tul Quran'],
+  'FSc Part 1_Pre-Engineering': ['Physics', 'Chemistry', 'Math', 'Eng', 'Urdu', 'Islamiyat', 'Tarjama tul Quran'],
   'FSc Part 1_Med': ['Physics', 'Chemistry', 'Bio', 'Eng', 'Urdu', 'Islamiyat', 'Tarjama tul Quran'],
   'FSc Part 1_Eng': ['Physics', 'Chemistry', 'Math', 'Eng', 'Urdu', 'Islamiyat', 'Tarjama tul Quran'],
   'FSc Part 1_ICS - Physics': ['Physics', 'Computer', 'Math', 'Eng', 'Urdu', 'Islamiyat', 'Tarjama tul Quran'],
   'FSc Part 1_ICS - Statistics': ['Statistics', 'Computer', 'Math', 'Eng', 'Urdu', 'Islamiyat', 'Tarjama tul Quran'],
   'FSc Part 1_FA IT': ['Economics', 'Computer', 'Physical Education', 'Eng', 'Urdu', 'Islamiyat Compulsory', 'Islamiyat Elective', 'Tarjama tul Quran'],
+  'FSc Part 2_Pre- Medical': ['Physics', 'Chemistry', 'Bio', 'Eng', 'Urdu', 'Pak Studies', 'Tarjama tul Quran'],
+  'FSc Part 2_Pre-Engineering': ['Physics', 'Chemistry', 'Math', 'Eng', 'Urdu', 'Pak Studies', 'Tarjama tul Quran'],
   'FSc Part 2_Med': ['Physics', 'Chemistry', 'Bio', 'Eng', 'Urdu', 'Pak Studies', 'Tarjama tul Quran'],
   'FSc Part 2_Eng': ['Physics', 'Chemistry', 'Math', 'Eng', 'Urdu', 'Pak Studies', 'Tarjama tul Quran'],
   'FSc Part 2_ICS - Physics': ['Physics', 'Computer', 'Math', 'Eng', 'Urdu', 'Pak Studies', 'Tarjama tul Quran'],
@@ -1267,13 +1298,37 @@ export const INITIAL_CURRICULUM_SUBJECTS = {
 export function getCurriculumSubjects() {
   try {
     const raw = localStorage.getItem(STORAGE_KEYS.CURRICULUM_SUBJECTS);
-    if (!raw) {
-      localStorage.setItem(STORAGE_KEYS.CURRICULUM_SUBJECTS, JSON.stringify(INITIAL_CURRICULUM_SUBJECTS));
-      return INITIAL_CURRICULUM_SUBJECTS;
+    let currentMap = { ...INITIAL_CURRICULUM_SUBJECTS };
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      currentMap = { ...currentMap, ...parsed };
     }
-    const parsed = JSON.parse(raw);
-    // Merge new initial defaults with any user-customized keys
-    return { ...INITIAL_CURRICULUM_SUBJECTS, ...parsed };
+    // Cross-link Pre- Medical and Pre-Engineering with Med / Eng if customized
+    if (currentMap['FSc Part 1_Med'] && !currentMap['FSc Part 1_Pre- Medical']) {
+      currentMap['FSc Part 1_Pre- Medical'] = currentMap['FSc Part 1_Med'];
+    }
+    if (currentMap['FSc Part 1_Pre- Medical']) {
+      currentMap['FSc Part 1_Med'] = currentMap['FSc Part 1_Pre- Medical'];
+    }
+    if (currentMap['FSc Part 1_Eng'] && !currentMap['FSc Part 1_Pre-Engineering']) {
+      currentMap['FSc Part 1_Pre-Engineering'] = currentMap['FSc Part 1_Eng'];
+    }
+    if (currentMap['FSc Part 1_Pre-Engineering']) {
+      currentMap['FSc Part 1_Eng'] = currentMap['FSc Part 1_Pre-Engineering'];
+    }
+    if (currentMap['FSc Part 2_Med'] && !currentMap['FSc Part 2_Pre- Medical']) {
+      currentMap['FSc Part 2_Pre- Medical'] = currentMap['FSc Part 2_Med'];
+    }
+    if (currentMap['FSc Part 2_Pre- Medical']) {
+      currentMap['FSc Part 2_Med'] = currentMap['FSc Part 2_Pre- Medical'];
+    }
+    if (currentMap['FSc Part 2_Eng'] && !currentMap['FSc Part 2_Pre-Engineering']) {
+      currentMap['FSc Part 2_Pre-Engineering'] = currentMap['FSc Part 2_Eng'];
+    }
+    if (currentMap['FSc Part 2_Pre-Engineering']) {
+      currentMap['FSc Part 2_Eng'] = currentMap['FSc Part 2_Pre-Engineering'];
+    }
+    return currentMap;
   } catch (e) {
     console.error('Failed to load curriculum subjects', e);
     return INITIAL_CURRICULUM_SUBJECTS;
@@ -1675,4 +1730,118 @@ export function generateNextSchemeOfStudyId(schemes) {
   });
   return `SOS-${String(max + 1).padStart(4, '0')}`;
 }
+
+// ----------------- STUDENT INQUIRIES & FOLLOW-UPS MODULE -----------------
+export const INITIAL_INQUIRIES = [
+  {
+    id: 'INQ-0001',
+    studentName: 'Zain Ul Abideen',
+    gender: 'Male',
+    contactNumber: '0301-4455667',
+    whatsappNumber: '0301-4455667',
+    fatherName: 'Tariq Mehmood',
+    fatherContact: '0321-7788990',
+    studentClass: 'FSc Part 1',
+    subject: 'Pre- Medical',
+    inquiryDate: '2026-09-05',
+    followUpDate: '2026-09-12',
+    status: 'Pending Follow-up',
+    remarks: 'Visited for Pre-Medical evening session. Asked about chemistry teacher.',
+    followUpNotes: [
+      { date: '2026-09-07', note: 'Called father. He requested fee installment plan.', by: 'Admin Desk' }
+    ],
+    createdAt: '2026-09-05T11:00:00Z'
+  },
+  {
+    id: 'INQ-0002',
+    studentName: 'Areeba Kashif',
+    gender: 'Female',
+    contactNumber: '0333-5566778',
+    whatsappNumber: '0333-5566778',
+    fatherName: 'Kashif Ali',
+    fatherContact: '0312-8899001',
+    studentClass: '9th',
+    subject: 'Science',
+    inquiryDate: '2026-09-06',
+    followUpDate: '2026-09-11',
+    status: 'Did Not Show Up',
+    remarks: 'Took admission prospectus on Thursday, was scheduled for demo lecture but did not show up.',
+    followUpNotes: [
+      { date: '2026-09-08', note: 'Sent reminder WhatsApp message about demo class.', by: 'Reception' }
+    ],
+    createdAt: '2026-09-06T14:30:00Z'
+  },
+  {
+    id: 'INQ-0003',
+    studentName: 'Hamza Noman',
+    gender: 'Male',
+    contactNumber: '0345-1234890',
+    whatsappNumber: '0345-1234890',
+    fatherName: 'Noman Riaz',
+    fatherContact: '0300-9876541',
+    studentClass: 'FSc Part 2',
+    subject: 'Pre-Engineering',
+    inquiryDate: '2026-09-07',
+    followUpDate: '2026-09-10',
+    status: 'Interested',
+    remarks: 'Looking for Math and Physics test preparation series only.',
+    followUpNotes: [],
+    createdAt: '2026-09-07T16:00:00Z'
+  },
+  {
+    id: 'INQ-0004',
+    studentName: 'Noor ul Huda',
+    gender: 'Female',
+    contactNumber: '0315-9988221',
+    whatsappNumber: '0315-9988221',
+    fatherName: 'Sheikh Waqar',
+    fatherContact: '0322-6655443',
+    studentClass: '10th',
+    subject: 'Computer',
+    inquiryDate: '2026-09-02',
+    followUpDate: '2026-09-09',
+    status: 'Registered',
+    remarks: 'Completed admission form and enrolled.',
+    followUpNotes: [
+      { date: '2026-09-04', note: 'Registered and fee paid.', by: 'Accounts' }
+    ],
+    createdAt: '2026-09-02T10:15:00Z'
+  }
+];
+
+export function getInquiries() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEYS.INQUIRIES);
+    if (!raw) {
+      localStorage.setItem(STORAGE_KEYS.INQUIRIES, JSON.stringify(INITIAL_INQUIRIES));
+      return INITIAL_INQUIRIES;
+    }
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed : INITIAL_INQUIRIES;
+  } catch (e) {
+    console.error('Failed to load inquiries', e);
+    return INITIAL_INQUIRIES;
+  }
+}
+
+export function saveInquiries(inquiries) {
+  try {
+    localStorage.setItem(STORAGE_KEYS.INQUIRIES, JSON.stringify(inquiries));
+  } catch (e) {
+    console.error('Failed to save inquiries', e);
+  }
+}
+
+export function generateNextInquiryId(inquiries) {
+  if (!inquiries || inquiries.length === 0) return 'INQ-0001';
+  let max = 0;
+  inquiries.forEach(i => {
+    if (i.id && i.id.startsWith('INQ-')) {
+      const num = parseInt(i.id.replace('INQ-', ''), 10);
+      if (!isNaN(num) && num > max) max = num;
+    }
+  });
+  return `INQ-${String(max + 1).padStart(4, '0')}`;
+}
+
 

@@ -1,9 +1,12 @@
-import React, { useState } from 'react';
-import { X, Upload, Check, Camera, User, Phone, Mail, MapPin, ShieldCheck, Edit3, MessageSquare, Coins, Calendar } from 'lucide-react';
+import React, { useState, useMemo } from 'react';
+import { X, Upload, Check, Camera, User, Phone, Mail, MapPin, ShieldCheck, Edit3, MessageSquare, Coins, Calendar, BookOpen } from 'lucide-react';
 import { CLASSES, CLASS_SUBJECTS, GENDERS } from '../../constants/academicData';
+import { getCurriculumSubjects } from '../../utils/storage';
 
 export default function EditStudentModal({ student, isOpen, onClose, onUpdateStudent }) {
   if (!isOpen || !student) return null;
+
+  const curriculumMap = getCurriculumSubjects();
 
   const [formData, setFormData] = useState({
     id: student.id,
@@ -19,7 +22,7 @@ export default function EditStudentModal({ student, isOpen, onClose, onUpdateStu
     fatherContact: student.fatherContact || '',
     fatherCnic: student.fatherCnic || '',
     studentClass: student.studentClass || '9th',
-    subject: student.subject || 'Science',
+    subject: student.subject === 'Med' ? 'Pre- Medical' : student.subject === 'Eng' ? 'Pre-Engineering' : (student.subject || 'Science'),
     fees: student.fees || '6500',
     dateOfJoining: student.dateOfJoining || student.registeredAt || new Date().toISOString().split('T')[0],
     isActive: student.isActive !== false,
@@ -27,16 +30,67 @@ export default function EditStudentModal({ student, isOpen, onClose, onUpdateStu
     registeredAt: student.registeredAt || new Date().toISOString().split('T')[0]
   });
 
+  const availableCurriculumSubjects = useMemo(() => {
+    if (!formData.studentClass || !formData.subject) return [];
+    const key = `${formData.studentClass}_${formData.subject}`;
+    return curriculumMap[key] || [];
+  }, [formData.studentClass, formData.subject, curriculumMap]);
+
+  const [selectedSubjects, setSelectedSubjects] = useState(() => {
+    if (student.enrolledSubjects && Array.isArray(student.enrolledSubjects) && student.enrolledSubjects.length > 0) {
+      return student.enrolledSubjects;
+    }
+    if (student.selectedSubjects && Array.isArray(student.selectedSubjects) && student.selectedSubjects.length > 0) {
+      return student.selectedSubjects;
+    }
+    const key = `${student.studentClass || '9th'}_${student.subject || 'Science'}`;
+    return curriculumMap[key] || [];
+  });
+
   const [errors, setErrors] = useState({});
   const [photoPreview, setPhotoPreview] = useState(student.pic || null);
 
   const handleClassChange = (newClass) => {
     const availableSubjects = CLASS_SUBJECTS[newClass] || [];
+    const newSec = availableSubjects[0] || '';
     setFormData(prev => ({
       ...prev,
       studentClass: newClass,
-      subject: availableSubjects.includes(prev.subject) ? prev.subject : (availableSubjects[0] || '')
+      subject: newSec
     }));
+    const key = `${newClass}_${newSec}`;
+    setSelectedSubjects([...(curriculumMap[key] || [])]);
+  };
+
+  const handleSectionChange = (newSec) => {
+    setFormData(prev => ({
+      ...prev,
+      subject: newSec
+    }));
+    const key = `${formData.studentClass}_${newSec}`;
+    setSelectedSubjects([...(curriculumMap[key] || [])]);
+  };
+
+  const isAllSubjectsSelected =
+    availableCurriculumSubjects.length > 0 &&
+    selectedSubjects.length === availableCurriculumSubjects.length;
+
+  const handleToggleAllSubjects = (e) => {
+    if (e.target.checked) {
+      setSelectedSubjects([...availableCurriculumSubjects]);
+    } else {
+      setSelectedSubjects([]);
+    }
+  };
+
+  const handleToggleSingleSubject = (subName) => {
+    setSelectedSubjects(prev => {
+      if (prev.includes(subName)) {
+        return prev.filter(s => s !== subName);
+      } else {
+        return [...prev, subName];
+      }
+    });
   };
 
   const handleImageChange = (e) => {
@@ -74,6 +128,9 @@ export default function EditStudentModal({ student, isOpen, onClose, onUpdateStu
     if (!formData.fatherContact.trim()) errs.fatherContact = 'Guardian contact is required';
     if (!formData.fatherCnic.trim()) errs.fatherCnic = 'Guardian CNIC is required';
     if (!formData.subject) errs.subject = 'Please select a subject';
+    if (availableCurriculumSubjects.length > 0 && selectedSubjects.length === 0) {
+      errs.selectedSubjects = 'Please select at least 1 subject';
+    }
 
     setErrors(errs);
     return Object.keys(errs).length === 0;
@@ -83,7 +140,14 @@ export default function EditStudentModal({ student, isOpen, onClose, onUpdateStu
     e.preventDefault();
     if (!validate()) return;
 
-    onUpdateStudent(formData);
+    const enrolled = selectedSubjects.length > 0 ? selectedSubjects : availableCurriculumSubjects;
+
+    onUpdateStudent({
+      ...formData,
+      section: formData.subject,
+      enrolledSubjects: enrolled,
+      selectedSubjects: enrolled
+    });
     onClose();
   };
 
@@ -358,13 +422,79 @@ export default function EditStudentModal({ student, isOpen, onClose, onUpdateStu
                     name="edit-subject"
                     value={sub}
                     checked={formData.subject === sub}
-                    onChange={() => setFormData({ ...formData, subject: sub })}
+                    onChange={() => handleSectionChange(sub)}
                     className="w-3.5 h-3.5 text-emerald-600"
                   />
                   <span className="leading-tight">{sub}</span>
                 </label>
               ))}
             </div>
+
+            {/* Subject-Wise Enrollment Checkboxes */}
+            {formData.subject && availableCurriculumSubjects.length > 0 && (
+              <div className="mt-3 p-3 bg-slate-50 border border-slate-200 rounded-2xl space-y-2 animate-in fade-in duration-150">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-1.5">
+                    <BookOpen className="w-3.5 h-3.5 text-indigo-600" />
+                    <label className="font-bold text-slate-800 text-xs">
+                      Enrolled Subjects
+                    </label>
+                  </div>
+                  <span className={`text-[10px] font-extrabold px-2 py-0.5 rounded-full ${
+                    isAllSubjectsSelected 
+                      ? 'bg-indigo-100 text-indigo-800' 
+                      : 'bg-amber-100 text-amber-800'
+                  }`}>
+                    {selectedSubjects.length} of {availableCurriculumSubjects.length} {isAllSubjectsSelected ? 'All Selected' : 'Custom'}
+                  </span>
+                </div>
+
+                <p className="text-[10px] text-slate-500 leading-tight">
+                  Student may study all subjects or specific individual subjects:
+                </p>
+
+                {/* Master "All Subjects" Checkbox */}
+                <label className="flex items-center gap-2 p-2 bg-white rounded-xl border border-indigo-200 cursor-pointer transition-all hover:bg-indigo-50/50 shadow-2xs">
+                  <input
+                    type="checkbox"
+                    checked={isAllSubjectsSelected}
+                    onChange={handleToggleAllSubjects}
+                    className="w-4 h-4 text-indigo-600 rounded border-slate-300 focus:ring-indigo-500"
+                  />
+                  <span className="font-bold text-xs text-indigo-950">
+                    All Subjects ({availableCurriculumSubjects.length})
+                  </span>
+                </label>
+
+                {/* Individual Subject Checkboxes */}
+                <div className="grid grid-cols-2 gap-1.5 pt-1">
+                  {availableCurriculumSubjects.map((subName) => {
+                    const isChecked = selectedSubjects.includes(subName);
+                    return (
+                      <label
+                        key={subName}
+                        className={`flex items-center gap-2 p-2 rounded-xl border text-xs cursor-pointer transition-all select-none ${
+                          isChecked
+                            ? 'bg-white border-indigo-300 text-slate-900 font-semibold shadow-2xs'
+                            : 'bg-white/60 border-slate-200 text-slate-400 hover:text-slate-700'
+                        }`}
+                      >
+                        <input
+                          type="checkbox"
+                          checked={isChecked}
+                          onChange={() => handleToggleSingleSubject(subName)}
+                          className="w-3.5 h-3.5 text-indigo-600 rounded border-slate-300 focus:ring-indigo-500"
+                        />
+                        <span className="truncate">{subName}</span>
+                      </label>
+                    );
+                  })}
+                </div>
+                {errors.selectedSubjects && (
+                  <p className="text-rose-500 text-[10px] mt-1 font-semibold">{errors.selectedSubjects}</p>
+                )}
+              </div>
+            )}
           </div>
 
           {/* Fees & Date of Joining */}

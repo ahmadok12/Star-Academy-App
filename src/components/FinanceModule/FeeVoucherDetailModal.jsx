@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { X, CreditCard, Edit3, Trash2, Calendar, Landmark, MessageSquare, AlertTriangle, CheckCircle, Clock } from 'lucide-react';
+import { X, CreditCard, Edit3, Trash2, Calendar, Landmark, MessageSquare, AlertTriangle, CheckCircle, Clock, Printer, FileDown, Share2 } from 'lucide-react';
+import { printSingleFeeVoucher, exportSingleFeeVoucherPDF, shareFeeVoucherPDFToWhatsApp } from '../../utils/exportShareUtils';
+import { OFFICIAL_BANK_DETAILS, FAYSAL_BANK_QR_BASE64 } from '../../constants/bankQrCode';
 
 export default function FeeVoucherDetailModal({
   isOpen,
@@ -140,14 +142,85 @@ export default function FeeVoucherDetailModal({
             </div>
           </div>
 
-          {/* Automated WhatsApp Reminder Action Button */}
-          <button
-            onClick={() => onSendWhatsApp(voucher)}
-            className="w-full py-2.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 active:scale-98 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-md shadow-emerald-200 transition-all"
-          >
-            <MessageSquare className="w-4 h-4" />
-            <span>Send WhatsApp Due Notification to Father</span>
-          </button>
+          {/* Official Bank Deposit & QR Code Card */}
+          <div className="p-3.5 bg-slate-50 border border-slate-200 rounded-2xl space-y-2.5">
+            <div className="flex items-center justify-between">
+              <span className="font-bold text-slate-800 text-xs flex items-center gap-1.5">
+                <Landmark className="w-4 h-4 text-indigo-600" />
+                Official Bank Details
+              </span>
+              <span className="text-[10px] bg-indigo-100 text-indigo-800 font-bold px-2 py-0.5 rounded-md">
+                Attached QR Code
+              </span>
+            </div>
+
+            <div className="bg-white p-2.5 rounded-xl border border-slate-200 text-xs space-y-1">
+              <div className="flex justify-between">
+                <span className="text-slate-500 font-medium">Bank:</span>
+                <span className="font-bold text-slate-800">{OFFICIAL_BANK_DETAILS.bankName}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-slate-500 font-medium">Title:</span>
+                <span className="font-bold text-slate-800">{OFFICIAL_BANK_DETAILS.accountTitle}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-slate-500 font-medium">Account:</span>
+                <span className="font-mono font-bold text-indigo-600">{OFFICIAL_BANK_DETAILS.accountNumber}</span>
+              </div>
+            </div>
+
+            {/* Attached QR Code Preview */}
+            <div className="flex items-center gap-3 bg-white p-2 rounded-xl border border-slate-200">
+              <div className="w-16 h-16 shrink-0 bg-slate-100 border border-slate-200 rounded-lg p-1 flex items-center justify-center">
+                <img src={FAYSAL_BANK_QR_BASE64} alt="Faysal Bank QR" className="w-full h-full object-contain" />
+              </div>
+              <div className="text-[11px] text-slate-600">
+                <span className="font-bold text-slate-800 block">Scan & Pay via Raast</span>
+                QR code is attached on all student vouchers below banking details.
+              </div>
+            </div>
+          </div>
+
+          {/* Action Buttons: Print Voucher / QR, Send PDF to WhatsApp, Text Notice */}
+          <div className="space-y-2 pt-1">
+            <div className="grid grid-cols-2 gap-2">
+              <button
+                type="button"
+                onClick={() => printSingleFeeVoucher(voucher)}
+                className="py-2.5 px-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-xs transition-all tap-active"
+              >
+                <Printer className="w-4 h-4" />
+                <span>Print Voucher & QR</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => exportSingleFeeVoucherPDF(voucher)}
+                className="py-2.5 px-3 rounded-xl bg-slate-800 hover:bg-slate-900 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-xs transition-all tap-active"
+              >
+                <FileDown className="w-4 h-4" />
+                <span>Download PDF</span>
+              </button>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => shareFeeVoucherPDFToWhatsApp(voucher)}
+              className="w-full py-2.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-md shadow-emerald-200 transition-all tap-active"
+            >
+              <Share2 className="w-4 h-4" />
+              <span>Send Fee Voucher PDF to Guardian WhatsApp</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => onSendWhatsApp(voucher)}
+              className="w-full py-2 px-4 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs flex items-center justify-center gap-2 transition-colors tap-active"
+            >
+              <MessageSquare className="w-3.5 h-3.5 text-slate-500" />
+              <span>Send Text Notice Reminder</span>
+            </button>
+          </div>
         </div>
 
         {/* Footer with DELETE BUTTON AT BOTTOM */}

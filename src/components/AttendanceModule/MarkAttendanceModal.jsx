@@ -13,6 +13,19 @@ export default function MarkAttendanceModal({ isOpen, onClose, students, onSaveA
   // Map of studentId -> status ('Present' | 'Absent' | 'Leave')
   const [attendanceMap, setAttendanceMap] = useState({});
   const [saveSuccess, setSaveSuccess] = useState(false);
+  const [expectedStartTime, setExpectedStartTime] = useState('08:00');
+  const [arrivalTimesMap, setArrivalTimesMap] = useState({});
+  const [minutesLateMap, setMinutesLateMap] = useState({});
+
+  const calculateMinutesLate = (arrival, start) => {
+    if (!arrival || !start) return 0;
+    const [aH, aM] = arrival.split(':').map(Number);
+    const [sH, sM] = start.split(':').map(Number);
+    if (isNaN(aH) || isNaN(aM) || isNaN(sH) || isNaN(sM)) return 0;
+    const aTotal = aH * 60 + aM;
+    const sTotal = sH * 60 + sM;
+    return Math.max(0, aTotal - sTotal);
+  };
 
   // Reset when dialog opens
   useEffect(() => {
@@ -21,6 +34,8 @@ export default function MarkAttendanceModal({ isOpen, onClose, students, onSaveA
       setSelectedClass('');
       setSelectedSubject('');
       setAttendanceMap({});
+      setArrivalTimesMap({});
+      setMinutesLateMap({});
       setSaveSuccess(false);
     }
   }, [isOpen]);
@@ -30,6 +45,8 @@ export default function MarkAttendanceModal({ isOpen, onClose, students, onSaveA
     setSelectedClass(newClass);
     setSelectedSubject('');
     setAttendanceMap({});
+    setArrivalTimesMap({});
+    setMinutesLateMap({});
   };
 
   // ONLY ACTIVE STUDENTS are available for selection and attendance marking
@@ -59,6 +76,37 @@ export default function MarkAttendanceModal({ isOpen, onClose, students, onSaveA
       ...prev,
       [studentId]: status,
     }));
+
+    if (status === ATTENDANCE_STATUS.LATE) {
+      // Default to 25 mins late if no arrival time entered
+      const defaultArrival = '08:25';
+      setArrivalTimesMap(prev => ({
+        ...prev,
+        [studentId]: prev[studentId] || defaultArrival
+      }));
+      setMinutesLateMap(prev => ({
+        ...prev,
+        [studentId]: prev[studentId] || calculateMinutesLate(defaultArrival, expectedStartTime) || 25
+      }));
+    } else if (status === ATTENDANCE_STATUS.PRESENT) {
+      setArrivalTimesMap(prev => ({
+        ...prev,
+        [studentId]: expectedStartTime
+      }));
+      setMinutesLateMap(prev => ({
+        ...prev,
+        [studentId]: 0
+      }));
+    }
+  };
+
+  const handleArrivalTimeChange = (studentId, arrivalVal) => {
+    setArrivalTimesMap(prev => ({ ...prev, [studentId]: arrivalVal }));
+    const lateMins = calculateMinutesLate(arrivalVal, expectedStartTime);
+    setMinutesLateMap(prev => ({ ...prev, [studentId]: lateMins }));
+    if (lateMins > 0) {
+      setAttendanceMap(prev => ({ ...prev, [studentId]: ATTENDANCE_STATUS.LATE }));
+    }
   };
 
   const handleMarkAll = (status) => {
@@ -72,31 +120,48 @@ export default function MarkAttendanceModal({ isOpen, onClose, students, onSaveA
   // Summary counts
   const counts = useMemo(() => {
     let present = 0,
+      late = 0,
       absent = 0,
       leave = 0;
     respectiveStudents.forEach((s) => {
       const st = attendanceMap[s.id];
       if (st === ATTENDANCE_STATUS.PRESENT) present++;
+      else if (st === ATTENDANCE_STATUS.LATE) late++;
       else if (st === ATTENDANCE_STATUS.ABSENT) absent++;
       else if (st === ATTENDANCE_STATUS.LEAVE) leave++;
     });
-    return { present, absent, leave, total: respectiveStudents.length };
+    return { present, late, absent, leave, total: respectiveStudents.length };
   }, [respectiveStudents, attendanceMap]);
 
   const handleSave = () => {
     if (respectiveStudents.length === 0) return;
 
-    const records = respectiveStudents.map((s) => ({
-      studentId: s.id,
-      studentName: `${s.firstName} ${s.lastName}`,
-      gender: s.gender,
-      pic: s.pic,
-      status: attendanceMap[s.id] || ATTENDANCE_STATUS.PRESENT,
-    }));
+    const records = respectiveStudents.map((s) => {
+      const status = attendanceMap[s.id] || ATTENDANCE_STATUS.PRESENT;
+      const arrival = arrivalTimesMap[s.id] || (status === ATTENDANCE_STATUS.LATE ? '08:25' : expectedStartTime);
+      const minsLate = status === ATTENDANCE_STATUS.LATE
+        ? (minutesLateMap[s.id] !== undefined ? minutesLateMap[s.id] : (calculateMinutesLate(arrival, expectedStartTime) || 25))
+        : 0;
+
+      return {
+        studentId: s.id,
+        studentName: `${s.firstName} ${s.lastName}`,
+        gender: s.gender,
+        pic: s.pic,
+        fatherName: s.fatherName,
+        fatherContact: s.fatherContact,
+        whatsappNumber: s.whatsappNumber || s.contactNumber,
+        status,
+        isLate: status === ATTENDANCE_STATUS.LATE || minsLate > 0,
+        arrivalTime: status === ATTENDANCE_STATUS.ABSENT ? '' : arrival,
+        minutesLate: minsLate,
+      };
+    });
 
     const newSession = {
       id: `ATT-${sessionDate.replace(/-/g, '')}-${Date.now().toString().slice(-4)}`,
       date: sessionDate,
+      expectedStartTime,
       studentClass: selectedClass,
       subject: selectedSubject,
       createdAt: new Date().toISOString(),
@@ -179,16 +244,29 @@ export default function MarkAttendanceModal({ isOpen, onClose, students, onSaveA
             </div>
           </div>
 
-          {/* Date Selector & Quick Counters */}
-          <div className="flex items-center justify-between gap-2 pt-1">
-            <div className="flex items-center gap-1.5 bg-white border border-slate-200 px-2.5 py-1.5 rounded-xl shadow-xs">
-              <span className="text-[10px] font-bold text-slate-400 uppercase">Date:</span>
-              <input
-                type="date"
-                value={sessionDate}
-                onChange={(e) => setSessionDate(e.target.value)}
-                className="text-xs font-bold text-slate-700 outline-none bg-transparent"
-              />
+          {/* Date Selector & Session Start Time */}
+          <div className="flex items-center justify-between gap-2 pt-1 flex-wrap">
+            <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1.5 bg-white border border-slate-200 px-2.5 py-1.5 rounded-xl shadow-xs">
+                <span className="text-[10px] font-bold text-slate-400 uppercase">Date:</span>
+                <input
+                  type="date"
+                  value={sessionDate}
+                  onChange={(e) => setSessionDate(e.target.value)}
+                  className="text-xs font-bold text-slate-700 outline-none bg-transparent"
+                />
+              </div>
+
+              <div className="flex items-center gap-1.5 bg-white border border-slate-200 px-2.5 py-1.5 rounded-xl shadow-xs">
+                <Clock className="w-3 h-3 text-indigo-500" />
+                <span className="text-[10px] font-bold text-slate-400 uppercase">Start:</span>
+                <input
+                  type="time"
+                  value={expectedStartTime}
+                  onChange={(e) => setExpectedStartTime(e.target.value)}
+                  className="text-xs font-bold text-slate-700 outline-none bg-transparent"
+                />
+              </div>
             </div>
 
             {/* Fast Quick Mark Buttons */}
@@ -220,8 +298,8 @@ export default function MarkAttendanceModal({ isOpen, onClose, students, onSaveA
             </div>
           )}
 
-          {/* Live Attendance Stats Counter Pills */}
-          <div className="grid grid-cols-4 gap-1.5 text-center text-[11px] pt-1">
+          {/* Live Attendance Stats Counter Pills (5 Metrics) */}
+          <div className="grid grid-cols-5 gap-1 text-center text-[11px] pt-1">
             <div className="bg-white rounded-lg p-1.5 border border-slate-200">
               <span className="text-slate-400 block text-[9px] uppercase font-bold">Active</span>
               <span className="font-extrabold text-slate-800">{counts.total}</span>
@@ -230,13 +308,17 @@ export default function MarkAttendanceModal({ isOpen, onClose, students, onSaveA
               <span className="text-emerald-600 block text-[9px] uppercase font-bold">Present</span>
               <span className="font-extrabold text-emerald-700">{counts.present}</span>
             </div>
+            <div className="bg-amber-50 rounded-lg p-1.5 border border-amber-200">
+              <span className="text-amber-600 block text-[9px] uppercase font-bold">Late</span>
+              <span className="font-extrabold text-amber-700">{counts.late}</span>
+            </div>
             <div className="bg-rose-50 rounded-lg p-1.5 border border-rose-200">
               <span className="text-rose-600 block text-[9px] uppercase font-bold">Absent</span>
               <span className="font-extrabold text-rose-700">{counts.absent}</span>
             </div>
-            <div className="bg-amber-50 rounded-lg p-1.5 border border-amber-200">
-              <span className="text-amber-600 block text-[9px] uppercase font-bold">Leave</span>
-              <span className="font-extrabold text-amber-700">{counts.leave}</span>
+            <div className="bg-indigo-50 rounded-lg p-1.5 border border-indigo-200">
+              <span className="text-indigo-600 block text-[9px] uppercase font-bold">Leave</span>
+              <span className="font-extrabold text-indigo-700">{counts.leave}</span>
             </div>
           </div>
         </div>
@@ -281,50 +363,87 @@ export default function MarkAttendanceModal({ isOpen, onClose, students, onSaveA
                     </div>
                   </div>
 
-                  {/* 3 Visually Different Buttons: Present, Absent, Leave (Only Selected is Colored) */}
-                  <div className="grid grid-cols-3 gap-1.5 pt-1 border-t border-slate-100">
+                  {/* 4 Visually Distinct Buttons: Present, Late, Absent, Leave */}
+                  <div className="grid grid-cols-4 gap-1 pt-1 border-t border-slate-100">
                     {/* 1. Present Button */}
                     <button
                       type="button"
                       onClick={() => handleStatusChange(student.id, ATTENDANCE_STATUS.PRESENT)}
-                      className={`flex items-center justify-center gap-1.5 py-2 px-1.5 rounded-xl font-bold text-xs transition-all tap-active ${
+                      className={`flex items-center justify-center gap-1 py-1.5 px-1 rounded-xl font-bold text-[11px] transition-all tap-active ${
                         currentStatus === ATTENDANCE_STATUS.PRESENT
-                          ? 'bg-emerald-600 text-white shadow-sm ring-2 ring-emerald-600 ring-offset-1 border border-emerald-600'
-                          : 'bg-white text-slate-600 hover:bg-slate-50 hover:text-slate-900 border border-slate-200 shadow-2xs'
+                          ? 'bg-emerald-600 text-white shadow-xs ring-2 ring-emerald-500 ring-offset-1 border border-emerald-600'
+                          : 'bg-white text-slate-600 hover:bg-slate-50 border border-slate-200 shadow-2xs'
                       }`}
                     >
-                      <CheckCircle2 className={`w-3.5 h-3.5 ${currentStatus === ATTENDANCE_STATUS.PRESENT ? 'text-white stroke-[2.5]' : 'text-slate-400'}`} />
+                      <CheckCircle2 className={`w-3 h-3 ${currentStatus === ATTENDANCE_STATUS.PRESENT ? 'text-white stroke-[2.5]' : 'text-slate-400'}`} />
                       <span>Present</span>
                     </button>
 
-                    {/* 2. Absent Button */}
+                    {/* 2. Late Button */}
+                    <button
+                      type="button"
+                      onClick={() => handleStatusChange(student.id, ATTENDANCE_STATUS.LATE)}
+                      className={`flex items-center justify-center gap-1 py-1.5 px-1 rounded-xl font-bold text-[11px] transition-all tap-active ${
+                        currentStatus === ATTENDANCE_STATUS.LATE
+                          ? 'bg-amber-500 text-white shadow-xs ring-2 ring-amber-400 ring-offset-1 border border-amber-500'
+                          : 'bg-white text-slate-600 hover:bg-slate-50 border border-slate-200 shadow-2xs'
+                      }`}
+                    >
+                      <Clock className={`w-3 h-3 ${currentStatus === ATTENDANCE_STATUS.LATE ? 'text-white stroke-[2.5]' : 'text-slate-400'}`} />
+                      <span>Late</span>
+                    </button>
+
+                    {/* 3. Absent Button */}
                     <button
                       type="button"
                       onClick={() => handleStatusChange(student.id, ATTENDANCE_STATUS.ABSENT)}
-                      className={`flex items-center justify-center gap-1.5 py-2 px-1.5 rounded-xl font-bold text-xs transition-all tap-active ${
+                      className={`flex items-center justify-center gap-1 py-1.5 px-1 rounded-xl font-bold text-[11px] transition-all tap-active ${
                         currentStatus === ATTENDANCE_STATUS.ABSENT
-                          ? 'bg-rose-600 text-white shadow-sm ring-2 ring-rose-600 ring-offset-1 border border-rose-600'
-                          : 'bg-white text-slate-600 hover:bg-slate-50 hover:text-slate-900 border border-slate-200 shadow-2xs'
+                          ? 'bg-rose-600 text-white shadow-xs ring-2 ring-rose-500 ring-offset-1 border border-rose-600'
+                          : 'bg-white text-slate-600 hover:bg-slate-50 border border-slate-200 shadow-2xs'
                       }`}
                     >
-                      <XCircle className={`w-3.5 h-3.5 ${currentStatus === ATTENDANCE_STATUS.ABSENT ? 'text-white stroke-[2.5]' : 'text-slate-400'}`} />
+                      <XCircle className={`w-3 h-3 ${currentStatus === ATTENDANCE_STATUS.ABSENT ? 'text-white stroke-[2.5]' : 'text-slate-400'}`} />
                       <span>Absent</span>
                     </button>
 
-                    {/* 3. Leave Button */}
+                    {/* 4. Leave Button */}
                     <button
                       type="button"
                       onClick={() => handleStatusChange(student.id, ATTENDANCE_STATUS.LEAVE)}
-                      className={`flex items-center justify-center gap-1.5 py-2 px-1.5 rounded-xl font-bold text-xs transition-all tap-active ${
+                      className={`flex items-center justify-center gap-1 py-1.5 px-1 rounded-xl font-bold text-[11px] transition-all tap-active ${
                         currentStatus === ATTENDANCE_STATUS.LEAVE
-                          ? 'bg-amber-500 text-white shadow-sm ring-2 ring-amber-500 ring-offset-1 border border-amber-500'
-                          : 'bg-white text-slate-600 hover:bg-slate-50 hover:text-slate-900 border border-slate-200 shadow-2xs'
+                          ? 'bg-indigo-600 text-white shadow-xs ring-2 ring-indigo-500 ring-offset-1 border border-indigo-600'
+                          : 'bg-white text-slate-600 hover:bg-slate-50 border border-slate-200 shadow-2xs'
                       }`}
                     >
-                      <Clock className={`w-3.5 h-3.5 ${currentStatus === ATTENDANCE_STATUS.LEAVE ? 'text-white stroke-[2.5]' : 'text-slate-400'}`} />
+                      <AlertCircle className={`w-3 h-3 ${currentStatus === ATTENDANCE_STATUS.LEAVE ? 'text-white stroke-[2.5]' : 'text-slate-400'}`} />
                       <span>Leave</span>
                     </button>
                   </div>
+
+                  {/* Arrival Time & Minutes Late (for Present or Late) */}
+                  {(currentStatus === ATTENDANCE_STATUS.PRESENT || currentStatus === ATTENDANCE_STATUS.LATE) && (
+                    <div className="flex items-center justify-between gap-2 px-2.5 py-1.5 rounded-xl bg-slate-50 border border-slate-200 text-xs">
+                      <div className="flex items-center gap-1.5">
+                        <Clock className="w-3.5 h-3.5 text-slate-400" />
+                        <span className="text-[10px] font-semibold text-slate-500 uppercase">Arrival:</span>
+                        <input
+                          type="time"
+                          value={arrivalTimesMap[student.id] || (currentStatus === ATTENDANCE_STATUS.LATE ? '08:25' : expectedStartTime)}
+                          onChange={(e) => handleArrivalTimeChange(student.id, e.target.value)}
+                          className="px-1.5 py-0.5 bg-white border border-slate-200 rounded font-semibold text-xs text-slate-700 outline-none focus:ring-1 focus:ring-indigo-400"
+                        />
+                      </div>
+                      {(currentStatus === ATTENDANCE_STATUS.LATE || (minutesLateMap[student.id] || 0) > 0) && (
+                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-amber-100 text-amber-800 border border-amber-300">
+                          {minutesLateMap[student.id] !== undefined && minutesLateMap[student.id] > 0
+                            ? `${minutesLateMap[student.id]} min late`
+                            : 'Late Arrival'}
+                        </span>
+                      )}
+                    </div>
+                  )}
                 </div>
               );
             })

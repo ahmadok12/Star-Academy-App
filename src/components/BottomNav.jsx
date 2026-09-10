@@ -25,7 +25,7 @@ export default function BottomNav({
       label: 'Students',
       icon: Users,
       badge: studentCount,
-      badgeColor: 'bg-indigo-100 text-indigo-700'
+      badgeColor: 'bg-blue-100 text-blue-700'
     },
     {
       id: 'admin',
@@ -60,12 +60,12 @@ export default function BottomNav({
               onClick={() => setActiveTab(item.id)}
               className={`relative flex flex-col items-center justify-center py-1 px-0.5 rounded-xl transition-all duration-150 tap-active min-w-[36px] ${
                 isActive
-                  ? 'text-indigo-600 font-semibold'
+                  ? 'text-blue-600 font-semibold'
                   : 'text-slate-500 hover:text-slate-800'
               }`}
             >
               <div className={`relative p-1 rounded-xl transition-all ${
-                isActive ? 'bg-indigo-50' : 'bg-transparent'
+                isActive ? 'bg-blue-50' : 'bg-transparent'
               }`}>
                 <Icon className={`w-4 h-4 transition-transform ${isActive ? 'scale-110 stroke-[2.25]' : 'stroke-2'}`} />
                 {item.badge !== null && item.badge !== undefined && (
@@ -74,11 +74,11 @@ export default function BottomNav({
                   </span>
                 )}
               </div>
-              <span className={`text-[8px] mt-0.5 tracking-tight truncate max-w-[54px] ${isActive ? 'font-bold text-indigo-600' : 'font-medium'}`}>
+              <span className={`text-[8px] mt-0.5 tracking-tight truncate max-w-[54px] ${isActive ? 'font-bold text-blue-600' : 'font-medium'}`}>
                 {item.label}
               </span>
               {isActive && (
-                <span className="w-1.5 h-1.5 rounded-full bg-indigo-600 mt-0.5"></span>
+                <span className="w-1.5 h-1.5 rounded-full bg-blue-600 mt-0.5"></span>
               )}
             </button>
           );

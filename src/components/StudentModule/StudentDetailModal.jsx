@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { X, Phone, Mail, MapPin, ShieldCheck, BookOpen, User, Hash, Edit3, Trash2, AlertTriangle, UserX, CheckSquare, Square, MessageSquare, Coins, CreditCard, Download, MessageCircle } from 'lucide-react';
-import { exportStudentProfilePDF, shareStudentProfileWhatsApp } from '../../utils/exportShareUtils';
+import { X, Phone, Mail, MapPin, ShieldCheck, BookOpen, User, Hash, Edit3, Trash2, AlertTriangle, UserX, CheckSquare, Square, MessageSquare, Coins, CreditCard, Download, MessageCircle, Printer } from 'lucide-react';
+import { exportStudentProfilePDF, printStudentProfile, shareStudentProfileWhatsApp } from '../../utils/exportShareUtils';
 
 export default function StudentDetailModal({
   student,
@@ -259,23 +259,52 @@ export default function StudentDetailModal({
           </div>
 
           {/* Academic Class & Subject */}
-          <div className="bg-indigo-50/60 border border-indigo-100 rounded-2xl p-3.5 flex items-center justify-between">
-            <div>
-              <span className="text-[10px] font-semibold text-indigo-700 uppercase">Enrolled Class & Subject</span>
-              <p className="text-xs font-bold text-slate-800 mt-0.5">
-                Class {student.studentClass} • {student.subject}
-              </p>
+          <div className="bg-indigo-50/60 border border-indigo-100 rounded-2xl p-3.5 space-y-2">
+            <div className="flex items-center justify-between">
+              <div>
+                <span className="text-[10px] font-semibold text-indigo-700 uppercase">Enrolled Class & Section</span>
+                <p className="text-xs font-bold text-slate-800 mt-0.5">
+                  Class {student.studentClass} • {student.subject}
+                </p>
+              </div>
+              <div className="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600">
+                <BookOpen className="w-4 h-4" />
+              </div>
             </div>
-            <div className="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600">
-              <BookOpen className="w-4 h-4" />
-            </div>
+
+            {student.enrolledSubjects && Array.isArray(student.enrolledSubjects) && student.enrolledSubjects.length > 0 && (
+              <div className="pt-2 border-t border-indigo-100/80">
+                <span className="text-[10px] font-semibold text-slate-500 block mb-1">
+                  Subjects Studied ({student.enrolledSubjects.length}):
+                </span>
+                <div className="flex flex-wrap gap-1">
+                  {student.enrolledSubjects.map((sub, idx) => (
+                    <span
+                      key={idx}
+                      className="px-2 py-0.5 rounded-md bg-white border border-indigo-200/70 text-indigo-950 font-semibold text-[10px]"
+                    >
+                      {sub}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
         {/* Modal Footer with Actions */}
         <div className="p-3.5 border-t border-slate-200 bg-white space-y-2">
-          {/* Download PDF & WhatsApp Row */}
+          {/* Print Preview, Download PDF & WhatsApp Row */}
           <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => printStudentProfile(student)}
+              className="flex-1 py-2 px-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-colors shadow-2xs cursor-pointer"
+              title="Print Preview Complete Student Profile"
+            >
+              <Printer className="w-3.5 h-3.5" />
+              <span>Print Preview</span>
+            </button>
             <button
               type="button"
               onClick={() => exportStudentProfilePDF(student)}
@@ -290,7 +319,7 @@ export default function StudentDetailModal({
               className="flex-1 py-2 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-colors shadow-2xs cursor-pointer"
             >
               <MessageCircle className="w-3.5 h-3.5" />
-              <span>Share on WhatsApp</span>
+              <span>WhatsApp</span>
             </button>
           </div>
 

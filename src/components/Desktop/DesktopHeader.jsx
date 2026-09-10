@@ -5,7 +5,9 @@ import {
   Users,
   ClipboardCheck,
   CreditCard,
-  ChevronRight
+  ChevronRight,
+  Search,
+  Bell
 } from 'lucide-react';
 
 export default function DesktopHeader({
@@ -35,50 +37,66 @@ export default function DesktopHeader({
   };
 
   return (
-    <header className="bg-white border-b border-slate-200 px-6 py-3.5 flex items-center justify-between gap-4 select-none sticky top-0 z-20">
-      {/* Left: Breadcrumbs navigation */}
-      <div className="flex items-center gap-2 text-sm">
-        <span className="font-semibold text-slate-400 uppercase tracking-wider text-xs">
-          Star Academy
-        </span>
-        <ChevronRight className="w-4 h-4 text-slate-300" />
-        <span className="font-bold text-slate-900 text-sm">
-          {tabLabels[activeTab] || 'Dashboard'}
-        </span>
-        {activeSubPageLabel && (
-          <>
-            <ChevronRight className="w-4 h-4 text-slate-300" />
-            <span className="font-semibold text-slate-700 bg-slate-100 border border-slate-200 px-2.5 py-0.5 rounded-md text-xs">
-              {activeSubPageLabel}
-            </span>
-          </>
-        )}
+    <header className="bg-white border-b border-slate-200/80 px-6 py-3 flex items-center justify-between gap-4 select-none sticky top-0 z-20">
+      {/* Left: Breadcrumbs navigation & quick search */}
+      <div className="flex items-center gap-4 min-w-0">
+        <div className="flex items-center gap-2 text-sm shrink-0">
+          <span className="font-semibold text-slate-400 uppercase tracking-wider text-xs">
+            Star Academy
+          </span>
+          <ChevronRight className="w-4 h-4 text-slate-300" />
+          <span className="font-bold text-slate-900 text-sm">
+            {tabLabels[activeTab] || 'Dashboard'}
+          </span>
+          {activeSubPageLabel && (
+            <>
+              <ChevronRight className="w-4 h-4 text-slate-300" />
+              <span className="font-semibold text-blue-700 bg-blue-50 border border-blue-100 px-2.5 py-0.5 rounded-full text-xs">
+                {activeSubPageLabel}
+              </span>
+            </>
+          )}
+        </div>
+
+        {/* Global Search Input (EduManage style) */}
+        <div className="hidden xl:flex items-center gap-2 bg-slate-100/80 border border-slate-200/60 rounded-xl px-3 py-1.5 w-64 text-slate-400 focus-within:ring-2 focus-within:ring-blue-500/30 focus-within:border-blue-400 focus-within:bg-white transition-all">
+          <Search className="w-4 h-4 text-slate-400 shrink-0" />
+          <input
+            type="text"
+            placeholder="Search students, roll no..."
+            className="w-full bg-transparent text-xs text-slate-700 placeholder-slate-400 focus:outline-hidden"
+          />
+        </div>
       </div>
 
       {/* Center / Right: Quick Metrics & System Information */}
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-2.5">
         {/* KPI: Enrolled Students */}
         <button
           type="button"
           onClick={() => onNavigate('students', null)}
-          className="hidden md:flex items-center gap-2 bg-white hover:bg-slate-50 border border-slate-200 px-3 py-1.5 rounded-lg text-sm text-slate-700 transition-colors cursor-pointer"
+          className="hidden md:flex items-center gap-2 bg-white hover:bg-slate-50 border border-slate-200/80 px-3 py-1.5 rounded-xl text-sm text-slate-700 transition-colors cursor-pointer shadow-2xs"
           title="View Students"
         >
-          <Users className="w-4 h-4 text-slate-500" />
+          <div className="w-5 h-5 rounded-md bg-blue-50 text-blue-600 flex items-center justify-center">
+            <Users className="w-3.5 h-3.5" />
+          </div>
           <span className="text-slate-500 font-medium text-xs">Students:</span>
-          <span className="font-bold text-slate-900 text-sm">{studentCount}</span>
+          <span className="font-bold text-slate-900 text-xs">{studentCount}</span>
         </button>
 
         {/* KPI: Attendance */}
         <button
           type="button"
           onClick={() => onNavigate('students', 'attendance')}
-          className="hidden lg:flex items-center gap-2 bg-white hover:bg-slate-50 border border-slate-200 px-3 py-1.5 rounded-lg text-sm text-slate-700 transition-colors cursor-pointer"
+          className="hidden lg:flex items-center gap-2 bg-white hover:bg-slate-50 border border-slate-200/80 px-3 py-1.5 rounded-xl text-sm text-slate-700 transition-colors cursor-pointer shadow-2xs"
           title="View Attendance Sessions"
         >
-          <ClipboardCheck className="w-4 h-4 text-slate-500" />
+          <div className="w-5 h-5 rounded-md bg-emerald-50 text-emerald-600 flex items-center justify-center">
+            <ClipboardCheck className="w-3.5 h-3.5" />
+          </div>
           <span className="text-slate-500 font-medium text-xs">Attendance:</span>
-          <span className="font-bold text-slate-900 text-sm">{attendanceCount}</span>
+          <span className="font-bold text-slate-900 text-xs">{attendanceCount}</span>
         </button>
 
         {/* KPI: Pending Fees */}
@@ -86,12 +104,12 @@ export default function DesktopHeader({
           <button
             type="button"
             onClick={() => onNavigate('reports', 'fee_paid_pending')}
-            className="hidden sm:flex items-center gap-2 bg-slate-50 hover:bg-slate-100 border border-slate-200 px-3 py-1.5 rounded-lg text-sm transition-colors cursor-pointer"
+            className="hidden sm:flex items-center gap-2 bg-amber-50/70 hover:bg-amber-100/80 border border-amber-200/60 px-3 py-1.5 rounded-xl text-sm transition-colors cursor-pointer"
             title="View Pending Dues"
           >
-            <CreditCard className="w-4 h-4 text-slate-600" />
-            <span className="text-slate-600 font-medium text-xs">Pending:</span>
-            <span className="font-bold text-slate-900 text-xs bg-slate-200/80 px-1.5 py-0.5 rounded">
+            <CreditCard className="w-3.5 h-3.5 text-amber-700" />
+            <span className="text-amber-700 font-medium text-xs">Pending:</span>
+            <span className="font-bold text-amber-900 text-xs bg-amber-200/80 px-1.5 py-0.5 rounded-full">
               {pendingFeeCount}
             </span>
           </button>
@@ -106,19 +124,41 @@ export default function DesktopHeader({
         </div>
 
         {/* Session Badge */}
-        <div className="inline-flex items-center gap-1 bg-slate-100 text-slate-700 border border-slate-200 px-2.5 py-1 rounded-lg text-xs font-semibold">
+        <div className="inline-flex items-center gap-1 bg-blue-50 text-blue-700 border border-blue-100 px-2.5 py-1 rounded-lg text-xs font-semibold">
           <span>Session {currentSession}</span>
         </div>
+
+        {/* Notification Bell */}
+        <button
+          type="button"
+          onClick={() => onNavigate('quick_actions', null)}
+          className="relative p-2 rounded-xl text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition-colors cursor-pointer border border-slate-200/80"
+          title="Notifications"
+        >
+          <Bell className="w-4 h-4" />
+          <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-rose-500 ring-2 ring-white"></span>
+        </button>
 
         {/* Settings button */}
         <button
           type="button"
           onClick={onOpenSettings}
-          className="p-2 rounded-lg text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition-colors cursor-pointer border border-slate-200"
+          className="p-2 rounded-xl text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition-colors cursor-pointer border border-slate-200/80"
           title="Academy Settings"
         >
           <Settings className="w-4 h-4" />
         </button>
+
+        {/* User Profile Pill (EduManage style) */}
+        <div className="hidden sm:flex items-center gap-2 pl-2 border-l border-slate-200/80">
+          <div className="w-8 h-8 rounded-full bg-blue-600 text-white font-bold text-xs flex items-center justify-center shadow-2xs">
+            SI
+          </div>
+          <div className="hidden md:block text-left leading-tight">
+            <span className="block text-xs font-bold text-slate-800">Salman Ijaz</span>
+            <span className="block text-[10px] text-slate-400 font-medium">Principal Admin</span>
+          </div>
+        </div>
       </div>
     </header>
   );

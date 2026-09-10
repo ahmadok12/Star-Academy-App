@@ -1,6 +1,9 @@
 // Star Academy Lahore - Export PDF & WhatsApp Share Utilities
 import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
+import { STAR_ACADEMY_LOGO_BASE64 } from '../constants/logoData';
+import { FAYSAL_BANK_QR_BASE64, OFFICIAL_BANK_DETAILS } from '../constants/bankQrCode';
+import { getAttendanceSessions, getFeeVouchers, getMarksheets, getBanks } from './storage';
 
 /**
  * Trigger native Print / Save as PDF using an offscreen printable window
@@ -174,9 +177,66 @@ function getCompleteHtmlDocument(title, content) {
           .badge-green { background: #dcfce7; color: #166534; }
           .badge-blue { background: #dbeafe; color: #1e40af; }
           .badge-amber { background: #fef3c7; color: #92400e; }
+          .badge-red { background: #fee2e2; color: #991b1b; }
+          .badge-purple { background: #f3e8ff; color: #6b21a8; }
+          .badge-late { background: #ffedd5; color: #c2410c; }
+          .kpi-card-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin: 8px 0 12px 0;
+          }
+          .kpi-card {
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            padding: 8px 6px;
+            text-align: center;
+          }
+          .kpi-val {
+            font-size: 12pt;
+            font-weight: 800;
+            color: #0f172a;
+          }
+          .kpi-lbl {
+            font-size: 7.5pt;
+            color: #64748b;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-top: 2px;
+          }
+          .subject-chip {
+            display: inline-block;
+            background: #eff6ff;
+            color: #1d4ed8;
+            border: 1px solid #bfdbfe;
+            padding: 2px 7px;
+            border-radius: 4px;
+            font-size: 8pt;
+            font-weight: 700;
+            margin: 2px 3px 2px 0;
+          }
+          .profile-hero {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            padding: 10px 14px;
+            margin-bottom: 12px;
+          }
+          .profile-avatar {
+            width: 65px;
+            height: 65px;
+            border-radius: 8px;
+            object-fit: cover;
+            border: 1.5px solid #cbd5e1;
+            background: #e2e8f0;
+          }
           .footer {
-            margin-top: 30px;
-            padding-top: 14px;
+            margin-top: 24px;
+            padding-top: 12px;
             border-top: 1px solid #cbd5e1;
             display: flex;
             justify-content: space-between;
@@ -186,7 +246,7 @@ function getCompleteHtmlDocument(title, content) {
           }
           .signature-box {
             text-align: center;
-            width: 180px;
+            width: 170px;
             border-top: 1.5px solid #0f172a;
             padding-top: 4px;
             font-weight: 800;
@@ -196,9 +256,12 @@ function getCompleteHtmlDocument(title, content) {
       </head>
       <body>
         <div class="header">
-          <div>
-            <h1 class="academy-title">Star Academy Lahore</h1>
-            <p class="academy-sub">Excellence in Matric & Intermediate Education</p>
+          <div style="display: flex; align-items: center; gap: 14px;">
+            <img src="${STAR_ACADEMY_LOGO_BASE64}" alt="Star Academy Logo" style="width: 56px; height: 56px; object-fit: contain;" />
+            <div>
+              <h1 class="academy-title">Star Academy Lahore</h1>
+              <p class="academy-sub">Excellence in Matric & Intermediate Education</p>
+            </div>
           </div>
           <div class="doc-badge">
             ${title}<br />
@@ -407,9 +470,12 @@ async function generatePdfDocument(title, bodyContent) {
       }
     </style>
     <div class="header">
-      <div>
-        <h1 class="academy-title">Star Academy Lahore</h1>
-        <p class="academy-sub">Excellence in Matric & Intermediate Education</p>
+      <div style="display: flex; align-items: center; gap: 14px;">
+        <img src="${STAR_ACADEMY_LOGO_BASE64}" alt="Star Academy Logo" style="width: 56px; height: 56px; object-fit: contain;" />
+        <div>
+          <h1 class="academy-title">Star Academy Lahore</h1>
+          <p class="academy-sub">Excellence in Matric & Intermediate Education</p>
+        </div>
       </div>
       <div class="doc-badge">
         ${title}<br />
@@ -577,29 +643,218 @@ export function shareTextToWhatsApp(text, targetPhone = null) {
 }
 
 // -------------------------------------------------------------
-// 1. STUDENT PROFILE EXPORT & SHARE
+// 1. STUDENT PROFILE EXPORT & SHARE (COMPLETE DOSSIER)
 // -------------------------------------------------------------
-function getStudentProfileHtml(student) {
+function getStudentProfileHtml(student, extraData = {}) {
   const fullName = `${student.firstName || ''} ${student.lastName || ''}`.trim();
-  return `
-    <h2 class="section-title">Official Student Profile Dossier</h2>
 
-    <div class="info-grid">
-      <div class="info-item">
-        <span class="info-label">Student ID:</span>
-        <span class="info-value">${student.id}</span>
+  // 1. Gather all linked modules
+  const attendanceSessions = extraData.attendanceSessions || (typeof getAttendanceSessions === 'function' ? getAttendanceSessions() : []) || [];
+  const feeVouchers = extraData.feeVouchers || (typeof getFeeVouchers === 'function' ? getFeeVouchers() : []) || [];
+  const marksheets = extraData.marksheets || (typeof getMarksheets === 'function' ? getMarksheets() : []) || [];
+  const banks = extraData.banks || (typeof getBanks === 'function' ? getBanks() : []) || [];
+
+  const bankNameMap = {};
+  banks.forEach((b) => {
+    bankNameMap[b.id] = b.bankName;
+  });
+
+  // 2. Attendance aggregation & calculations
+  const studentAttendanceRecords = [];
+  let presentCount = 0;
+  let absentCount = 0;
+  let leaveCount = 0;
+  let lateCount = 0;
+
+  attendanceSessions.forEach((session) => {
+    const match = session.records?.find((r) => r.studentId === student.id);
+    if (match) {
+      studentAttendanceRecords.push({
+        date: session.date,
+        studentClass: session.studentClass || student.studentClass,
+        subject: session.subject || 'Regular Session',
+        status: match.status,
+        arrivalTime: match.arrivalTime || '',
+        minutesLate: match.minutesLate || 0
+      });
+      if (match.status === 'Present') presentCount++;
+      else if (match.status === 'Absent') absentCount++;
+      else if (match.status === 'Leave') leaveCount++;
+      else if (match.status === 'Late') {
+        lateCount++;
+        presentCount++; // late arrivals are counted as present
+      }
+    }
+  });
+
+  studentAttendanceRecords.sort((a, b) => new Date(b.date) - new Date(a.date));
+  const totalAttendance = studentAttendanceRecords.length;
+  const attendancePercentage = totalAttendance > 0 ? Math.round((presentCount / totalAttendance) * 100) : 100;
+
+  // 3. Fee Vouchers & Ledger aggregation
+  const studentVouchers = feeVouchers.filter((v) => v.studentId === student.id);
+  studentVouchers.sort((a, b) => new Date(b.dueDate || b.createdAt || '') - new Date(a.dueDate || a.createdAt || ''));
+
+  const paidVouchers = studentVouchers.filter((v) => v.status === 'PAID');
+  const pendingVouchers = studentVouchers.filter((v) => v.status === 'PENDING');
+  const totalBilled = studentVouchers.reduce((s, v) => s + (Number(v.feeAmount) || 0), 0);
+  const totalPaid = paidVouchers.reduce((s, v) => s + (Number(v.amountPaid || v.feeAmount) || 0), 0);
+  const totalPending = pendingVouchers.reduce((s, v) => s + (Number(v.feeAmount) || 0), 0);
+
+  // 4. Marksheets & Examination Results aggregation
+  const studentExamResults = [];
+  marksheets.forEach((ms) => {
+    const list = ms.studentScores || ms.studentResults || [];
+    const lowerName = fullName.toLowerCase();
+    const found = list.find(
+      (r) => r.studentId === student.id || (r.studentName && r.studentName.toLowerCase() === lowerName)
+    );
+    if (found) {
+      studentExamResults.push({
+        title: ms.title || ms.testName || 'Academic Exam',
+        date: ms.createdAt || ms.date || 'N/A',
+        studentClass: ms.studentClass || student.studentClass,
+        section: ms.section || student.section,
+        totalObtained: found.totalObtained !== undefined ? found.totalObtained : found.marksObtained,
+        totalMax: found.totalMax !== undefined ? found.totalMax : found.maxMarks,
+        percentage: found.percentage || 0,
+        grade: found.grade || 'N/A',
+        isPassed: found.isPassed !== undefined ? found.isPassed : (Number(found.percentage) >= 40),
+        scores: found.scores || {}
+      });
+    }
+  });
+  studentExamResults.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+  const totalExams = studentExamResults.length;
+  const passedExams = studentExamResults.filter((e) => e.isPassed).length;
+  const avgExamPercentage =
+    totalExams > 0
+      ? (studentExamResults.reduce((acc, e) => acc + (Number(e.percentage) || 0), 0) / totalExams).toFixed(1)
+      : '0';
+
+  // 5. Enrolled Subjects
+  const subjects =
+    student.subjects && student.subjects.length > 0
+      ? student.subjects
+      : ['English', 'Urdu', 'Physics', 'Chemistry', 'Biology', 'Mathematics', 'Islamiat', 'Pak Studies'];
+
+  // 6. Build Attendance Rows (up to 15 latest records)
+  const attendanceRowsHtml = studentAttendanceRecords.slice(0, 15).map((r, idx) => {
+    let badgeClass = 'badge-green';
+    if (r.status === 'Absent') badgeClass = 'badge-red';
+    else if (r.status === 'Leave') badgeClass = 'badge-blue';
+    else if (r.status === 'Late') badgeClass = 'badge-late';
+
+    const timingDetails = r.arrivalTime
+      ? `${r.arrivalTime} ${r.minutesLate > 0 ? `(${r.minutesLate}m late)` : '(On Time)'}`
+      : '—';
+
+    return `
+      <tr>
+        <td style="text-align: center; font-weight: bold;">${idx + 1}</td>
+        <td><strong>${r.date}</strong></td>
+        <td>${r.subject} (${r.studentClass || 'Regular'})</td>
+        <td><span class="badge ${badgeClass}">${r.status}</span></td>
+        <td>${timingDetails}</td>
+      </tr>
+    `;
+  }).join('');
+
+  // 7. Build Fee Voucher Rows
+  const feeRowsHtml = studentVouchers.map((v, idx) => {
+    const isPaid = v.status === 'PAID';
+    const statusBadge = isPaid
+      ? '<span class="badge badge-green">PAID</span>'
+      : '<span class="badge badge-amber">PENDING</span>';
+    const bankName = v.bankId ? (bankNameMap[v.bankId] || v.bankId) : (isPaid ? 'Cash / Bank' : '—');
+    const paymentDate = v.paymentDate || (isPaid ? v.dueDate : '—');
+
+    return `
+      <tr>
+        <td style="text-align: center; font-weight: bold;">${idx + 1}</td>
+        <td><strong>${v.id || `VCH-${idx + 1}`}</strong></td>
+        <td>${v.month || 'Current Month'}</td>
+        <td>${v.dueDate || 'N/A'}</td>
+        <td style="font-weight: 800;">Rs. ${Number(v.feeAmount || 0).toLocaleString()}</td>
+        <td>${statusBadge}</td>
+        <td>${paymentDate}</td>
+        <td>${bankName}</td>
+      </tr>
+    `;
+  }).join('');
+
+  // 8. Build Exam Results Rows
+  const examRowsHtml = studentExamResults.map((e, idx) => {
+    const isPassed = e.isPassed;
+    const resultBadge = isPassed
+      ? '<span class="badge badge-green">PASSED</span>'
+      : '<span class="badge badge-red">FAILED</span>';
+
+    // Subject breakdown chips if present
+    const scoreEntries = Object.entries(e.scores || {});
+    const breakdown = scoreEntries.length > 0
+      ? `<div style="margin-top: 4px; font-size: 8pt; color: #475569;">${scoreEntries.map(([subj, val]) => `${subj}: <b>${val}</b>`).join(' • ')}</div>`
+      : '';
+
+    return `
+      <tr>
+        <td style="text-align: center; font-weight: bold;">${idx + 1}</td>
+        <td>
+          <strong>${e.title}</strong>
+          ${breakdown}
+        </td>
+        <td>${e.date}</td>
+        <td style="text-align: center;">${e.totalObtained} / ${e.totalMax}</td>
+        <td style="text-align: center; font-weight: 800;">${e.percentage}%</td>
+        <td style="text-align: center;"><span class="badge badge-purple">${e.grade}</span></td>
+        <td style="text-align: center;">${resultBadge}</td>
+      </tr>
+    `;
+  }).join('');
+
+  const avatarUrl = student.pic || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=256';
+  const isActive = !student.isLeft && student.isActive !== false;
+
+  return `
+    <!-- Top Hero Header with Student Photo & Identification -->
+    <div class="profile-hero">
+      <img src="${avatarUrl}" alt="${fullName}" class="profile-avatar" />
+      <div style="flex: 1;">
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+          <h2 style="margin: 0; font-size: 16pt; font-weight: 900; color: #0f172a; text-transform: uppercase;">
+            ${fullName}
+          </h2>
+          <span class="badge ${isActive ? 'badge-green' : 'badge-red'}" style="font-size: 9pt;">
+            ${isActive ? 'ACTIVE STUDENT' : 'WITHDRAWN / LEFT'}
+          </span>
+        </div>
+        <div style="display: flex; gap: 14px; margin-top: 5px; font-size: 9.5pt; color: #475569; font-weight: 700; flex-wrap: wrap;">
+          <span>Student ID: <b style="color: #0f172a;">${student.id}</b></span>
+          <span>•</span>
+          <span>Class: <b style="color: #0f172a;">${student.studentClass || student.class || 'N/A'}</b></span>
+          <span>•</span>
+          <span>Section: <b style="color: #2563eb;">${student.section || student.subject || 'Pre- Medical'}</b></span>
+          <span>•</span>
+          <span>Session: <b style="color: #0f172a;">${student.academicYear || student.session || '2026 - 27'}</b></span>
+        </div>
       </div>
+    </div>
+
+    <!-- Section 1: Personal & Admission Information -->
+    <h2 class="section-title">1. Personal & Admission Information</h2>
+    <div class="info-grid">
       <div class="info-item">
         <span class="info-label">Full Name:</span>
         <span class="info-value">${fullName}</span>
       </div>
       <div class="info-item">
-        <span class="info-label">Class:</span>
-        <span class="info-value">${student.studentClass || student.class || 'N/A'}</span>
+        <span class="info-label">Student Roll No:</span>
+        <span class="info-value">${student.id}</span>
       </div>
       <div class="info-item">
-        <span class="info-label">Section / Group:</span>
-        <span class="info-value">${student.section || student.subject || 'A'}</span>
+        <span class="info-label">Class & Group:</span>
+        <span class="info-value">${student.studentClass || 'N/A'} (${student.section || 'Pre- Medical'})</span>
       </div>
       <div class="info-item">
         <span class="info-label">Gender:</span>
@@ -610,46 +865,206 @@ function getStudentProfileHtml(student) {
         <span class="info-value">${student.academicYear || student.session || '2026 - 27'}</span>
       </div>
       <div class="info-item">
-        <span class="info-label">Father / Guardian:</span>
-        <span class="info-value">${student.fatherName || 'N/A'}</span>
+        <span class="info-label">Date of Admission:</span>
+        <span class="info-value">${student.dateOfJoining || student.dateOfAdmission || 'N/A'}</span>
       </div>
       <div class="info-item">
-        <span class="info-label">Contact / Phone:</span>
-        <span class="info-value">${student.contactNumber || student.phone || 'N/A'}</span>
+        <span class="info-label">B-Form / CNIC:</span>
+        <span class="info-value">${student.cnic || student.bForm || 'N/A'}</span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">Admission Status:</span>
+        <span class="info-value">${isActive ? 'Enrolled & Verified' : 'Inactive'}</span>
+      </div>
+    </div>
+
+    <!-- Section 2: Guardian & Contact Details -->
+    <h2 class="section-title">2. Guardian & Contact Details</h2>
+    <div class="info-grid">
+      <div class="info-item">
+        <span class="info-label">Father / Guardian:</span>
+        <span class="info-value">${student.fatherName || 'N/A'}</span>
       </div>
       <div class="info-item">
         <span class="info-label">Guardian CNIC:</span>
         <span class="info-value">${student.fatherCnic || 'N/A'}</span>
       </div>
       <div class="info-item">
-        <span class="info-label">Student CNIC / B-Form:</span>
-        <span class="info-value">${student.cnic || student.bForm || 'N/A'}</span>
+        <span class="info-label">Primary Contact No:</span>
+        <span class="info-value">${student.contactNumber || student.phone || 'N/A'}</span>
       </div>
       <div class="info-item">
-        <span class="info-label">Monthly Tuition Fee:</span>
-        <span class="info-value">Rs. ${Number(student.fees || student.monthlyFee || 0).toLocaleString()}</span>
-      </div>
-      <div class="info-item">
-        <span class="info-label">Date of Joining:</span>
-        <span class="info-value">${student.dateOfJoining || student.dateOfAdmission || 'N/A'}</span>
+        <span class="info-label">WhatsApp Number:</span>
+        <span class="info-value">${student.whatsappNumber || student.contactNumber || 'N/A'}</span>
       </div>
       <div class="info-item" style="grid-column: span 2;">
         <span class="info-label">Residential Address:</span>
-        <span class="info-value">${student.address || 'Lahore, Pakistan'}</span>
+        <span class="info-value">${student.address || 'Lahore, Punjab, Pakistan'}</span>
+      </div>
+    </div>
+
+    <!-- Section 3: Enrolled Subjects -->
+    <h2 class="section-title">3. Enrolled Curriculum Subjects</h2>
+    <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 10px 14px; margin-bottom: 14px;">
+      <div style="display: flex; flex-wrap: wrap; gap: 4px;">
+        ${subjects.map((s) => `<span class="subject-chip">✓ ${s}</span>`).join('')}
+      </div>
+    </div>
+
+    <!-- Section 4: Tuition Fee Statement & Voucher History -->
+    <h2 class="section-title">4. Financial & Tuition Fee Statement</h2>
+    <div class="kpi-card-grid">
+      <div class="kpi-card">
+        <div class="kpi-val">Rs. ${Number(student.fees || student.monthlyFee || 0).toLocaleString()}</div>
+        <div class="kpi-lbl">Monthly Tuition Fee</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-val">Rs. ${totalBilled.toLocaleString()}</div>
+        <div class="kpi-lbl">Total Billed</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-val" style="color: #166534;">Rs. ${totalPaid.toLocaleString()}</div>
+        <div class="kpi-lbl">Total Paid</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-val" style="color: ${totalPending > 0 ? '#991b1b' : '#166534'};">
+          Rs. ${totalPending.toLocaleString()}
+        </div>
+        <div class="kpi-lbl">${totalPending > 0 ? 'Pending Dues' : 'Balance Cleared'}</div>
+      </div>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 30px; text-align: center;">#</th>
+          <th>Voucher No</th>
+          <th>Billing Month</th>
+          <th>Due Date</th>
+          <th>Fee Amount</th>
+          <th>Status</th>
+          <th>Paid Date</th>
+          <th>Bank / Method</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${feeRowsHtml || '<tr><td colspan="8" style="text-align: center; color: #64748b;">No fee vouchers recorded for this student.</td></tr>'}
+      </tbody>
+    </table>
+
+    <!-- Section 5: Attendance & Punctuality Record -->
+    <h2 class="section-title" style="margin-top: 18px;">5. Attendance & Punctuality Record</h2>
+    <div class="kpi-card-grid">
+      <div class="kpi-card">
+        <div class="kpi-val">${totalAttendance}</div>
+        <div class="kpi-lbl">Total Sessions</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-val" style="color: #166534;">${presentCount}</div>
+        <div class="kpi-lbl">Present Days</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-val" style="color: #c2410c;">${lateCount}</div>
+        <div class="kpi-lbl">Latecomers</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-val" style="color: #1e40af;">${attendancePercentage}%</div>
+        <div class="kpi-lbl">Attendance Rate</div>
+      </div>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 30px; text-align: center;">#</th>
+          <th>Date</th>
+          <th>Subject / Session</th>
+          <th>Status</th>
+          <th>Arrival Time & Punctuality</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${attendanceRowsHtml || '<tr><td colspan="5" style="text-align: center; color: #64748b;">No daily attendance sessions logged.</td></tr>'}
+      </tbody>
+    </table>
+
+    <!-- Section 6: Examination Results & Academic Marksheets -->
+    <h2 class="section-title" style="margin-top: 18px;">6. Examination & Academic Marksheets</h2>
+    <div class="kpi-card-grid">
+      <div class="kpi-card">
+        <div class="kpi-val">${totalExams}</div>
+        <div class="kpi-lbl">Total Tests</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-val" style="color: #166534;">${passedExams}</div>
+        <div class="kpi-lbl">Tests Passed</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-val" style="color: #1e40af;">${avgExamPercentage}%</div>
+        <div class="kpi-lbl">Average Score</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-val" style="color: #6b21a8;">
+          ${avgExamPercentage >= 80 ? 'A+' : avgExamPercentage >= 70 ? 'A' : avgExamPercentage >= 60 ? 'B' : avgExamPercentage >= 50 ? 'C' : 'Pass'}
+        </div>
+        <div class="kpi-lbl">Academic Grade</div>
+      </div>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 30px; text-align: center;">#</th>
+          <th>Examination Title & Subject Breakdown</th>
+          <th>Date</th>
+          <th style="text-align: center;">Marks</th>
+          <th style="text-align: center;">Percentage</th>
+          <th style="text-align: center;">Grade</th>
+          <th style="text-align: center;">Result</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${examRowsHtml || '<tr><td colspan="7" style="text-align: center; color: #64748b;">No marksheet examinations found for this student.</td></tr>'}
+      </tbody>
+    </table>
+
+    <!-- Section 7: Official Academy Signatures & Verification -->
+    <div style="margin-top: 24px; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; background: #f8fafc; display: flex; align-items: center; justify-content: space-between; gap: 16px;">
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <img src="${FAYSAL_BANK_QR_BASE64}" alt="Verification QR" style="width: 55px; height: 55px; object-fit: contain; border: 1px solid #cbd5e1; border-radius: 6px; padding: 2px; background: #fff;" />
+        <div style="font-size: 8.5pt; color: #475569; line-height: 1.35;">
+          <b style="color: #0f172a;">Official Star Academy Record</b><br />
+          Scan QR code to verify student credentials and online fee payment.<br />
+          Record ID: <b>${student.id}</b> • Generated on ${new Date().toLocaleDateString('en-GB')}
+        </div>
+      </div>
+      <div style="display: flex; gap: 24px;">
+        <div style="text-align: center; width: 140px; border-top: 1.5px solid #0f172a; padding-top: 4px; font-size: 8.5pt; font-weight: 800; color: #0f172a;">
+          Parent / Guardian
+        </div>
+        <div style="text-align: center; width: 140px; border-top: 1.5px solid #0f172a; padding-top: 4px; font-size: 8.5pt; font-weight: 800; color: #0f172a;">
+          Principal / Admin
+        </div>
       </div>
     </div>
   `;
 }
 
-export function exportStudentProfilePDF(student) {
+export function exportStudentProfilePDF(student, extraData = {}) {
   const fullName = `${student.firstName || ''} ${student.lastName || ''}`.trim();
-  const html = getStudentProfileHtml(student);
+  const html = getStudentProfileHtml(student, extraData);
   downloadHtmlAsPDF(`Student Profile - ${fullName}`, html, `Student_Profile_${student.id || ''}_${fullName}`);
 }
 
-export function shareStudentProfileWhatsApp(student) {
+export function printStudentProfile(student, extraData = {}) {
   const fullName = `${student.firstName || ''} ${student.lastName || ''}`.trim();
-  const html = getStudentProfileHtml(student);
+  const html = getStudentProfileHtml(student, extraData);
+  printHtmlAsPDF(`Student Profile - ${fullName}`, html);
+}
+
+export function shareStudentProfileWhatsApp(student, extraData = {}) {
+  const fullName = `${student.firstName || ''} ${student.lastName || ''}`.trim();
+  const html = getStudentProfileHtml(student, extraData);
   shareHtmlAsPDFToWhatsApp(
     `Student Profile - ${fullName}`,
     html,
@@ -953,3 +1368,154 @@ export function shareSOSWhatsApp(scheme) {
   const filename = `Scheme_of_Study_${scheme.studentClass}_${scheme.section}`;
   shareHtmlAsPDFToWhatsApp(title, getSOSHtml(scheme), filename);
 }
+
+// -------------------------------------------------------------
+// 6. FEE VOUCHERS WITH BANK DETAILS & QR CODE (Single & All)
+// -------------------------------------------------------------
+export function getSingleFeeVoucherHtml(voucher, isStandalonePage = false) {
+  const isPaid = voucher.status === 'PAID';
+  return `
+    <div class="voucher-wrapper" style="border: 2px solid #312e81; border-radius: 12px; padding: 18px; background: #ffffff; margin-bottom: 20px; ${isStandalonePage ? 'page-break-after: always;' : ''}">
+      <!-- Voucher Top Bar -->
+      <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #e2e8f0; padding-bottom: 12px; margin-bottom: 14px;">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <img src="${STAR_ACADEMY_LOGO_BASE64}" alt="Star Academy Logo" style="width: 52px; height: 52px; object-fit: contain;" />
+          <div>
+            <h2 style="font-size: 15pt; font-weight: 900; color: #312e81; margin: 0; text-transform: uppercase; letter-spacing: -0.3px;">Star Academy Lahore</h2>
+            <p style="font-size: 8.5pt; color: #6366f1; margin: 2px 0 0; font-weight: 700;">Official Tuition Fee Voucher • ${isPaid ? 'PAID RECEIPT' : 'STUDENT / BANK COPY'}</p>
+          </div>
+        </div>
+        <div style="text-align: right;">
+          <span style="display: inline-block; background: #eef2ff; color: #3730a3; border: 1px solid #c7d2fe; padding: 3px 8px; border-radius: 6px; font-size: 8.5pt; font-weight: 800; font-family: monospace;">
+            ${voucher.id}
+          </span>
+          <div style="font-size: 8pt; color: #64748b; margin-top: 3px;">Month: <strong>${voucher.month || 'September 2026'}</strong></div>
+        </div>
+      </div>
+
+      <!-- Student Info Grid -->
+      <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px 14px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 10px 14px; margin-bottom: 14px; font-size: 9pt;">
+        <div><span style="color: #64748b; font-weight: 600;">Student Name:</span> <strong style="color: #0f172a;">${voucher.studentName}</strong></div>
+        <div><span style="color: #64748b; font-weight: 600;">Student Roll No:</span> <strong style="color: #4338ca; font-family: monospace;">${voucher.studentId}</strong></div>
+        <div><span style="color: #64748b; font-weight: 600;">Father's Name:</span> <strong style="color: #0f172a;">${voucher.fatherName || 'N/A'}</strong></div>
+        <div><span style="color: #64748b; font-weight: 600;">Class & Section:</span> <strong style="color: #0f172a;">${voucher.studentClass} (${voucher.section || 'General'})</strong></div>
+        <div><span style="color: #64748b; font-weight: 600;">Due Date:</span> <strong style="color: #dc2626;">${voucher.dueDate || '10th of Month'}</strong></div>
+        <div><span style="color: #64748b; font-weight: 600;">Payment Status:</span> <strong style="color: ${isPaid ? '#166534' : '#b45309'};">${voucher.status}</strong></div>
+      </div>
+
+      <!-- Fee Breakdown & Banking Details + QR Code 2-Column Section -->
+      <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 16px; margin-bottom: 14px;">
+        <!-- Left Column: Fee Table -->
+        <div>
+          <table style="width: 100%; border-collapse: collapse; font-size: 9pt;">
+            <thead>
+              <tr style="background: #f1f5f9;">
+                <th style="padding: 6px 8px; border: 1px solid #cbd5e1; text-align: left;">Particulars</th>
+                <th style="padding: 6px 8px; border: 1px solid #cbd5e1; text-align: right; width: 90px;">Amount (PKR)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="padding: 6px 8px; border: 1px solid #e2e8f0;">Monthly Tuition Fee</td>
+                <td style="padding: 6px 8px; border: 1px solid #e2e8f0; text-align: right; font-weight: bold;">${Number(voucher.feeAmount || 0).toLocaleString()}</td>
+              </tr>
+              <tr>
+                <td style="padding: 6px 8px; border: 1px solid #e2e8f0;">Previous Arrears</td>
+                <td style="padding: 6px 8px; border: 1px solid #e2e8f0; text-align: right;">0</td>
+              </tr>
+              <tr style="background: #eef2ff; font-weight: bold;">
+                <td style="padding: 6px 8px; border: 1px solid #cbd5e1; color: #1e1b4b;">Total Payable by Due Date</td>
+                <td style="padding: 6px 8px; border: 1px solid #cbd5e1; text-align: right; color: #1e1b4b; font-size: 10pt;">Rs. ${Number(voucher.feeAmount || 0).toLocaleString()}</td>
+              </tr>
+              <tr style="color: #b91c1c;">
+                <td style="padding: 4px 8px; border: 1px solid #e2e8f0; font-size: 8pt;">Late Fee Fine (After Due Date)</td>
+                <td style="padding: 4px 8px; border: 1px solid #e2e8f0; text-align: right; font-size: 8pt;">Rs. 200</td>
+              </tr>
+              <tr style="background: #fef2f2; font-weight: bold; color: #991b1b;">
+                <td style="padding: 6px 8px; border: 1px solid #cbd5e1;">Payable After Due Date</td>
+                <td style="padding: 6px 8px; border: 1px solid #cbd5e1; text-align: right;">Rs. ${(Number(voucher.feeAmount || 0) + 200).toLocaleString()}</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div style="margin-top: 10px; font-size: 8pt; color: #64748b; line-height: 1.3;">
+            • Fee once paid is non-refundable and non-transferable.<br />
+            • Please present this voucher when depositing at bank or academy accounts.
+          </div>
+        </div>
+
+        <!-- Right Column: Official Banking Details & Attached QR Code -->
+        <div style="background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 12px; text-align: center;">
+          <div style="font-size: 8.5pt; font-weight: 800; color: #1e293b; text-transform: uppercase; margin-bottom: 6px; letter-spacing: 0.3px;">
+            Banking & Deposit Details
+          </div>
+
+          <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 8px; text-align: left; font-size: 8.5pt; margin-bottom: 8px;">
+            <div style="margin-bottom: 3px;"><span style="color: #64748b; font-weight: 600;">Bank:</span> <strong style="color: #0f172a;">${OFFICIAL_BANK_DETAILS.bankName}</strong></div>
+            <div style="margin-bottom: 3px;"><span style="color: #64748b; font-weight: 600;">Title:</span> <strong style="color: #0f172a;">${OFFICIAL_BANK_DETAILS.accountTitle}</strong></div>
+            <div><span style="color: #64748b; font-weight: 600;">Account:</span> <strong style="color: #4338ca; font-family: monospace; font-size: 9.5pt;">${OFFICIAL_BANK_DETAILS.accountNumber}</strong></div>
+          </div>
+
+          <!-- Attached QR Code Below Banking Details -->
+          <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; margin-top: 4px;">
+            <div style="background: #ffffff; padding: 4px; border: 1px solid #cbd5e1; border-radius: 8px; display: inline-block;">
+              <img src="${FAYSAL_BANK_QR_BASE64}" alt="Faysal Bank QR Code" style="width: 105px; height: 105px; object-fit: contain; display: block;" />
+            </div>
+            <span style="font-size: 7.5pt; font-weight: 700; color: #475569; margin-top: 4px;">
+              Scan QR code to pay via Raast / Any Banking App
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Signatures -->
+      <div style="display: flex; justify-content: space-between; align-items: flex-end; padding-top: 12px; border-top: 1px solid #e2e8f0; font-size: 8pt; color: #64748b;">
+        <div style="text-align: center; width: 140px;">
+          <div style="border-top: 1px solid #0f172a; padding-top: 3px; font-weight: bold; color: #0f172a;">Depositor Signature</div>
+        </div>
+        <div style="text-align: center; font-size: 7.5pt;">
+          Official Star Academy Accounts Copy
+        </div>
+        <div style="text-align: center; width: 140px;">
+          <div style="border-top: 1px solid #0f172a; padding-top: 3px; font-weight: bold; color: #0f172a;">Authorized Cashier</div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+export function getAllFeeVouchersHtml(vouchers) {
+  return (vouchers || [])
+    .map((voucher, idx) => getSingleFeeVoucherHtml(voucher, idx < vouchers.length - 1))
+    .join('');
+}
+
+export function exportSingleFeeVoucherPDF(voucher) {
+  const title = `Fee Voucher - ${voucher.studentName} (${voucher.id})`;
+  const filename = `Fee_Voucher_${voucher.id}_${voucher.studentName.replace(/\s+/g, '_')}`;
+  downloadHtmlAsPDF(title, getSingleFeeVoucherHtml(voucher), filename);
+}
+
+export function shareFeeVoucherPDFToWhatsApp(voucher) {
+  const title = `Fee Voucher - ${voucher.studentName} (${voucher.id})`;
+  const filename = `Fee_Voucher_${voucher.id}_${voucher.studentName.replace(/\s+/g, '_')}`;
+  const phone = voucher.whatsappNumber || voucher.fatherContact || '';
+  shareHtmlAsPDFToWhatsApp(title, getSingleFeeVoucherHtml(voucher), filename, phone);
+}
+
+export function printSingleFeeVoucher(voucher) {
+  const title = `Fee Voucher - ${voucher.studentName} (${voucher.id})`;
+  printHtmlAsPDF(title, getSingleFeeVoucherHtml(voucher));
+}
+
+export function exportAllFeeVouchersPDF(vouchers, monthTitle = 'September 2026') {
+  const title = `All Student Fee Vouchers - ${monthTitle} (${vouchers.length} Students)`;
+  const filename = `All_Fee_Vouchers_${monthTitle.replace(/\s+/g, '_')}`;
+  downloadHtmlAsPDF(title, getAllFeeVouchersHtml(vouchers), filename);
+}
+
+export function printAllFeeVouchers(vouchers, monthTitle = 'September 2026') {
+  const title = `All Student Fee Vouchers - ${monthTitle} (${vouchers.length} Students)`;
+  printHtmlAsPDF(title, getAllFeeVouchersHtml(vouchers));
+}
+

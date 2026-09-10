@@ -20,7 +20,7 @@ export default function MobileFrame({
           onClick={() => setIsFrameMode(true)}
           className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full transition-all ${
             isFrameMode
-              ? 'bg-indigo-600 text-white shadow-sm font-semibold'
+              ? 'bg-blue-600 text-white shadow-sm font-semibold'
               : 'hover:text-white'
           }`}
         >
@@ -31,7 +31,7 @@ export default function MobileFrame({
           onClick={() => setIsFrameMode(false)}
           className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full transition-all ${
             !isFrameMode
-              ? 'bg-indigo-600 text-white shadow-sm font-semibold'
+              ? 'bg-blue-600 text-white shadow-sm font-semibold'
               : 'hover:text-white'
           }`}
         >
@@ -50,10 +50,10 @@ export default function MobileFrame({
         style={{ minHeight: isFrameMode ? '840px' : '100vh' }}
       >
         {/* Phone Notch & Status Bar (in Frame mode or top of app) */}
-        <div className="bg-indigo-800 text-white px-6 pt-2 pb-1.5 flex items-center justify-between text-xs select-none">
+        <div className="bg-blue-800 text-white px-6 pt-2 pb-1.5 flex items-center justify-between text-xs select-none">
           <span className="font-semibold text-[11px] tracking-tight">{currentTime}</span>
           <div className="w-20 h-4 bg-slate-900 rounded-full mx-auto -mt-1 hidden sm:block"></div>
-          <div className="flex items-center gap-1.5 text-indigo-100">
+          <div className="flex items-center gap-1.5 text-blue-100">
             <Signal className="w-3 h-3" />
             <Wifi className="w-3 h-3" />
             <Battery className="w-3.5 h-3.5" />

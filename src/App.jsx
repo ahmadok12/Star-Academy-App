@@ -50,7 +50,9 @@ import {
   saveAcademicSessionsList,
   DEFAULT_ACADEMIC_SESSION,
   getSchemesOfStudy,
-  saveSchemesOfStudy
+  saveSchemesOfStudy,
+  getInquiries,
+  saveInquiries
 } from './utils/storage';
 import { CheckCircle, Info, Trash2, AlertCircle } from 'lucide-react';
 
@@ -84,6 +86,9 @@ export default function App() {
   // Settings & Curriculum Subjects Data
   const [curriculumSubjects, setCurriculumSubjects] = useState({});
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+
+  // Inquiry / Walk-in Leads Data
+  const [inquiries, setInquiries] = useState([]);
 
   // Academic Session Management (User Request: Default '2026 - 27')
   const [currentSession, setCurrentSession] = useState(getAcademicSession() || DEFAULT_ACADEMIC_SESSION);
@@ -155,7 +160,8 @@ export default function App() {
         list: 'Students Directory',
         student_attendance: 'Student Attendance Register',
         teacher_attendance: 'Teacher Attendance Register',
-        fee_vouchers: 'Fee Vouchers & Invoicing'
+        fee_vouchers: 'Fee Vouchers & Invoicing',
+        inquiries: 'Student Inquiries & Follow-up'
       },
       admin: {
         sos: 'Curriculum Scheme of Study',
@@ -213,9 +219,32 @@ export default function App() {
     setCurriculumSubjects(getCurriculumSubjects());
     setMarksheets(getMarksheets(loadedStudents));
     setSchemesOfStudy(getSchemesOfStudy());
+    setInquiries(getInquiries());
     setCurrentSession(getAcademicSession() || DEFAULT_ACADEMIC_SESSION);
     setAcademicSessionsList(getAcademicSessionsList());
   }, []);
+
+  // --- Inquiry Handlers ---
+  const handleAddInquiry = (newInquiry) => {
+    const updated = [newInquiry, ...inquiries];
+    setInquiries(updated);
+    saveInquiries(updated);
+    showToast(`Inquiry for ${newInquiry.studentName} created successfully!`);
+  };
+
+  const handleUpdateInquiry = (updatedInquiry) => {
+    const updated = inquiries.map(i => i.id === updatedInquiry.id ? updatedInquiry : i);
+    setInquiries(updated);
+    saveInquiries(updated);
+    showToast(`Inquiry for ${updatedInquiry.studentName} updated successfully!`);
+  };
+
+  const handleDeleteInquiry = (inquiryId) => {
+    const updated = inquiries.filter(i => i.id !== inquiryId);
+    setInquiries(updated);
+    saveInquiries(updated);
+    showToast('Inquiry deleted successfully!');
+  };
 
   const handleSaveCurriculumSubjects = (updatedMap) => {
     setCurriculumSubjects(updatedMap);
@@ -756,6 +785,10 @@ export default function App() {
           onUpdateStudent={handleUpdateStudent}
           onDeleteStudent={handleDeleteStudent}
           onToggleLeftStatus={handleToggleStudentStatus}
+          inquiries={inquiries}
+          onAddInquiry={handleAddInquiry}
+          onUpdateInquiry={handleUpdateInquiry}
+          onDeleteInquiry={handleDeleteInquiry}
           attendanceSessions={attendanceSessions}
           onSaveAttendance={handleSaveAttendance}
           onUpdateAttendanceSession={handleUpdateAttendanceSession}
