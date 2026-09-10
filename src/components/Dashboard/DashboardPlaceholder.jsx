@@ -131,22 +131,24 @@ export default function DashboardPlaceholder({
     return (
       <div className="flex flex-col flex-1 pb-16">
         {/* Subpage Header with Back Button */}
-        <div className="flex items-center justify-between px-4 py-3 bg-white border-b border-slate-200 sticky top-0 z-20">
-          <button
-            type="button"
-            onClick={() => setSubPage(null)}
-            className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-semibold transition-all tap-active cursor-pointer"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            <span>Back to Dashboard</span>
-          </button>
-          <span className="text-sm md:text-base font-bold text-slate-800 tracking-tight">
-            {pageTitle}
-          </span>
+        <div className="bg-white/95 backdrop-blur-md border-b border-slate-200/80 sticky top-0 z-20 shadow-xs">
+          <div className="max-w-6xl mx-auto w-full flex items-center justify-between px-4 py-3">
+            <button
+              type="button"
+              onClick={() => setSubPage(null)}
+              className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-semibold transition-all tap-active cursor-pointer"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              <span>Back to Dashboard</span>
+            </button>
+            <span className="text-sm md:text-base font-bold text-slate-800 tracking-tight">
+              {pageTitle}
+            </span>
+          </div>
         </div>
 
         {/* View-Only Subpage Contents */}
-        <div className="p-4 md:p-6">
+        <div className="max-w-6xl mx-auto w-full p-4 md:p-6">
           {subPage === 'timetable' && (
             <TimetableSection
               timetables={timetables}
@@ -187,7 +189,7 @@ export default function DashboardPlaceholder({
 
   // Dashboard Main Hub View
   return (
-    <div className="p-4 md:p-6 space-y-4 pb-20 w-full min-w-0 overflow-x-hidden">
+    <div className="max-w-6xl mx-auto p-4 md:p-6 space-y-4 pb-20 w-full min-w-0 overflow-x-hidden">
       {/* Grid: Responsive 1/2/3 columns */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {menuItems.map((item) => {

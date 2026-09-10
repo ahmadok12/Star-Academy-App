@@ -189,96 +189,94 @@ export default function ReportsPlaceholder({
   ];
 
   // SUBPAGE RENDER ROUTING
-  if (activeReport === 'total_profit') {
-    return (
-      <TotalProfitReport
-        feeVouchers={feeVouchers}
-        chargedExpenses={chargedExpenses}
-        teacherSalaries={teacherSalaries}
-        banks={banks}
-        currentSession={currentSession}
-        onBack={() => setActiveReport(null)}
-      />
-    );
-  }
+  if (activeReport) {
+    let reportComponent = null;
 
-  if (activeReport === 'fee_paid_pending') {
-    return (
-      <FeePaidPendingReport
-        feeVouchers={feeVouchers}
-        allStudents={allStudents}
-        banks={banks}
-        currentSession={currentSession}
-        onBack={() => setActiveReport(null)}
-      />
-    );
-  }
+    if (activeReport === 'total_profit') {
+      reportComponent = (
+        <TotalProfitReport
+          feeVouchers={feeVouchers}
+          chargedExpenses={chargedExpenses}
+          teacherSalaries={teacherSalaries}
+          banks={banks}
+          currentSession={currentSession}
+          onBack={() => setActiveReport(null)}
+        />
+      );
+    } else if (activeReport === 'fee_paid_pending') {
+      reportComponent = (
+        <FeePaidPendingReport
+          feeVouchers={feeVouchers}
+          allStudents={allStudents}
+          banks={banks}
+          currentSession={currentSession}
+          onBack={() => setActiveReport(null)}
+        />
+      );
+    } else if (activeReport === 'monthly_fee_collection') {
+      reportComponent = (
+        <MonthlyFeeCollectionReport
+          feeVouchers={feeVouchers}
+          currentSession={currentSession}
+          onBack={() => setActiveReport(null)}
+        />
+      );
+    } else if (activeReport === 'expense_breakdown') {
+      reportComponent = (
+        <ExpenseBreakdownReport
+          chargedExpenses={chargedExpenses}
+          expenseCategories={expenseCategories}
+          banks={banks}
+          currentSession={currentSession}
+          onBack={() => setActiveReport(null)}
+        />
+      );
+    } else if (activeReport === 'teacher_payroll') {
+      reportComponent = (
+        <TeacherPayrollReport
+          teachers={teachers}
+          teacherSalaries={teacherSalaries}
+          banks={banks}
+          currentSession={currentSession}
+          onBack={() => setActiveReport(null)}
+        />
+      );
+    } else if (activeReport === 'student_result_analysis') {
+      reportComponent = (
+        <ExamPassFailReport
+          marksheets={marksheets}
+          allStudents={allStudents}
+          currentSession={currentSession}
+          onBack={() => setActiveReport(null)}
+        />
+      );
+    } else if (activeReport === 'student_attendance') {
+      reportComponent = (
+        <StudentAttendanceReport
+          attendanceSessions={attendanceSessions}
+          allStudents={allStudents}
+          currentSession={currentSession}
+          onBack={() => setActiveReport(null)}
+        />
+      );
+    } else if (activeReport === 'teacher_attendance') {
+      reportComponent = (
+        <TeacherAttendanceReport
+          teacherAttendanceSessions={teacherAttendanceSessions}
+          teachers={teachers}
+          currentSession={currentSession}
+          onBack={() => setActiveReport(null)}
+        />
+      );
+    }
 
-  if (activeReport === 'monthly_fee_collection') {
-    return (
-      <MonthlyFeeCollectionReport
-        feeVouchers={feeVouchers}
-        currentSession={currentSession}
-        onBack={() => setActiveReport(null)}
-      />
-    );
-  }
-
-  if (activeReport === 'expense_breakdown') {
-    return (
-      <ExpenseBreakdownReport
-        chargedExpenses={chargedExpenses}
-        expenseCategories={expenseCategories}
-        banks={banks}
-        currentSession={currentSession}
-        onBack={() => setActiveReport(null)}
-      />
-    );
-  }
-
-  if (activeReport === 'teacher_payroll') {
-    return (
-      <TeacherPayrollReport
-        teachers={teachers}
-        teacherSalaries={teacherSalaries}
-        banks={banks}
-        currentSession={currentSession}
-        onBack={() => setActiveReport(null)}
-      />
-    );
-  }
-
-  if (activeReport === 'student_result_analysis') {
-    return (
-      <ExamPassFailReport
-        marksheets={marksheets}
-        allStudents={allStudents}
-        currentSession={currentSession}
-        onBack={() => setActiveReport(null)}
-      />
-    );
-  }
-
-  if (activeReport === 'student_attendance') {
-    return (
-      <StudentAttendanceReport
-        attendanceSessions={attendanceSessions}
-        allStudents={allStudents}
-        currentSession={currentSession}
-        onBack={() => setActiveReport(null)}
-      />
-    );
-  }
-
-  if (activeReport === 'teacher_attendance') {
-    return (
-      <TeacherAttendanceReport
-        teacherAttendanceSessions={teacherAttendanceSessions}
-        teachers={teachers}
-        currentSession={currentSession}
-        onBack={() => setActiveReport(null)}
-      />
-    );
+    if (reportComponent) {
+      return (
+        <div className="max-w-6xl mx-auto w-full">
+          {reportComponent}
+        </div>
+      );
+    }
   }
 
   // Session archive students calculation
@@ -296,7 +294,7 @@ export default function ReportsPlaceholder({
 
   // MAIN REPORTS HUB SCREEN
   return (
-    <div className="p-3.5 space-y-4 pb-24 w-full min-w-0 overflow-x-hidden">
+    <div className="max-w-6xl mx-auto p-4 md:p-6 space-y-4 pb-24 w-full min-w-0 overflow-x-hidden">
       {/* List of 8 Report Cards */}
       <div className="w-full min-w-0">
         <div className="flex items-center justify-between mb-3 px-1">
