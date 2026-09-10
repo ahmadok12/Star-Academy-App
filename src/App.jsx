@@ -937,8 +937,8 @@ export default function App() {
               onNavigate={handleDesktopNavigate}
             />
 
-            <main className="flex-1 overflow-y-auto bg-slate-50 p-4 md:p-8">
-              <div className="max-w-6xl mx-auto w-full">
+            <main className="flex-1 overflow-y-auto bg-slate-50">
+              <div className="w-full">
                 {renderTabContent()}
               </div>
             </main>

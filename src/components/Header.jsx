@@ -10,7 +10,7 @@ export default function Header({ studentCount, attendanceCount, activeTab, onNav
   });
 
   return (
-    <header className="sticky top-0 z-30 bg-gradient-to-r from-blue-700 via-blue-600 to-blue-700 text-white shadow-xs">
+    <header className="relative z-30 bg-gradient-to-r from-blue-700 via-blue-600 to-blue-700 text-white shadow-xs">
       {/* Academy Brand Header */}
       <div className="px-4 pt-3 pb-3">
         <div className="flex items-center justify-between">
