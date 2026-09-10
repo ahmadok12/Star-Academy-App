@@ -1,0 +1,386 @@
+import React, { useMemo, useState } from 'react';
+import {
+  ArrowLeft,
+  Award,
+  Download,
+  MessageCircle,
+  TrendingUp,
+  CheckCircle2,
+  XCircle,
+  Search,
+  Filter,
+  Users
+} from 'lucide-react';
+import { downloadHtmlAsPDF, shareHtmlAsPDFToWhatsApp } from '../../utils/exportShareUtils';
+
+export default function ExamPassFailReport({
+  marksheets = [],
+  allStudents = [],
+  currentSession = '2026 - 27',
+  onBack
+}) {
+  const [selectedClass, setSelectedClass] = useState('ALL');
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const studentMap = useMemo(() => {
+    const map = {};
+    allStudents.forEach(s => { map[s.id] = s; });
+    return map;
+  }, [allStudents]);
+
+  // Aggregate Exam Analysis
+  const analysis = useMemo(() => {
+    let totalCandidates = 0;
+    let totalPassed = 0;
+    let totalFailed = 0;
+
+    const grades = { 'A+': 0, 'A': 0, 'B': 0, 'C': 0, 'F': 0 };
+
+    const examList = marksheets.map(m => {
+      const scores = m.studentScores || [];
+      const total = scores.length;
+      let passed = 0;
+      let failed = 0;
+
+      scores.forEach(s => {
+        totalCandidates++;
+        const g = s.grade || (s.percentage >= 80 ? 'A+' : s.percentage >= 70 ? 'A' : s.percentage >= 60 ? 'B' : s.percentage >= 50 ? 'C' : 'F');
+        if (grades[g] !== undefined) grades[g]++;
+        else grades['F']++;
+
+        if (s.isPassed || s.percentage >= 50) {
+          passed++;
+          totalPassed++;
+        } else {
+          failed++;
+          totalFailed++;
+        }
+      });
+
+      const passRate = total > 0 ? ((passed / total) * 100).toFixed(1) : '0.0';
+      const topper = [...scores].sort((a, b) => (b.percentage || 0) - (a.percentage || 0))[0];
+      const topperStudent = studentMap[topper?.studentId];
+      const topperName = topperStudent ? `${topperStudent.firstName} ${topperStudent.lastName}` : topper?.studentName || 'N/A';
+
+      return {
+        ...m,
+        total,
+        passed,
+        failed,
+        passRate,
+        topperName,
+        topperPercentage: topper?.percentage || 0
+      };
+    });
+
+    const overallPassRate = totalCandidates > 0 ? ((totalPassed / totalCandidates) * 100).toFixed(1) : '0.0';
+    const overallFailRate = totalCandidates > 0 ? ((totalFailed / totalCandidates) * 100).toFixed(1) : '0.0';
+
+    return {
+      examList,
+      totalExams: marksheets.length,
+      totalCandidates,
+      totalPassed,
+      totalFailed,
+      overallPassRate,
+      overallFailRate,
+      grades
+    };
+  }, [marksheets, studentMap]);
+
+  const filteredExams = useMemo(() => {
+    return analysis.examList.filter(m => {
+      if (selectedClass !== 'ALL' && m.studentClass !== selectedClass) return false;
+      if (searchQuery.trim()) {
+        const q = searchQuery.toLowerCase();
+        const matchTitle = (m.title || m.testName || '').toLowerCase().includes(q);
+        const matchClass = (m.studentClass || '').toLowerCase().includes(q);
+        return matchTitle || matchClass;
+      }
+      return true;
+    });
+  }, [analysis.examList, selectedClass, searchQuery]);
+
+  const classes = ['ALL', '9th', '10th', 'FSc Part 1', 'FSc Part 2'];
+
+  const getReportHtml = () => {
+    const examRowsHtml = filteredExams.map((m, idx) => `
+      <tr>
+        <td style="text-align: center; font-weight: bold;">${idx + 1}</td>
+        <td><strong>${m.title || m.testName}</strong></td>
+        <td>${m.studentClass} (${m.section})</td>
+        <td style="text-align: center;">${m.total}</td>
+        <td style="text-align: center; color: #166534; font-weight: bold;">${m.passed}</td>
+        <td style="text-align: center; color: #b91c1c; font-weight: bold;">${m.failed}</td>
+        <td style="text-align: center;"><span class="badge ${Number(m.passRate) >= 70 ? 'badge-green' : 'badge-amber'}">${m.passRate}%</span></td>
+        <td style="text-align: center;">${m.classAverage || 0}%</td>
+        <td>${m.topperName} (${m.topperPercentage}%)</td>
+      </tr>
+    `).join('');
+
+    return `
+      <h2 class="section-title">Star Academy - Academic Exam Performance & Pass/Fail Analysis</h2>
+      <div class="info-grid">
+        <div class="info-item">
+          <span class="info-label">Academic Session:</span>
+          <span class="info-value">${currentSession}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Total Examinations Conducted:</span>
+          <span class="info-value">${analysis.totalExams} Exam Series</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Total Candidates Evaluated:</span>
+          <span class="info-value">${analysis.totalCandidates} Evaluations</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Overall Academy Passing Rate:</span>
+          <span class="info-value" style="color: #166534; font-size: 11pt;">${analysis.overallPassRate}% (${analysis.totalPassed} Passed)</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Overall Academy Failure Rate:</span>
+          <span class="info-value" style="color: #b91c1c; font-size: 11pt;">${analysis.overallFailRate}% (${analysis.totalFailed} Failed)</span>
+        </div>
+      </div>
+
+      <h3 style="font-size: 11pt; font-weight: 800; margin: 16px 0 8px 0; color: #1e293b;">Exam-by-Exam Performance Audit</h3>
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 30px; text-align: center;">#</th>
+            <th>Exam Title</th>
+            <th>Class</th>
+            <th style="text-align: center;">Appeared</th>
+            <th style="text-align: center;">Passed</th>
+            <th style="text-align: center;">Failed</th>
+            <th style="text-align: center;">Pass %</th>
+            <th style="text-align: center;">Average %</th>
+            <th>1st Position Topper</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${examRowsHtml || '<tr><td colspan="9" style="text-align: center;">No examination marksheets found</td></tr>'}
+        </tbody>
+      </table>
+    `;
+  };
+
+  const handleDownloadPDF = () => {
+    const title = `Academic Result & Pass Fail Report - ${currentSession}`;
+    const filename = `Exam_Pass_Fail_Analysis_${currentSession.replace(/\s+/g, '_')}`;
+    downloadHtmlAsPDF(title, getReportHtml(), filename);
+  };
+
+  const handleShareWhatsApp = () => {
+    const title = `Academic Result & Pass Fail Report - ${currentSession}`;
+    const filename = `Exam_Pass_Fail_Analysis_${currentSession.replace(/\s+/g, '_')}`;
+    shareHtmlAsPDFToWhatsApp(title, getReportHtml(), filename);
+  };
+
+  return (
+    <div className="space-y-4 pb-24 animate-in fade-in duration-200 w-full min-w-0 overflow-x-hidden p-3.5">
+      {/* Top Navigation Bar */}
+      <div className="flex items-center justify-between flex-wrap gap-2">
+        <button
+          type="button"
+          onClick={onBack}
+          className="flex items-center gap-1.5 px-3.5 py-2 rounded-2xl bg-white hover:bg-slate-100 text-slate-700 text-xs font-bold border border-slate-200 shadow-xs transition-all tap-active cursor-pointer"
+        >
+          <ArrowLeft className="w-4 h-4" />
+          <span>Back to Reports</span>
+        </button>
+
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={handleDownloadPDF}
+            className="flex items-center gap-1.5 px-3.5 py-2 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold border border-slate-300 transition-all cursor-pointer shadow-2xs"
+          >
+            <Download className="w-3.5 h-3.5 text-slate-600" />
+            <span>Download PDF</span>
+          </button>
+          <button
+            type="button"
+            onClick={handleShareWhatsApp}
+            className="flex items-center gap-1.5 px-3.5 py-2 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition-all shadow-2xs cursor-pointer"
+          >
+            <MessageCircle className="w-3.5 h-3.5" />
+            <span>Share on WhatsApp</span>
+          </button>
+        </div>
+      </div>
+
+      {/* Hero Header */}
+      <div className="bg-gradient-to-br from-violet-700 via-indigo-700 to-purple-800 text-white rounded-3xl p-5 shadow-md">
+        <div className="flex items-center justify-between flex-wrap gap-2">
+          <div className="space-y-1">
+            <div className="inline-flex items-center gap-1.5 bg-white/20 text-white border border-white/30 px-3 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider">
+              <Award className="w-3 h-3" />
+              <span>Academic Quality Audit • {currentSession}</span>
+            </div>
+            <h2 className="text-2xl font-black tracking-tight text-white">
+              Student Result & Pass / Fail Analysis
+            </h2>
+            <p className="text-xs text-purple-100/90 font-medium">
+              Examination outcome analytics, pass/fail trends, subject averages & candidate grade distribution.
+            </p>
+          </div>
+
+          <div className="text-right">
+            <span className="text-[11px] text-white/80 font-bold block">Overall Pass Rate</span>
+            <span className="text-2xl font-black text-amber-300">{analysis.overallPassRate}%</span>
+          </div>
+        </div>
+      </div>
+
+      {/* 3 Metric Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <div className="bg-white p-4 rounded-3xl border border-slate-200/90 shadow-xs">
+          <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block">Total Candidates</span>
+          <p className="text-lg font-black text-slate-900 mt-1">
+            {analysis.totalCandidates}
+          </p>
+          <span className="text-[11px] text-slate-500 font-medium mt-0.5 block">
+            Across {analysis.totalExams} Exam Series
+          </span>
+        </div>
+
+        <div className="bg-white p-4 rounded-3xl border border-emerald-200/90 bg-emerald-50/20 shadow-xs">
+          <span className="text-[10px] text-emerald-700 font-bold uppercase tracking-wider block">Total Passed</span>
+          <p className="text-lg font-black text-emerald-700 mt-1">
+            {analysis.totalPassed} ({analysis.overallPassRate}%)
+          </p>
+          <span className="text-[11px] text-emerald-600 font-bold mt-0.5 block flex items-center gap-1">
+            <CheckCircle2 className="w-3 h-3" />
+            Qualified Examination Threshold
+          </span>
+        </div>
+
+        <div className="bg-white p-4 rounded-3xl border border-rose-200/90 bg-rose-50/20 shadow-xs">
+          <span className="text-[10px] text-rose-700 font-bold uppercase tracking-wider block">Total Failed</span>
+          <p className="text-lg font-black text-rose-700 mt-1">
+            {analysis.totalFailed} ({analysis.overallFailRate}%)
+          </p>
+          <span className="text-[11px] text-rose-600 font-bold mt-0.5 block flex items-center gap-1">
+            <XCircle className="w-3 h-3" />
+            Requiring Academic Remediation
+          </span>
+        </div>
+      </div>
+
+      {/* Grade Distribution Bar */}
+      <div className="bg-white rounded-3xl border border-slate-200/90 shadow-xs p-4 space-y-3">
+        <h3 className="text-xs font-black text-slate-800 uppercase tracking-wider">
+          Academy Grade Spectrum Distribution
+        </h3>
+        <div className="grid grid-cols-5 gap-2 text-center">
+          {Object.entries(analysis.grades).map(([grade, count]) => {
+            const pct = analysis.totalCandidates > 0 ? ((count / analysis.totalCandidates) * 100).toFixed(0) : 0;
+            return (
+              <div key={grade} className="p-3 bg-slate-50 rounded-2xl border border-slate-200/70">
+                <span className={`text-base font-black ${grade === 'F' ? 'text-rose-600' : 'text-indigo-600'}`}>
+                  {grade}
+                </span>
+                <p className="text-xs font-bold text-slate-900 mt-0.5">{count}</p>
+                <span className="text-[10px] text-slate-400 font-bold">{pct}%</span>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Filter and Table */}
+      <div className="bg-white rounded-3xl border border-slate-200/90 shadow-xs p-4 space-y-3">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+          <h3 className="text-xs font-black text-slate-800 uppercase tracking-wider">
+            Exam-by-Exam Scorecard ({filteredExams.length})
+          </h3>
+
+          <div className="relative flex-1 max-w-xs">
+            <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+            <input
+              type="text"
+              placeholder="Search exam title..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-8 pr-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-violet-500"
+            />
+          </div>
+        </div>
+
+        {/* Class Filter Chips */}
+        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar text-xs">
+          <span className="text-[11px] font-bold text-slate-400 shrink-0 flex items-center gap-1">
+            <Filter className="w-3 h-3" /> Class:
+          </span>
+          {classes.map(c => (
+            <button
+              key={c}
+              type="button"
+              onClick={() => setSelectedClass(c)}
+              className={`px-2.5 py-1 rounded-lg text-xs font-bold shrink-0 transition-all cursor-pointer ${
+                selectedClass === c
+                  ? 'bg-violet-600 text-white shadow-2xs'
+                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+              }`}
+            >
+              {c}
+            </button>
+          ))}
+        </div>
+
+        {/* Table */}
+        <div className="w-full min-w-0 overflow-x-auto">
+          <table className="w-full text-xs text-left min-w-[560px]">
+            <thead>
+              <tr className="bg-slate-50 text-slate-600 font-bold border-b border-slate-200">
+                <th className="py-2.5 px-3">Exam Series</th>
+                <th className="py-2.5 px-3">Class</th>
+                <th className="py-2.5 px-3 text-center">Appeared</th>
+                <th className="py-2.5 px-3 text-center">Passed</th>
+                <th className="py-2.5 px-3 text-center">Failed</th>
+                <th className="py-2.5 px-3 text-center">Pass %</th>
+                <th className="py-2.5 px-3 text-center">Avg %</th>
+                <th className="py-2.5 px-3">1st Position Topper</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100 font-medium">
+              {filteredExams.length === 0 ? (
+                <tr>
+                  <td colSpan={8} className="text-center py-6 text-slate-400">
+                    No examination records found matching criteria.
+                  </td>
+                </tr>
+              ) : (
+                filteredExams.map(m => (
+                  <tr key={m.id} className="hover:bg-slate-50/70 transition-colors">
+                    <td className="py-2.5 px-3 font-bold text-slate-900">{m.title || m.testName}</td>
+                    <td className="py-2.5 px-3">
+                      <span className="px-2 py-0.5 rounded-md bg-violet-50 text-violet-800 font-bold text-[10px]">
+                        {m.studentClass} ({m.section})
+                      </span>
+                    </td>
+                    <td className="py-2.5 px-3 text-center text-slate-700">{m.total}</td>
+                    <td className="py-2.5 px-3 text-center font-bold text-emerald-700">{m.passed}</td>
+                    <td className="py-2.5 px-3 text-center font-bold text-rose-600">{m.failed}</td>
+                    <td className="py-2.5 px-3 text-center">
+                      <span className={`px-2 py-0.5 rounded-full text-[10px] font-black ${
+                        Number(m.passRate) >= 70 ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'
+                      }`}>
+                        {m.passRate}%
+                      </span>
+                    </td>
+                    <td className="py-2.5 px-3 text-center font-bold text-indigo-700">{m.classAverage || 0}%</td>
+                    <td className="py-2.5 px-3 text-[11px] text-slate-600">
+                      <strong>{m.topperName}</strong> ({m.topperPercentage}%)
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  );
+}

@@ -1,0 +1,89 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply antialiased select-none;
+  }
+}
+
+/* Custom scrollbars for clean mobile appearance */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.4);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.6);
+}
+
+/* Smooth active button tap feedback */
+.tap-active:active {
+  transform: scale(0.97);
+  transition: transform 0.1s ease-in-out;
+}
+
+/* ==========================================================================
+   Desktop Workspace Typography & Minimalist Scaling
+   ========================================================================== */
+@media (min-width: 1024px) {
+  .desktop-workspace {
+    font-size: 15px;
+    color: #0f172a;
+  }
+
+  /* Scale up micro font classes in desktop mode for comfortable reading */
+  .desktop-workspace .text-\[9px\],
+  .desktop-workspace .text-\[9\.5px\],
+  .desktop-workspace .text-\[10px\],
+  .desktop-workspace .text-\[10\.5px\],
+  .desktop-workspace .text-\[11px\] {
+    font-size: 0.8125rem !important; /* ~13px */
+    line-height: 1.25rem !important;
+  }
+
+  .desktop-workspace .text-xs {
+    font-size: 0.9375rem !important; /* ~15px */
+    line-height: 1.375rem !important;
+  }
+
+  .desktop-workspace .text-sm {
+    font-size: 1.0625rem !important; /* ~17px */
+    line-height: 1.625rem !important;
+  }
+
+  .desktop-workspace .text-base {
+    font-size: 1.1875rem !important; /* ~19px */
+    line-height: 1.75rem !important;
+  }
+
+  .desktop-workspace .text-lg {
+    font-size: 1.3125rem !important; /* ~21px */
+    line-height: 1.875rem !important;
+  }
+
+  .desktop-workspace .text-xl {
+    font-size: 1.5rem !important; /* 24px */
+    line-height: 2rem !important;
+  }
+
+  .desktop-workspace .text-2xl {
+    font-size: 1.75rem !important; /* 28px */
+    line-height: 2.25rem !important;
+  }
+
+  .desktop-workspace .text-3xl {
+    font-size: 2.125rem !important; /* 34px */
+    line-height: 2.5rem !important;
+  }
+}
