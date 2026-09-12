@@ -13,17 +13,27 @@ export default function StudentList({
   onUpdateStudent,
   onDeleteStudent,
   onToggleLeftStatus,
-  onBack
+  onBack,
+  initialSearchTerm = ''
 }) {
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState(initialSearchTerm || '');
   const [selectedClass, setSelectedClass] = useState('All');
   const [statusFilter, setStatusFilter] = useState('active'); // 'active' | 'all' | 'left'
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(Boolean(initialSearchTerm));
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [viewingStudent, setViewingStudent] = useState(null);
   const [editingStudent, setEditingStudent] = useState(null);
   const [idCardStudent, setIdCardStudent] = useState(null);
+
+  React.useEffect(() => {
+    if (initialSearchTerm !== undefined && initialSearchTerm !== null) {
+      setSearchTerm(initialSearchTerm);
+      if (initialSearchTerm.trim()) {
+        setIsSearchOpen(true);
+      }
+    }
+  }, [initialSearchTerm]);
 
   // Keep viewingStudent updated if its data changes in students array
   const currentViewingStudent = useMemo(() => {

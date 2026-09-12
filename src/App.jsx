@@ -125,6 +125,8 @@ export default function App() {
     return true;
   });
 
+  const [headerSearchTerm, setHeaderSearchTerm] = useState('');
+
   const handleDesktopNavigate = (tab, subpage = null) => {
     setQuickActionsSubPage(null);
     setDashboardSubPage(null);
@@ -141,6 +143,11 @@ export default function App() {
       else if (tab === 'banking') setBankingSubPage(subpage);
       else if (tab === 'reports') setReportsSubPage(subpage);
     }
+  };
+
+  const handleHeaderSearch = (query) => {
+    setHeaderSearchTerm(query);
+    handleDesktopNavigate('students', 'list');
   };
 
   const getActiveSubPageLabel = () => {
@@ -793,6 +800,7 @@ export default function App() {
         <StudentTabHub
           subPage={studentSubPage}
           setSubPage={setStudentSubPage}
+          initialSearchTerm={headerSearchTerm}
           students={currentYearStudents}
           onAddStudent={handleAddStudent}
           onUpdateStudent={handleUpdateStudent}
@@ -950,6 +958,8 @@ export default function App() {
               currentSession={currentSession}
               onOpenSettings={() => setIsSettingsOpen(true)}
               onNavigate={handleDesktopNavigate}
+              students={currentYearStudents}
+              onSearchSubmit={handleHeaderSearch}
             />
 
             <main className="flex-1 overflow-y-auto bg-slate-50">

@@ -10,6 +10,7 @@ import { INQUIRY_STATUS } from '../../constants/academicData';
 export default function StudentTabHub({
   subPage,
   setSubPage,
+  initialSearchTerm = '',
   // StudentList props
   students,
   onAddStudent,
@@ -123,6 +124,7 @@ export default function StudentTabHub({
             onDeleteStudent={onDeleteStudent}
             onToggleLeftStatus={onToggleLeftStatus}
             onBack={() => setSubPage(null)}
+            initialSearchTerm={initialSearchTerm}
           />
         )}
 
