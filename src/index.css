@@ -5,6 +5,10 @@
 @layer base {
   body {
     @apply antialiased select-none;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
   }
 }
 
@@ -86,4 +90,28 @@
     font-size: 2.125rem !important; /* 34px */
     line-height: 2.5rem !important;
   }
+}
+
+/* ==========================================================================
+   Mobile View & Mobile Phone Frame Typography & Layout Corrections
+   ========================================================================== */
+.mobile-phone-frame {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif !important;
+}
+
+/* When viewing inside Mobile Frame on desktop, prevent lg:grid-cols-3 from squeezing cards into 100px columns */
+.mobile-phone-frame .lg\:grid-cols-3,
+.mobile-phone-frame .sm\:grid-cols-2 {
+  grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
+}
+
+.mobile-phone-frame .group.min-h-\[145px\] {
+  min-height: auto !important;
+  padding: 1rem !important;
+}
+
+.mobile-phone-frame h1,
+.mobile-phone-frame h2,
+.mobile-phone-frame h3 {
+  letter-spacing: -0.015em;
 }

@@ -42,7 +42,7 @@ export default function MobileFrame({
 
       {/* Main Container */}
       <div
-        className={`w-full transition-all duration-300 ${
+        className={`w-full transition-all duration-300 mobile-phone-frame ${
           isFrameMode
             ? 'max-w-[420px] rounded-[38px] shadow-2xl ring-12 ring-slate-800/90 border border-slate-700/50 overflow-hidden bg-slate-50 relative'
             : 'max-w-md w-full bg-slate-50 min-h-screen relative shadow-lg'
