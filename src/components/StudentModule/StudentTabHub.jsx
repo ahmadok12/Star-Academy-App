@@ -96,7 +96,7 @@ export default function StudentTabHub({
     return (
       <div className="flex flex-col flex-1 pb-16">
         {/* Subpage Header with Back Button (only for subpages without an integrated header) */}
-        {subPage !== 'list' && subPage !== 'attendance' && (
+        {subPage !== 'list' && subPage !== 'inquiries' && subPage !== 'receive_fees' && subPage !== 'attendance' && (
           <div className="bg-white/95 backdrop-blur-md border-b border-slate-200/80 sticky top-0 z-20 shadow-xs">
             <div className="max-w-6xl mx-auto w-full flex items-center justify-between px-4 py-3">
               <button
@@ -134,6 +134,7 @@ export default function StudentTabHub({
             onDeleteInquiry={onDeleteInquiry}
             onOpenRegisterStudent={(inq) => setRegisteringInquiry(inq)}
             curriculumSubjects={curriculumSubjects}
+            onBack={() => setSubPage(null)}
           />
         )}
 
@@ -164,6 +165,7 @@ export default function StudentTabHub({
               onUpdateVoucher={onUpdateVoucher}
               onDeleteVoucher={onDeleteVoucher}
               onGenerateMonthlyVouchers={onGenerateMonthlyVouchers}
+              onBack={() => setSubPage(null)}
             />
           </div>
         )}

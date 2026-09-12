@@ -18,7 +18,9 @@ import {
   Trash2,
   Sparkles,
   BookOpen,
-  Filter
+  Filter,
+  ArrowLeft,
+  X
 } from 'lucide-react';
 import { INQUIRY_STATUS } from '../../constants/academicData';
 import AddInquiryModal from './AddInquiryModal';
@@ -29,11 +31,13 @@ export default function InquiriesSection({
   onUpdateInquiry,
   onDeleteInquiry,
   onOpenRegisterStudent,
-  curriculumSubjects
+  curriculumSubjects,
+  onBack
 }) {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('ALL');
-  const [isFiltersExpanded, setIsFiltersExpanded] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [noteInputs, setNoteInputs] = useState({});
   const [activeNoteBoxId, setActiveNoteBoxId] = useState(null);
@@ -136,143 +140,152 @@ export default function InquiriesSection({
   };
 
   return (
-    <div className="p-4 md:p-6 space-y-4 max-w-5xl mx-auto w-full">
-      {/* Top Banner & Metric Summary */}
-      <div className="bg-gradient-to-r from-amber-600 via-orange-600 to-amber-700 rounded-3xl p-5 text-white shadow-lg space-y-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-11 h-11 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/20">
-              <HelpCircle className="w-6 h-6 text-amber-200" />
+    <div className="flex flex-col flex-1 w-full">
+      {/* Small Compact Bar: Back, New Inquiry, Search, Filter (No big cards or other info) */}
+      <div className="bg-white/95 backdrop-blur-md border-b border-slate-200/80 sticky top-0 z-20 shadow-xs">
+        <div className="max-w-5xl mx-auto px-4 py-2">
+          <div className="flex items-center justify-between gap-2">
+            {/* Back Button */}
+            {onBack && (
+              <button
+                type="button"
+                onClick={onBack}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition-all tap-active cursor-pointer shrink-0"
+                title="Back"
+              >
+                <ArrowLeft className="w-4 h-4" />
+                <span>Back</span>
+              </button>
+            )}
+
+            {/* Action Buttons: New Inquiry, Search, Filter */}
+            <div className="flex items-center gap-2 ml-auto">
+              <button
+                type="button"
+                onClick={() => setIsAddModalOpen(true)}
+                className="flex items-center gap-1.5 bg-amber-600 hover:bg-amber-700 text-white px-3.5 py-1.5 rounded-xl text-xs font-bold shadow-xs transition-all tap-active cursor-pointer shrink-0"
+              >
+                <Plus className="w-4 h-4" />
+                <span>New Inquiry</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setIsSearchOpen(prev => !prev);
+                  if (!isSearchOpen) setIsFilterOpen(false);
+                }}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-bold transition-all tap-active cursor-pointer ${
+                  isSearchOpen || searchTerm
+                    ? 'bg-amber-50 text-amber-700 border-amber-200 shadow-2xs'
+                    : 'bg-slate-100 hover:bg-slate-200 text-slate-700 border-slate-200'
+                }`}
+                title="Search Inquiries"
+              >
+                <Search className="w-3.5 h-3.5" />
+                <span>Search</span>
+                {searchTerm && <span className="w-1.5 h-1.5 rounded-full bg-amber-600"></span>}
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setIsFilterOpen(prev => !prev);
+                  if (!isFilterOpen) setIsSearchOpen(false);
+                }}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-bold transition-all tap-active cursor-pointer ${
+                  isFilterOpen || statusFilter !== 'ALL'
+                    ? 'bg-amber-50 text-amber-700 border-amber-200 shadow-2xs'
+                    : 'bg-slate-100 hover:bg-slate-200 text-slate-700 border-slate-200'
+                }`}
+                title="Filter Inquiries"
+              >
+                <Filter className="w-3.5 h-3.5" />
+                <span>Filter</span>
+                {statusFilter !== 'ALL' && (
+                  <span className="w-1.5 h-1.5 rounded-full bg-amber-600"></span>
+                )}
+              </button>
             </div>
-            <div>
-              <h2 className="text-lg font-black tracking-tight flex items-center gap-2">
-                <span>Student Inquiries & Follow-ups</span>
-                <Sparkles className="w-4 h-4 text-amber-300" />
-              </h2>
-              <p className="text-xs text-amber-100 font-medium">
-                Track walk-in visitors, no-shows & register active students
-              </p>
-            </div>
           </div>
 
-          <button
-            type="button"
-            onClick={() => setIsAddModalOpen(true)}
-            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white text-amber-900 hover:bg-amber-50 text-xs font-extrabold shadow-md transition-all active:scale-98"
-          >
-            <Plus className="w-4 h-4 text-amber-600" />
-            <span>New Inquiry</span>
-          </button>
-        </div>
-
-        {/* 4 Summary Stats */}
-        <div className="grid grid-cols-4 gap-2 pt-2 border-t border-white/15 text-center">
-          <div className="bg-white/10 backdrop-blur-xs rounded-xl p-2">
-            <span className="text-[10px] text-amber-200 font-bold block uppercase">Total</span>
-            <span className="text-base font-black text-white">{counts.total}</span>
-          </div>
-          <div className="bg-amber-400/20 backdrop-blur-xs rounded-xl p-2 border border-amber-300/30">
-            <span className="text-[10px] text-amber-200 font-bold block uppercase">Follow-up</span>
-            <span className="text-base font-black text-amber-200">{counts.pending}</span>
-          </div>
-          <div className="bg-rose-500/20 backdrop-blur-xs rounded-xl p-2 border border-rose-300/30">
-            <span className="text-[10px] text-rose-200 font-bold block uppercase">No-Shows</span>
-            <span className="text-base font-black text-rose-200">{counts.didNotShowUp}</span>
-          </div>
-          <div className="bg-emerald-500/20 backdrop-blur-xs rounded-xl p-2 border border-emerald-300/30">
-            <span className="text-[10px] text-emerald-200 font-bold block uppercase">Registered</span>
-            <span className="text-base font-black text-emerald-200">{counts.registered}</span>
-          </div>
-        </div>
-      </div>
-
-      {/* Collapsible Filter & Search Bar Toggle */}
-      <div className="space-y-2.5">
-        <div className="flex items-center justify-between gap-2">
-          <button
-            type="button"
-            onClick={() => setIsFiltersExpanded(prev => !prev)}
-            className="flex-1 flex items-center justify-between px-3 py-2 rounded-xl bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold transition-all cursor-pointer select-none shadow-2xs"
-          >
-            <div className="flex items-center gap-2 min-w-0">
-              <Sparkles className="w-3.5 h-3.5 text-amber-600 shrink-0" />
-              <span className="font-bold">Search & Filters</span>
-              <span className="text-[10px] bg-slate-100 border border-slate-200 px-2 py-0.5 rounded-full font-bold text-slate-600 truncate">
-                {statusFilter === 'ALL' ? 'All Inquiries' : statusFilter}{searchTerm ? ` • "${searchTerm}"` : ''}
-              </span>
-            </div>
-            <div className="flex items-center gap-1 text-slate-400 shrink-0 ml-2">
-              <span className="text-[11px] font-medium text-slate-500">
-                {isFiltersExpanded ? 'Collapse' : 'Expand'}
-              </span>
-              {isFiltersExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-            </div>
-          </button>
-
-          {(searchTerm || statusFilter !== 'ALL') && (
-            <button
-              type="button"
-              onClick={() => {
-                setSearchTerm('');
-                setStatusFilter('ALL');
-              }}
-              className="px-2.5 py-2 rounded-xl bg-rose-50 text-rose-600 hover:bg-rose-100 text-[11px] font-bold transition-all cursor-pointer shrink-0 border border-rose-100"
-              title="Reset all filters"
-            >
-              Reset
-            </button>
-          )}
-        </div>
-
-        {isFiltersExpanded && (
-          <div className="space-y-2.5 pt-1 animate-in fade-in duration-150">
-            {/* Search Input */}
-            <div className="relative">
+          {/* Search Drawer */}
+          {isSearchOpen && (
+            <div className="mt-2 relative animate-in fade-in slide-in-from-top-1 duration-150">
               <Search className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
               <input
                 type="text"
-                placeholder="Search inquiry by student name, phone, guardian, class..."
+                placeholder="Search by student name, phone, guardian, class..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-9 pr-3.5 py-2 bg-white text-xs rounded-xl border border-slate-200 focus:border-amber-500 focus:ring-2 focus:ring-amber-100 outline-none shadow-2xs"
+                className="w-full pl-9 pr-8 py-2 bg-slate-50 focus:bg-white text-xs rounded-xl border border-slate-200 focus:border-amber-500 focus:ring-2 focus:ring-amber-100 outline-none"
                 autoFocus
               />
+              {searchTerm && (
+                <button
+                  type="button"
+                  onClick={() => setSearchTerm('')}
+                  className="absolute right-2.5 top-2.5 text-slate-400 hover:text-slate-600"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              )}
             </div>
+          )}
 
-            {/* Filter Pills */}
-            <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar text-xs">
-              {[
-                { id: 'ALL', label: 'All Inquiries', count: counts.total },
-                { id: INQUIRY_STATUS.PENDING, label: 'Pending Follow-up', count: counts.pending },
-                { id: INQUIRY_STATUS.DID_NOT_SHOW_UP, label: 'Did Not Show Up', count: counts.didNotShowUp },
-                { id: INQUIRY_STATUS.INTERESTED, label: 'Interested', count: counts.interested },
-                { id: INQUIRY_STATUS.REGISTERED, label: 'Registered Students', count: counts.registered }
-              ].map((tab) => {
-                const isActive = statusFilter === tab.id;
-                return (
+          {/* Filter Drawer */}
+          {isFilterOpen && (
+            <div className="mt-2.5 space-y-2 pt-2 border-t border-slate-100 animate-in fade-in slide-in-from-top-1 duration-150">
+              <div className="flex items-center justify-between">
+                <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Status:</span>
+                {statusFilter !== 'ALL' && (
                   <button
-                    key={tab.id}
                     type="button"
-                    onClick={() => setStatusFilter(tab.id)}
-                    className={`px-3 py-1.5 rounded-xl font-bold whitespace-nowrap transition-all flex items-center gap-1.5 cursor-pointer ${
-                      isActive
-                        ? 'bg-slate-900 text-white shadow-xs'
-                        : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
-                    }`}
+                    onClick={() => setStatusFilter('ALL')}
+                    className="text-[11px] font-semibold text-rose-600 hover:text-rose-700"
                   >
-                    <span>{tab.label}</span>
-                    <span className={`px-1.5 py-0.2 rounded-md text-[10px] ${
-                      isActive ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-600'
-                    }`}>
-                      {tab.count}
-                    </span>
+                    Reset Filter
                   </button>
-                );
-              })}
+                )}
+              </div>
+
+              {/* Filter Pills */}
+              <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar text-xs">
+                {[
+                  { id: 'ALL', label: 'All', count: counts.total },
+                  { id: INQUIRY_STATUS.PENDING, label: 'Pending', count: counts.pending },
+                  { id: INQUIRY_STATUS.DID_NOT_SHOW_UP, label: 'No-Show', count: counts.didNotShowUp },
+                  { id: INQUIRY_STATUS.INTERESTED, label: 'Interested', count: counts.interested },
+                  { id: INQUIRY_STATUS.REGISTERED, label: 'Registered', count: counts.registered }
+                ].map((tab) => {
+                  const isActive = statusFilter === tab.id;
+                  return (
+                    <button
+                      key={tab.id}
+                      type="button"
+                      onClick={() => setStatusFilter(tab.id)}
+                      className={`px-3 py-1 rounded-lg font-bold whitespace-nowrap transition-all flex items-center gap-1.5 cursor-pointer ${
+                        isActive
+                          ? 'bg-amber-600 text-white shadow-xs'
+                          : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                      }`}
+                    >
+                      <span>{tab.label}</span>
+                      <span className={`px-1.5 py-0.2 rounded-md text-[10px] ${
+                        isActive ? 'bg-white/20 text-white' : 'bg-white text-slate-600'
+                      }`}>
+                        {tab.count}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
+
+      <div className="p-4 max-w-5xl mx-auto w-full">
 
       {/* Inquiry Cards List */}
       <div className="space-y-3">
@@ -503,6 +516,7 @@ export default function InquiriesSection({
             );
           })
         )}
+      </div>
       </div>
 
       {/* Add Inquiry Modal */}

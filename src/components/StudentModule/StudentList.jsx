@@ -18,7 +18,8 @@ export default function StudentList({
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedClass, setSelectedClass] = useState('All');
   const [statusFilter, setStatusFilter] = useState('active'); // 'active' | 'all' | 'left'
-  const [isFiltersExpanded, setIsFiltersExpanded] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [viewingStudent, setViewingStudent] = useState(null);
   const [editingStudent, setEditingStudent] = useState(null);
@@ -40,26 +41,32 @@ export default function StudentList({
       if (statusFilter === 'left' && !isLeft) return false;
 
       // Class filter
-      if (selectedClass !== 'All' && student.studentClass !== selectedClass) return false;
-
-      // Search query
-      if (searchTerm.trim()) {
-        const query = searchTerm.toLowerCase();
-        const matches =
-          `${student.firstName} ${student.lastName}`.toLowerCase().includes(query) ||
-          student.id.toLowerCase().includes(query) ||
-          student.fatherName.toLowerCase().includes(query) ||
-          student.contactNumber.includes(query) ||
-          student.subject.toLowerCase().includes(query);
-        if (!matches) return false;
+      const cls = student.studentClass || student.class;
+      if (selectedClass !== 'All' && cls !== selectedClass) {
+        return false;
       }
 
-      return true;
+      // Search term filter
+      if (!searchTerm.trim()) return true;
+      const q = searchTerm.toLowerCase();
+      const fullName = student.studentName || `${student.firstName || ''} ${student.lastName || ''}`.trim() || student.name || '';
+      return (
+        fullName.toLowerCase().includes(q) ||
+        student.id?.toLowerCase().includes(q) ||
+        student.phone?.toLowerCase().includes(q) ||
+        student.contactNumber?.includes(q) ||
+        student.section?.toLowerCase().includes(q) ||
+        student.subject?.toLowerCase().includes(q) ||
+        student.fatherName?.toLowerCase().includes(q)
+      );
     });
-  }, [students, searchTerm, selectedClass, statusFilter]);
+  }, [students, statusFilter, selectedClass, searchTerm]);
 
-  const activeCount = students.filter(s => !s.isLeft && s.isActive !== false).length;
-  const leftCount = students.filter(s => s.isLeft || s.isActive === false).length;
+  const activeCount = useMemo(
+    () => students.filter((s) => !s.isLeft && s.isActive !== false).length,
+    [students]
+  );
+  const leftCount = students.length - activeCount;
 
   const handleStartEdit = (student) => {
     setViewingStudent(null);
@@ -68,106 +75,102 @@ export default function StudentList({
 
   return (
     <div className="flex flex-col flex-1 w-full">
-      {/* Top Action & Search Bar - Clean Edge-to-Edge Sticky Top-0 */}
+      {/* Small Compact Bar: Back, Add Student, Search, Filter buttons (No other text) */}
       <div className="bg-white/95 backdrop-blur-md border-b border-slate-200/80 sticky top-0 z-20 shadow-xs">
-        <div className="max-w-6xl mx-auto p-4 space-y-2.5">
-          {/* Header Title & Add Student Button */}
-          <div className="flex items-center justify-between gap-3">
-            <div className="flex items-center gap-3 min-w-0">
-              {onBack && (
-                <button
-                  type="button"
-                  onClick={onBack}
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition-all tap-active cursor-pointer shrink-0"
-                  title="Back to Students Hub"
-                >
-                  <ArrowLeft className="w-3.5 h-3.5" />
-                  <span>Back</span>
-                </button>
-              )}
-              <div className="min-w-0">
-                <h2 className="text-base font-black text-slate-800 flex items-center gap-1.5 truncate">
-                  <Users className="w-4 h-4 text-blue-600 shrink-0" />
-                  <span>Student Directory</span>
-                </h2>
-                <p className="text-[11px] text-slate-500 font-medium truncate">
-                  Showing {filteredStudents.length} of {students.length} students ({activeCount} active)
-                </p>
-              </div>
-            </div>
+        <div className="max-w-6xl mx-auto px-4 py-2">
+          <div className="flex items-center justify-between gap-2">
+            {/* Back Button */}
+            {onBack && (
+              <button
+                type="button"
+                onClick={onBack}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition-all tap-active cursor-pointer shrink-0"
+                title="Back"
+              >
+                <ArrowLeft className="w-4 h-4" />
+                <span>Back</span>
+              </button>
+            )}
 
-            <button
-              onClick={() => setIsAddModalOpen(true)}
-              className="flex items-center gap-1.5 bg-blue-600 hover:bg-blue-700 text-white px-3.5 py-2 rounded-xl text-xs font-bold shadow-xs transition-all tap-active cursor-pointer shrink-0"
-            >
-              <Plus className="w-4 h-4" />
-              <span>Add Student</span>
-            </button>
-          </div>
+            {/* Action Buttons: Add Student, Search, Filter */}
+            <div className="flex items-center gap-2 ml-auto">
+              <button
+                type="button"
+                onClick={() => setIsAddModalOpen(true)}
+                className="flex items-center gap-1.5 bg-blue-600 hover:bg-blue-700 text-white px-3.5 py-1.5 rounded-xl text-xs font-bold shadow-xs transition-all tap-active cursor-pointer shrink-0"
+              >
+                <Plus className="w-4 h-4" />
+                <span>Add Student</span>
+              </button>
 
-          {/* Collapsible Search & Filter Bar Toggle */}
-          <div className="flex items-center justify-between gap-2 pt-0.5">
-            <button
-              type="button"
-              onClick={() => setIsFiltersExpanded(prev => !prev)}
-              className="flex-1 flex items-center justify-between px-3 py-2 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 text-xs font-semibold transition-all cursor-pointer select-none"
-            >
-              <div className="flex items-center gap-2 min-w-0">
-                <SlidersHorizontal className="w-3.5 h-3.5 text-blue-600 shrink-0" />
-                <span className="font-bold">Search & Filters</span>
-                <span className="text-[10px] bg-white border border-slate-200 px-2 py-0.5 rounded-full font-bold text-slate-600 truncate">
-                  {statusFilter === 'active' ? 'Active' : statusFilter === 'all' ? 'All' : 'Left'} • {selectedClass === 'All' ? 'All Classes' : selectedClass}{searchTerm ? ` • "${searchTerm}"` : ''}
-                </span>
-              </div>
-              <div className="flex items-center gap-1 text-slate-400 shrink-0 ml-2">
-                <span className="text-[11px] font-medium text-slate-500">
-                  {isFiltersExpanded ? 'Collapse' : 'Expand'}
-                </span>
-                {isFiltersExpanded ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
-              </div>
-            </button>
-
-            {(searchTerm || statusFilter !== 'active' || selectedClass !== 'All') && (
               <button
                 type="button"
                 onClick={() => {
-                  setSearchTerm('');
-                  setStatusFilter('active');
-                  setSelectedClass('All');
+                  setIsSearchOpen((prev) => !prev);
+                  if (!isSearchOpen) setIsFilterOpen(false);
                 }}
-                className="px-2.5 py-2 rounded-xl bg-rose-50 text-rose-600 hover:bg-rose-100 text-[11px] font-bold transition-all cursor-pointer shrink-0 border border-rose-100"
-                title="Reset all filters"
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-bold transition-all tap-active cursor-pointer ${
+                  isSearchOpen || searchTerm
+                    ? 'bg-blue-50 text-blue-700 border-blue-200 shadow-2xs'
+                    : 'bg-slate-100 hover:bg-slate-200 text-slate-700 border-slate-200'
+                }`}
+                title="Search Students"
               >
-                Reset
+                <Search className="w-3.5 h-3.5" />
+                <span>Search</span>
+                {searchTerm && <span className="w-1.5 h-1.5 rounded-full bg-blue-600"></span>}
               </button>
-            )}
+
+              <button
+                type="button"
+                onClick={() => {
+                  setIsFilterOpen((prev) => !prev);
+                  if (!isFilterOpen) setIsSearchOpen(false);
+                }}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-bold transition-all tap-active cursor-pointer ${
+                  isFilterOpen || statusFilter !== 'active' || selectedClass !== 'All'
+                    ? 'bg-blue-50 text-blue-700 border-blue-200 shadow-2xs'
+                    : 'bg-slate-100 hover:bg-slate-200 text-slate-700 border-slate-200'
+                }`}
+                title="Filter Students"
+              >
+                <Filter className="w-3.5 h-3.5" />
+                <span>Filter</span>
+                {(statusFilter !== 'active' || selectedClass !== 'All') && (
+                  <span className="w-1.5 h-1.5 rounded-full bg-blue-600"></span>
+                )}
+              </button>
+            </div>
           </div>
 
-          {/* Expandable Bars (Search, Status, Class) */}
-          {isFiltersExpanded && (
-            <div className="space-y-2.5 pt-1 animate-in fade-in duration-150">
-              {/* Search Input Box */}
-              <div className="relative">
-                <Search className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
-                <input
-                  type="text"
-                  placeholder="Search by name, ID, phone, section..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-9 pr-8 py-2 bg-slate-100 hover:bg-slate-100/80 focus:bg-white text-xs rounded-xl border border-transparent focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all outline-none"
-                  autoFocus
-                />
-                {searchTerm && (
-                  <button
-                    onClick={() => setSearchTerm('')}
-                    className="absolute right-2.5 top-2.5 text-slate-400 hover:text-slate-600"
-                  >
-                    <X className="w-3.5 h-3.5" />
-                  </button>
-                )}
-              </div>
+          {/* Search Drawer */}
+          {isSearchOpen && (
+            <div className="mt-2 relative animate-in fade-in slide-in-from-top-1 duration-150">
+              <Search className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
+              <input
+                type="text"
+                placeholder="Search by name, ID, phone, section..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-9 pr-8 py-2 bg-slate-50 focus:bg-white text-xs rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none"
+                autoFocus
+              />
+              {searchTerm && (
+                <button
+                  type="button"
+                  onClick={() => setSearchTerm('')}
+                  className="absolute right-2.5 top-2.5 text-slate-400 hover:text-slate-600"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              )}
+            </div>
+          )}
 
-              {/* Status Filter Tabs (Active vs All vs Left Academy) */}
+          {/* Filter Drawer */}
+          {isFilterOpen && (
+            <div className="mt-2.5 space-y-2 pt-2 border-t border-slate-100 animate-in fade-in slide-in-from-top-1 duration-150">
+              {/* Status Filter Tabs */}
               <div className="grid grid-cols-3 gap-1 bg-slate-100 p-1 rounded-xl text-[11px] font-semibold">
                 <button
                   onClick={() => setStatusFilter('active')}
@@ -197,11 +200,11 @@ export default function StudentList({
                       : 'text-slate-600 hover:text-slate-800'
                   }`}
                 >
-                  Left Academy ({leftCount})
+                  Left ({leftCount})
                 </button>
               </div>
 
-              {/* Horizontal Class Filter Pills */}
+              {/* Class Filter Pills */}
               <div className="flex items-center gap-1.5 overflow-x-auto pb-0.5 no-scrollbar text-xs">
                 <button
                   onClick={() => setSelectedClass('All')}
