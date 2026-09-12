@@ -180,30 +180,61 @@ function getCompleteHtmlDocument(title, content) {
           .badge-red { background: #fee2e2; color: #991b1b; }
           .badge-purple { background: #f3e8ff; color: #6b21a8; }
           .badge-late { background: #ffedd5; color: #c2410c; }
+          .kpi-table {
+            width: 100% !important;
+            table-layout: fixed !important;
+            border-collapse: separate !important;
+            border-spacing: 6px !important;
+            margin: 6px 0 10px 0 !important;
+            page-break-inside: avoid !important;
+            break-inside: avoid !important;
+            border: none !important;
+            background: transparent !important;
+          }
+          .kpi-cell {
+            background: #f8fafc !important;
+            border: 1px solid #cbd5e1 !important;
+            border-radius: 6px !important;
+            padding: 6px 4px !important;
+            text-align: center !important;
+            width: 25% !important;
+            vertical-align: middle !important;
+            box-sizing: border-box !important;
+          }
           .kpi-card-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 8px;
-            margin: 8px 0 12px 0;
+            display: flex !important;
+            flex-direction: row !important;
+            flex-wrap: nowrap !important;
+            gap: 6px !important;
+            margin: 6px 0 10px 0 !important;
+            page-break-inside: avoid !important;
+            break-inside: avoid !important;
+            width: 100% !important;
           }
           .kpi-card {
-            background: #f8fafc;
-            border: 1px solid #cbd5e1;
-            border-radius: 6px;
-            padding: 8px 6px;
-            text-align: center;
+            flex: 1 1 0 !important;
+            width: 25% !important;
+            min-width: 0 !important;
+            background: #f8fafc !important;
+            border: 1px solid #cbd5e1 !important;
+            border-radius: 6px !important;
+            padding: 6px 4px !important;
+            text-align: center !important;
+            box-sizing: border-box !important;
           }
           .kpi-val {
-            font-size: 12pt;
-            font-weight: 800;
+            font-size: 11pt !important;
+            font-weight: 800 !important;
             color: #0f172a;
+            white-space: nowrap !important;
           }
           .kpi-lbl {
-            font-size: 7.5pt;
+            font-size: 7.5pt !important;
             color: #64748b;
-            font-weight: 700;
-            text-transform: uppercase;
-            margin-top: 2px;
+            font-weight: 700 !important;
+            text-transform: uppercase !important;
+            margin-top: 2px !important;
+            white-space: nowrap !important;
           }
           .subject-chip {
             display: inline-block;
@@ -217,22 +248,38 @@ function getCompleteHtmlDocument(title, content) {
             margin: 2px 3px 2px 0;
           }
           .profile-hero {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            background: #f8fafc;
-            border: 1px solid #cbd5e1;
-            border-radius: 8px;
-            padding: 10px 14px;
-            margin-bottom: 12px;
+            display: flex !important;
+            align-items: center !important;
+            gap: 12px !important;
+            background: #f8fafc !important;
+            border: 1px solid #cbd5e1 !important;
+            border-radius: 8px !important;
+            padding: 8px 12px !important;
+            margin-bottom: 12px !important;
+            page-break-inside: avoid !important;
+            break-inside: avoid !important;
           }
           .profile-avatar {
-            width: 65px;
-            height: 65px;
-            border-radius: 8px;
-            object-fit: cover;
-            border: 1.5px solid #cbd5e1;
-            background: #e2e8f0;
+            width: 48px !important;
+            height: 48px !important;
+            min-width: 48px !important;
+            max-width: 48px !important;
+            min-height: 48px !important;
+            max-height: 48px !important;
+            border-radius: 6px !important;
+            object-fit: cover !important;
+            border: 1.5px solid #cbd5e1 !important;
+            background: #e2e8f0 !important;
+            display: block !important;
+            flex-shrink: 0 !important;
+          }
+          .section-title {
+            page-break-after: avoid !important;
+            break-after: avoid !important;
+          }
+          .profile-section {
+            page-break-inside: avoid !important;
+            break-inside: avoid !important;
           }
           .footer {
             margin-top: 24px;
@@ -450,6 +497,95 @@ async function generatePdfDocument(title, bodyContent) {
       #star-academy-pdf-render .badge-blue { background: #dbeafe; color: #1e40af; }
       #star-academy-pdf-render .badge-amber { background: #fef3c7; color: #92400e; }
       #star-academy-pdf-render .badge-red { background: #fee2e2; color: #991b1b; }
+      #star-academy-pdf-render .badge-purple { background: #f3e8ff; color: #6b21a8; }
+      #star-academy-pdf-render .badge-late { background: #ffedd5; color: #c2410c; }
+      #star-academy-pdf-render .kpi-table {
+        width: 100% !important;
+        table-layout: fixed !important;
+        border-collapse: separate !important;
+        border-spacing: 6px !important;
+        margin: 6px 0 10px 0 !important;
+        border: none !important;
+        background: transparent !important;
+      }
+      #star-academy-pdf-render .kpi-cell {
+        background: #f8fafc !important;
+        border: 1px solid #cbd5e1 !important;
+        border-radius: 6px !important;
+        padding: 6px 4px !important;
+        text-align: center !important;
+        width: 25% !important;
+        vertical-align: middle !important;
+        box-sizing: border-box !important;
+      }
+      #star-academy-pdf-render .kpi-card-grid {
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+        gap: 6px !important;
+        margin: 6px 0 10px 0 !important;
+        width: 100% !important;
+      }
+      #star-academy-pdf-render .kpi-card {
+        flex: 1 1 0 !important;
+        width: 25% !important;
+        min-width: 0 !important;
+        background: #f8fafc !important;
+        border: 1px solid #cbd5e1 !important;
+        border-radius: 6px !important;
+        padding: 6px 4px !important;
+        text-align: center !important;
+        box-sizing: border-box !important;
+      }
+      #star-academy-pdf-render .kpi-val {
+        font-size: 11pt !important;
+        font-weight: 800 !important;
+        color: #0f172a;
+        white-space: nowrap !important;
+      }
+      #star-academy-pdf-render .kpi-lbl {
+        font-size: 7.5pt !important;
+        color: #64748b;
+        font-weight: 700 !important;
+        text-transform: uppercase !important;
+        margin-top: 2px !important;
+        white-space: nowrap !important;
+      }
+      #star-academy-pdf-render .subject-chip {
+        display: inline-block;
+        background: #eff6ff;
+        color: #1d4ed8;
+        border: 1px solid #bfdbfe;
+        padding: 2px 7px;
+        border-radius: 4px;
+        font-size: 8pt;
+        font-weight: 700;
+        margin: 2px 3px 2px 0;
+      }
+      #star-academy-pdf-render .profile-hero {
+        display: flex !important;
+        align-items: center !important;
+        gap: 12px !important;
+        background: #f8fafc !important;
+        border: 1px solid #cbd5e1 !important;
+        border-radius: 8px !important;
+        padding: 8px 12px !important;
+        margin-bottom: 12px !important;
+      }
+      #star-academy-pdf-render .profile-avatar {
+        width: 48px !important;
+        height: 48px !important;
+        min-width: 48px !important;
+        max-width: 48px !important;
+        min-height: 48px !important;
+        max-height: 48px !important;
+        border-radius: 6px !important;
+        object-fit: cover !important;
+        border: 1.5px solid #cbd5e1 !important;
+        background: #e2e8f0 !important;
+        display: block !important;
+        flex-shrink: 0 !important;
+      }
       #star-academy-pdf-render .footer {
         margin-top: 30px;
         padding-top: 14px;
@@ -818,18 +954,18 @@ function getStudentProfileHtml(student, extraData = {}) {
 
   return `
     <!-- Top Hero Header with Student Photo & Identification -->
-    <div class="profile-hero">
-      <img src="${avatarUrl}" alt="${fullName}" class="profile-avatar" />
-      <div style="flex: 1;">
+    <div class="profile-hero" style="display: flex; align-items: center; gap: 14px; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; padding: 8px 12px; margin-bottom: 12px; page-break-inside: avoid; break-inside: avoid;">
+      <img src="${avatarUrl}" alt="${fullName}" class="profile-avatar" width="48" height="48" style="width: 48px !important; height: 48px !important; min-width: 48px !important; max-width: 48px !important; min-height: 48px !important; max-height: 48px !important; border-radius: 6px; object-fit: cover; border: 1.5px solid #cbd5e1; background: #e2e8f0; display: block; flex-shrink: 0;" />
+      <div style="flex: 1; min-width: 0;">
         <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px;">
-          <h2 style="margin: 0; font-size: 16pt; font-weight: 900; color: #0f172a; text-transform: uppercase;">
+          <h2 style="margin: 0; font-size: 15pt; font-weight: 900; color: #0f172a; text-transform: uppercase;">
             ${fullName}
           </h2>
-          <span class="badge ${isActive ? 'badge-green' : 'badge-red'}" style="font-size: 9pt;">
+          <span class="badge ${isActive ? 'badge-green' : 'badge-red'}" style="font-size: 8.5pt;">
             ${isActive ? 'ACTIVE STUDENT' : 'WITHDRAWN / LEFT'}
           </span>
         </div>
-        <div style="display: flex; gap: 14px; margin-top: 5px; font-size: 9.5pt; color: #475569; font-weight: 700; flex-wrap: wrap;">
+        <div style="display: flex; gap: 12px; margin-top: 4px; font-size: 9pt; color: #475569; font-weight: 700; flex-wrap: wrap;">
           <span>Student ID: <b style="color: #0f172a;">${student.id}</b></span>
           <span>•</span>
           <span>Class: <b style="color: #0f172a;">${student.studentClass || student.class || 'N/A'}</b></span>
@@ -912,121 +1048,131 @@ function getStudentProfileHtml(student, extraData = {}) {
     </div>
 
     <!-- Section 4: Tuition Fee Statement & Voucher History -->
-    <h2 class="section-title">4. Financial & Tuition Fee Statement</h2>
-    <div class="kpi-card-grid">
-      <div class="kpi-card">
-        <div class="kpi-val">Rs. ${Number(student.fees || student.monthlyFee || 0).toLocaleString()}</div>
-        <div class="kpi-lbl">Monthly Tuition Fee</div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-val">Rs. ${totalBilled.toLocaleString()}</div>
-        <div class="kpi-lbl">Total Billed</div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-val" style="color: #166534;">Rs. ${totalPaid.toLocaleString()}</div>
-        <div class="kpi-lbl">Total Paid</div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-val" style="color: ${totalPending > 0 ? '#991b1b' : '#166534'};">
-          Rs. ${totalPending.toLocaleString()}
-        </div>
-        <div class="kpi-lbl">${totalPending > 0 ? 'Pending Dues' : 'Balance Cleared'}</div>
-      </div>
-    </div>
-
-    <table>
-      <thead>
+    <div class="profile-section" style="page-break-inside: avoid; break-inside: avoid; margin-bottom: 14px;">
+      <h2 class="section-title">4. Financial & Tuition Fee Statement</h2>
+      <table class="kpi-table" style="width: 100% !important; table-layout: fixed !important; border-collapse: separate !important; border-spacing: 6px !important; margin: 6px 0 10px 0 !important; border: none !important; background: transparent !important;">
         <tr>
-          <th style="width: 30px; text-align: center;">#</th>
-          <th>Voucher No</th>
-          <th>Billing Month</th>
-          <th>Due Date</th>
-          <th>Fee Amount</th>
-          <th>Status</th>
-          <th>Paid Date</th>
-          <th>Bank / Method</th>
+          <td class="kpi-cell" style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px; padding: 6px 4px; text-align: center; width: 25%; vertical-align: middle;">
+            <div class="kpi-val" style="font-size: 11pt; font-weight: 800; color: #0f172a; white-space: nowrap;">Rs. ${Number(student.fees || student.monthlyFee || 0).toLocaleString()}</div>
+            <div class="kpi-lbl" style="font-size: 7.5pt; color: #64748b; font-weight: 700; text-transform: uppercase; margin-top: 2px; white-space: nowrap;">Monthly Tuition Fee</div>
+          </td>
+          <td class="kpi-cell" style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px; padding: 6px 4px; text-align: center; width: 25%; vertical-align: middle;">
+            <div class="kpi-val" style="font-size: 11pt; font-weight: 800; color: #0f172a; white-space: nowrap;">Rs. ${totalBilled.toLocaleString()}</div>
+            <div class="kpi-lbl" style="font-size: 7.5pt; color: #64748b; font-weight: 700; text-transform: uppercase; margin-top: 2px; white-space: nowrap;">Total Billed</div>
+          </td>
+          <td class="kpi-cell" style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px; padding: 6px 4px; text-align: center; width: 25%; vertical-align: middle;">
+            <div class="kpi-val" style="font-size: 11pt; font-weight: 800; color: #166534; white-space: nowrap;">Rs. ${totalPaid.toLocaleString()}</div>
+            <div class="kpi-lbl" style="font-size: 7.5pt; color: #64748b; font-weight: 700; text-transform: uppercase; margin-top: 2px; white-space: nowrap;">Total Paid</div>
+          </td>
+          <td class="kpi-cell" style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px; padding: 6px 4px; text-align: center; width: 25%; vertical-align: middle;">
+            <div class="kpi-val" style="font-size: 11pt; font-weight: 800; color: ${totalPending > 0 ? '#991b1b' : '#166534'}; white-space: nowrap;">Rs. ${totalPending.toLocaleString()}</div>
+            <div class="kpi-lbl" style="font-size: 7.5pt; color: #64748b; font-weight: 700; text-transform: uppercase; margin-top: 2px; white-space: nowrap;">${totalPending > 0 ? 'Pending Dues' : 'Balance Cleared'}</div>
+          </td>
         </tr>
-      </thead>
-      <tbody>
-        ${feeRowsHtml || '<tr><td colspan="8" style="text-align: center; color: #64748b;">No fee vouchers recorded for this student.</td></tr>'}
-      </tbody>
-    </table>
+      </table>
+
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 30px; text-align: center;">#</th>
+            <th>Voucher No</th>
+            <th>Billing Month</th>
+            <th>Due Date</th>
+            <th>Fee Amount</th>
+            <th>Status</th>
+            <th>Paid Date</th>
+            <th>Bank / Method</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${feeRowsHtml || '<tr><td colspan="8" style="text-align: center; color: #64748b;">No fee vouchers recorded for this student.</td></tr>'}
+        </tbody>
+      </table>
+    </div>
 
     <!-- Section 5: Attendance & Punctuality Record -->
-    <h2 class="section-title" style="margin-top: 18px;">5. Attendance & Punctuality Record</h2>
-    <div class="kpi-card-grid">
-      <div class="kpi-card">
-        <div class="kpi-val">${totalAttendance}</div>
-        <div class="kpi-lbl">Total Sessions</div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-val" style="color: #166534;">${presentCount}</div>
-        <div class="kpi-lbl">Present Days</div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-val" style="color: #c2410c;">${lateCount}</div>
-        <div class="kpi-lbl">Latecomers</div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-val" style="color: #1e40af;">${attendancePercentage}%</div>
-        <div class="kpi-lbl">Attendance Rate</div>
-      </div>
-    </div>
-
-    <table>
-      <thead>
+    <div class="profile-section" style="page-break-inside: avoid; break-inside: avoid; margin-bottom: 14px;">
+      <h2 class="section-title" style="margin-top: 14px;">5. Attendance & Punctuality Record</h2>
+      <table class="kpi-table" style="width: 100% !important; table-layout: fixed !important; border-collapse: separate !important; border-spacing: 6px !important; margin: 6px 0 10px 0 !important; border: none !important; background: transparent !important;">
         <tr>
-          <th style="width: 30px; text-align: center;">#</th>
-          <th>Date</th>
-          <th>Subject / Session</th>
-          <th>Status</th>
-          <th>Arrival Time & Punctuality</th>
+          <td class="kpi-cell" style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px; padding: 6px 4px; text-align: center; width: 25%; vertical-align: middle;">
+            <div class="kpi-val" style="font-size: 11pt; font-weight: 800; color: #0f172a; white-space: nowrap;">${totalAttendance}</div>
+            <div class="kpi-lbl" style="font-size: 7.5pt; color: #64748b; font-weight: 700; text-transform: uppercase; margin-top: 2px; white-space: nowrap;">Total Sessions</div>
+          </td>
+          <td class="kpi-cell" style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px; padding: 6px 4px; text-align: center; width: 25%; vertical-align: middle;">
+            <div class="kpi-val" style="font-size: 11pt; font-weight: 800; color: #166534; white-space: nowrap;">${presentCount}</div>
+            <div class="kpi-lbl" style="font-size: 7.5pt; color: #64748b; font-weight: 700; text-transform: uppercase; margin-top: 2px; white-space: nowrap;">Present Days</div>
+          </td>
+          <td class="kpi-cell" style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px; padding: 6px 4px; text-align: center; width: 25%; vertical-align: middle;">
+            <div class="kpi-val" style="font-size: 11pt; font-weight: 800; color: #c2410c; white-space: nowrap;">${lateCount}</div>
+            <div class="kpi-lbl" style="font-size: 7.5pt; color: #64748b; font-weight: 700; text-transform: uppercase; margin-top: 2px; white-space: nowrap;">Latecomers</div>
+          </td>
+          <td class="kpi-cell" style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px; padding: 6px 4px; text-align: center; width: 25%; vertical-align: middle;">
+            <div class="kpi-val" style="font-size: 11pt; font-weight: 800; color: #1e40af; white-space: nowrap;">${attendancePercentage}%</div>
+            <div class="kpi-lbl" style="font-size: 7.5pt; color: #64748b; font-weight: 700; text-transform: uppercase; margin-top: 2px; white-space: nowrap;">Attendance Rate</div>
+          </td>
         </tr>
-      </thead>
-      <tbody>
-        ${attendanceRowsHtml || '<tr><td colspan="5" style="text-align: center; color: #64748b;">No daily attendance sessions logged.</td></tr>'}
-      </tbody>
-    </table>
+      </table>
+
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 30px; text-align: center;">#</th>
+            <th>Date</th>
+            <th>Subject / Session</th>
+            <th>Status</th>
+            <th>Arrival Time & Punctuality</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${attendanceRowsHtml || '<tr><td colspan="5" style="text-align: center; color: #64748b;">No daily attendance sessions logged.</td></tr>'}
+        </tbody>
+      </table>
+    </div>
 
     <!-- Section 6: Examination Results & Academic Marksheets -->
-    <h2 class="section-title" style="margin-top: 18px;">6. Examination & Academic Marksheets</h2>
-    <div class="kpi-card-grid">
-      <div class="kpi-card">
-        <div class="kpi-val">${totalExams}</div>
-        <div class="kpi-lbl">Total Tests</div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-val" style="color: #166534;">${passedExams}</div>
-        <div class="kpi-lbl">Tests Passed</div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-val" style="color: #1e40af;">${avgExamPercentage}%</div>
-        <div class="kpi-lbl">Average Score</div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-val" style="color: #6b21a8;">
-          ${avgExamPercentage >= 80 ? 'A+' : avgExamPercentage >= 70 ? 'A' : avgExamPercentage >= 60 ? 'B' : avgExamPercentage >= 50 ? 'C' : 'Pass'}
-        </div>
-        <div class="kpi-lbl">Academic Grade</div>
-      </div>
-    </div>
-
-    <table>
-      <thead>
+    <div class="profile-section" style="page-break-inside: avoid; break-inside: avoid; margin-bottom: 14px;">
+      <h2 class="section-title" style="margin-top: 14px;">6. Examination & Academic Marksheets</h2>
+      <table class="kpi-table" style="width: 100% !important; table-layout: fixed !important; border-collapse: separate !important; border-spacing: 6px !important; margin: 6px 0 10px 0 !important; border: none !important; background: transparent !important;">
         <tr>
-          <th style="width: 30px; text-align: center;">#</th>
-          <th>Examination Title & Subject Breakdown</th>
-          <th>Date</th>
-          <th style="text-align: center;">Marks</th>
-          <th style="text-align: center;">Percentage</th>
-          <th style="text-align: center;">Grade</th>
-          <th style="text-align: center;">Result</th>
+          <td class="kpi-cell" style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px; padding: 6px 4px; text-align: center; width: 25%; vertical-align: middle;">
+            <div class="kpi-val" style="font-size: 11pt; font-weight: 800; color: #0f172a; white-space: nowrap;">${totalExams}</div>
+            <div class="kpi-lbl" style="font-size: 7.5pt; color: #64748b; font-weight: 700; text-transform: uppercase; margin-top: 2px; white-space: nowrap;">Total Tests</div>
+          </td>
+          <td class="kpi-cell" style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px; padding: 6px 4px; text-align: center; width: 25%; vertical-align: middle;">
+            <div class="kpi-val" style="font-size: 11pt; font-weight: 800; color: #166534; white-space: nowrap;">${passedExams}</div>
+            <div class="kpi-lbl" style="font-size: 7.5pt; color: #64748b; font-weight: 700; text-transform: uppercase; margin-top: 2px; white-space: nowrap;">Tests Passed</div>
+          </td>
+          <td class="kpi-cell" style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px; padding: 6px 4px; text-align: center; width: 25%; vertical-align: middle;">
+            <div class="kpi-val" style="font-size: 11pt; font-weight: 800; color: #1e40af; white-space: nowrap;">${avgExamPercentage}%</div>
+            <div class="kpi-lbl" style="font-size: 7.5pt; color: #64748b; font-weight: 700; text-transform: uppercase; margin-top: 2px; white-space: nowrap;">Average Score</div>
+          </td>
+          <td class="kpi-cell" style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px; padding: 6px 4px; text-align: center; width: 25%; vertical-align: middle;">
+            <div class="kpi-val" style="font-size: 11pt; font-weight: 800; color: #6b21a8; white-space: nowrap;">
+              ${avgExamPercentage >= 80 ? 'A+' : avgExamPercentage >= 70 ? 'A' : avgExamPercentage >= 60 ? 'B' : avgExamPercentage >= 50 ? 'C' : 'Pass'}
+            </div>
+            <div class="kpi-lbl" style="font-size: 7.5pt; color: #64748b; font-weight: 700; text-transform: uppercase; margin-top: 2px; white-space: nowrap;">Academic Grade</div>
+          </td>
         </tr>
-      </thead>
-      <tbody>
-        ${examRowsHtml || '<tr><td colspan="7" style="text-align: center; color: #64748b;">No marksheet examinations found for this student.</td></tr>'}
-      </tbody>
-    </table>
+      </table>
+
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 30px; text-align: center;">#</th>
+            <th>Examination Title & Subject Breakdown</th>
+            <th>Date</th>
+            <th style="text-align: center;">Marks</th>
+            <th style="text-align: center;">Percentage</th>
+            <th style="text-align: center;">Grade</th>
+            <th style="text-align: center;">Result</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${examRowsHtml || '<tr><td colspan="7" style="text-align: center; color: #64748b;">No marksheet examinations found for this student.</td></tr>'}
+        </tbody>
+      </table>
+    </div>
 
     <!-- Section 7: Official Academy Signatures & Verification -->
     <div style="margin-top: 24px; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; background: #f8fafc; display: flex; align-items: center; justify-content: space-between; gap: 16px;">
