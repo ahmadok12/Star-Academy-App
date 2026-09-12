@@ -116,30 +116,54 @@ function getCompleteHtmlDocument(title, content, orientation = 'portrait') {
           }
           .section-title {
             color: #0f172a;
-            font-size: 13pt;
+            font-size: 12pt;
             font-weight: 800;
-            margin: 14px 0 8px 0;
+            margin: 10px 0 6px 0;
             border-bottom: 1px solid #e2e8f0;
             padding-bottom: 4px;
+            page-break-after: avoid !important;
+            break-after: avoid !important;
+            page-break-inside: avoid !important;
+            break-inside: avoid !important;
+          }
+          .section-header-block {
+            page-break-inside: avoid !important;
+            break-inside: avoid !important;
+            page-break-after: avoid !important;
+            break-after: avoid !important;
+            display: block !important;
+            margin-bottom: 4px;
           }
           table {
             width: 100%;
             border-collapse: collapse;
-            margin: 10px 0;
-            font-size: 9.5pt;
+            margin: 6px 0;
+            font-size: 9pt;
+            page-break-inside: auto;
+          }
+          thead {
+            display: table-header-group;
+          }
+          tr {
+            page-break-inside: avoid !important;
+            break-inside: avoid !important;
           }
           th {
             background-color: #f1f5f9;
             color: #334155;
             font-weight: 800;
             text-align: left;
-            padding: 7px 10px;
+            padding: 5px 8px;
             border: 1px solid #cbd5e1;
+            page-break-inside: avoid !important;
+            break-inside: avoid !important;
           }
           td {
-            padding: 6px 10px;
+            padding: 5px 8px;
             border: 1px solid #e2e8f0;
             color: #1e293b;
+            page-break-inside: avoid !important;
+            break-inside: avoid !important;
           }
           tr:nth-child(even) td {
             background-color: #f8fafc;
@@ -147,19 +171,21 @@ function getCompleteHtmlDocument(title, content, orientation = 'portrait') {
           .info-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 8px 16px;
+            gap: 6px 14px;
             background: #f8fafc;
             border: 1px solid #e2e8f0;
             border-radius: 8px;
-            padding: 12px;
-            margin-bottom: 14px;
-            font-size: 9.5pt;
+            padding: 10px 12px;
+            margin-bottom: 10px;
+            font-size: 9pt;
+            page-break-inside: avoid !important;
+            break-inside: avoid !important;
           }
           .info-item {
             display: flex;
             justify-content: space-between;
             border-bottom: 1px dashed #e2e8f0;
-            padding-bottom: 3px;
+            padding-bottom: 2px;
           }
           .info-label {
             font-weight: 700;
@@ -187,21 +213,28 @@ function getCompleteHtmlDocument(title, content, orientation = 'portrait') {
             table-layout: fixed !important;
             border-collapse: separate !important;
             border-spacing: 6px !important;
-            margin: 6px 0 10px 0 !important;
+            margin: 4px 0 8px 0 !important;
             page-break-inside: avoid !important;
             break-inside: avoid !important;
             border: none !important;
             background: transparent !important;
           }
+          .kpi-table tr,
+          .kpi-table td {
+            page-break-inside: avoid !important;
+            break-inside: avoid !important;
+          }
           .kpi-cell {
             background: #f8fafc !important;
             border: 1px solid #cbd5e1 !important;
             border-radius: 6px !important;
-            padding: 6px 4px !important;
+            padding: 5px 4px !important;
             text-align: center !important;
             width: 25% !important;
             vertical-align: middle !important;
             box-sizing: border-box !important;
+            page-break-inside: avoid !important;
+            break-inside: avoid !important;
           }
           .kpi-card-grid {
             display: flex !important;
@@ -436,30 +469,53 @@ async function generatePdfDocument(title, bodyContent, orientation = 'portrait')
       }
       #star-academy-pdf-render .section-title {
         color: #0f172a;
-        font-size: 13pt;
+        font-size: 12pt;
         font-weight: 800;
-        margin: 14px 0 8px 0;
+        margin: 10px 0 6px 0;
         border-bottom: 1px solid #e2e8f0;
         padding-bottom: 4px;
+        page-break-after: avoid !important;
+        break-after: avoid !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+      }
+      #star-academy-pdf-render .section-header-block {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+        page-break-after: avoid !important;
+        break-after: avoid !important;
+        display: block !important;
+        margin-bottom: 4px;
       }
       #star-academy-pdf-render table {
         width: 100%;
         border-collapse: collapse;
-        margin: 10px 0;
-        font-size: 9.5pt;
+        margin: 6px 0;
+        font-size: 9pt;
+      }
+      #star-academy-pdf-render thead {
+        display: table-header-group;
+      }
+      #star-academy-pdf-render tr {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
       }
       #star-academy-pdf-render th {
         background-color: #f1f5f9;
         color: #334155;
         font-weight: 800;
         text-align: left;
-        padding: 7px 10px;
+        padding: 5px 8px;
         border: 1px solid #cbd5e1;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
       }
       #star-academy-pdf-render td {
-        padding: 6px 10px;
+        padding: 5px 8px;
         border: 1px solid #e2e8f0;
         color: #1e293b;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
       }
       #star-academy-pdf-render tr:nth-child(even) td {
         background-color: #f8fafc;
@@ -467,19 +523,21 @@ async function generatePdfDocument(title, bodyContent, orientation = 'portrait')
       #star-academy-pdf-render .info-grid {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
-        gap: 8px 16px;
+        gap: 6px 14px;
         background: #f8fafc;
         border: 1px solid #e2e8f0;
         border-radius: 8px;
-        padding: 12px;
-        margin-bottom: 14px;
-        font-size: 9.5pt;
+        padding: 10px 12px;
+        margin-bottom: 10px;
+        font-size: 9pt;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
       }
       #star-academy-pdf-render .info-item {
         display: flex;
         justify-content: space-between;
         border-bottom: 1px dashed #e2e8f0;
-        padding-bottom: 3px;
+        padding-bottom: 2px;
       }
       #star-academy-pdf-render .info-label {
         font-weight: 700;
@@ -507,19 +565,28 @@ async function generatePdfDocument(title, bodyContent, orientation = 'portrait')
         table-layout: fixed !important;
         border-collapse: separate !important;
         border-spacing: 6px !important;
-        margin: 6px 0 10px 0 !important;
+        margin: 4px 0 8px 0 !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
         border: none !important;
         background: transparent !important;
+      }
+      #star-academy-pdf-render .kpi-table tr,
+      #star-academy-pdf-render .kpi-table td {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
       }
       #star-academy-pdf-render .kpi-cell {
         background: #f8fafc !important;
         border: 1px solid #cbd5e1 !important;
         border-radius: 6px !important;
-        padding: 6px 4px !important;
+        padding: 5px 4px !important;
         text-align: center !important;
         width: 25% !important;
         vertical-align: middle !important;
         box-sizing: border-box !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
       }
       #star-academy-pdf-render .kpi-card-grid {
         display: flex !important;
@@ -1053,28 +1120,30 @@ function getStudentProfileHtml(student, extraData = {}) {
     </div>
 
     <!-- Section 4: Tuition Fee Statement & Voucher History -->
-    <div class="profile-section" style="page-break-inside: avoid; break-inside: avoid; margin-bottom: 14px;">
-      <h2 class="section-title">4. Financial & Tuition Fee Statement</h2>
-      <table class="kpi-table" style="width: 100% !important; table-layout: fixed !important; border-collapse: separate !important; border-spacing: 6px !important; margin: 6px 0 10px 0 !important; border: none !important; background: transparent !important;">
-        <tr>
-          <td class="kpi-cell" style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px; padding: 6px 4px; text-align: center; width: 25%; vertical-align: middle;">
-            <div class="kpi-val" style="font-size: 11pt; font-weight: 800; color: #0f172a; white-space: nowrap;">Rs. ${Number(student.fees || student.monthlyFee || 0).toLocaleString()}</div>
-            <div class="kpi-lbl" style="font-size: 7.5pt; color: #64748b; font-weight: 700; text-transform: uppercase; margin-top: 2px; white-space: nowrap;">Monthly Tuition Fee</div>
-          </td>
-          <td class="kpi-cell" style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px; padding: 6px 4px; text-align: center; width: 25%; vertical-align: middle;">
-            <div class="kpi-val" style="font-size: 11pt; font-weight: 800; color: #0f172a; white-space: nowrap;">Rs. ${totalBilled.toLocaleString()}</div>
-            <div class="kpi-lbl" style="font-size: 7.5pt; color: #64748b; font-weight: 700; text-transform: uppercase; margin-top: 2px; white-space: nowrap;">Total Billed</div>
-          </td>
-          <td class="kpi-cell" style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px; padding: 6px 4px; text-align: center; width: 25%; vertical-align: middle;">
-            <div class="kpi-val" style="font-size: 11pt; font-weight: 800; color: #166534; white-space: nowrap;">Rs. ${totalPaid.toLocaleString()}</div>
-            <div class="kpi-lbl" style="font-size: 7.5pt; color: #64748b; font-weight: 700; text-transform: uppercase; margin-top: 2px; white-space: nowrap;">Total Paid</div>
-          </td>
-          <td class="kpi-cell" style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px; padding: 6px 4px; text-align: center; width: 25%; vertical-align: middle;">
-            <div class="kpi-val" style="font-size: 11pt; font-weight: 800; color: ${totalPending > 0 ? '#991b1b' : '#166534'}; white-space: nowrap;">Rs. ${totalPending.toLocaleString()}</div>
-            <div class="kpi-lbl" style="font-size: 7.5pt; color: #64748b; font-weight: 700; text-transform: uppercase; margin-top: 2px; white-space: nowrap;">${totalPending > 0 ? 'Pending Dues' : 'Balance Cleared'}</div>
-          </td>
-        </tr>
-      </table>
+    <div class="profile-section" style="margin-bottom: 12px;">
+      <div class="section-header-block" style="page-break-inside: avoid !important; break-inside: avoid !important; page-break-after: avoid !important; break-after: avoid !important; display: block;">
+        <h2 class="section-title">4. Financial & Tuition Fee Statement</h2>
+        <table class="kpi-table" style="width: 100% !important; table-layout: fixed !important; border-collapse: separate !important; border-spacing: 6px !important; margin: 4px 0 8px 0 !important; border: none !important; background: transparent !important; page-break-inside: avoid !important; break-inside: avoid !important;">
+          <tr style="page-break-inside: avoid !important; break-inside: avoid !important;">
+            <td class="kpi-cell" style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px; padding: 5px 4px; text-align: center; width: 25%; vertical-align: middle; page-break-inside: avoid !important; break-inside: avoid !important;">
+              <div class="kpi-val" style="font-size: 11pt; font-weight: 800; color: #0f172a; white-space: nowrap;">Rs. ${Number(student.fees || student.monthlyFee || 0).toLocaleString()}</div>
+              <div class="kpi-lbl" style="font-size: 7.5pt; color: #64748b; font-weight: 700; text-transform: uppercase; margin-top: 2px; white-space: nowrap;">Monthly Tuition Fee</div>
+            </td>
+            <td class="kpi-cell" style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px; padding: 5px 4px; text-align: center; width: 25%; vertical-align: middle; page-break-inside: avoid !important; break-inside: avoid !important;">
+              <div class="kpi-val" style="font-size: 11pt; font-weight: 800; color: #0f172a; white-space: nowrap;">Rs. ${totalBilled.toLocaleString()}</div>
+              <div class="kpi-lbl" style="font-size: 7.5pt; color: #64748b; font-weight: 700; text-transform: uppercase; margin-top: 2px; white-space: nowrap;">Total Billed</div>
+            </td>
+            <td class="kpi-cell" style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px; padding: 5px 4px; text-align: center; width: 25%; vertical-align: middle; page-break-inside: avoid !important; break-inside: avoid !important;">
+              <div class="kpi-val" style="font-size: 11pt; font-weight: 800; color: #166534; white-space: nowrap;">Rs. ${totalPaid.toLocaleString()}</div>
+              <div class="kpi-lbl" style="font-size: 7.5pt; color: #64748b; font-weight: 700; text-transform: uppercase; margin-top: 2px; white-space: nowrap;">Total Paid</div>
+            </td>
+            <td class="kpi-cell" style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px; padding: 5px 4px; text-align: center; width: 25%; vertical-align: middle; page-break-inside: avoid !important; break-inside: avoid !important;">
+              <div class="kpi-val" style="font-size: 11pt; font-weight: 800; color: ${totalPending > 0 ? '#991b1b' : '#166534'}; white-space: nowrap;">Rs. ${totalPending.toLocaleString()}</div>
+              <div class="kpi-lbl" style="font-size: 7.5pt; color: #64748b; font-weight: 700; text-transform: uppercase; margin-top: 2px; white-space: nowrap;">${totalPending > 0 ? 'Pending Dues' : 'Balance Cleared'}</div>
+            </td>
+          </tr>
+        </table>
+      </div>
 
       <table>
         <thead>
@@ -1096,28 +1165,30 @@ function getStudentProfileHtml(student, extraData = {}) {
     </div>
 
     <!-- Section 5: Attendance & Punctuality Record -->
-    <div class="profile-section" style="page-break-inside: avoid; break-inside: avoid; margin-bottom: 14px;">
-      <h2 class="section-title" style="margin-top: 14px;">5. Attendance & Punctuality Record</h2>
-      <table class="kpi-table" style="width: 100% !important; table-layout: fixed !important; border-collapse: separate !important; border-spacing: 6px !important; margin: 6px 0 10px 0 !important; border: none !important; background: transparent !important;">
-        <tr>
-          <td class="kpi-cell" style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px; padding: 6px 4px; text-align: center; width: 25%; vertical-align: middle;">
-            <div class="kpi-val" style="font-size: 11pt; font-weight: 800; color: #0f172a; white-space: nowrap;">${totalAttendance}</div>
-            <div class="kpi-lbl" style="font-size: 7.5pt; color: #64748b; font-weight: 700; text-transform: uppercase; margin-top: 2px; white-space: nowrap;">Total Sessions</div>
-          </td>
-          <td class="kpi-cell" style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px; padding: 6px 4px; text-align: center; width: 25%; vertical-align: middle;">
-            <div class="kpi-val" style="font-size: 11pt; font-weight: 800; color: #166534; white-space: nowrap;">${presentCount}</div>
-            <div class="kpi-lbl" style="font-size: 7.5pt; color: #64748b; font-weight: 700; text-transform: uppercase; margin-top: 2px; white-space: nowrap;">Present Days</div>
-          </td>
-          <td class="kpi-cell" style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px; padding: 6px 4px; text-align: center; width: 25%; vertical-align: middle;">
-            <div class="kpi-val" style="font-size: 11pt; font-weight: 800; color: #c2410c; white-space: nowrap;">${lateCount}</div>
-            <div class="kpi-lbl" style="font-size: 7.5pt; color: #64748b; font-weight: 700; text-transform: uppercase; margin-top: 2px; white-space: nowrap;">Latecomers</div>
-          </td>
-          <td class="kpi-cell" style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px; padding: 6px 4px; text-align: center; width: 25%; vertical-align: middle;">
-            <div class="kpi-val" style="font-size: 11pt; font-weight: 800; color: #1e40af; white-space: nowrap;">${attendancePercentage}%</div>
-            <div class="kpi-lbl" style="font-size: 7.5pt; color: #64748b; font-weight: 700; text-transform: uppercase; margin-top: 2px; white-space: nowrap;">Attendance Rate</div>
-          </td>
-        </tr>
-      </table>
+    <div class="profile-section" style="margin-bottom: 12px;">
+      <div class="section-header-block" style="page-break-inside: avoid !important; break-inside: avoid !important; page-break-after: avoid !important; break-after: avoid !important; display: block;">
+        <h2 class="section-title">5. Attendance & Punctuality Record</h2>
+        <table class="kpi-table" style="width: 100% !important; table-layout: fixed !important; border-collapse: separate !important; border-spacing: 6px !important; margin: 4px 0 8px 0 !important; border: none !important; background: transparent !important; page-break-inside: avoid !important; break-inside: avoid !important;">
+          <tr style="page-break-inside: avoid !important; break-inside: avoid !important;">
+            <td class="kpi-cell" style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px; padding: 5px 4px; text-align: center; width: 25%; vertical-align: middle; page-break-inside: avoid !important; break-inside: avoid !important;">
+              <div class="kpi-val" style="font-size: 11pt; font-weight: 800; color: #0f172a; white-space: nowrap;">${totalAttendance}</div>
+              <div class="kpi-lbl" style="font-size: 7.5pt; color: #64748b; font-weight: 700; text-transform: uppercase; margin-top: 2px; white-space: nowrap;">Total Sessions</div>
+            </td>
+            <td class="kpi-cell" style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px; padding: 5px 4px; text-align: center; width: 25%; vertical-align: middle; page-break-inside: avoid !important; break-inside: avoid !important;">
+              <div class="kpi-val" style="font-size: 11pt; font-weight: 800; color: #166534; white-space: nowrap;">${presentCount}</div>
+              <div class="kpi-lbl" style="font-size: 7.5pt; color: #64748b; font-weight: 700; text-transform: uppercase; margin-top: 2px; white-space: nowrap;">Present Days</div>
+            </td>
+            <td class="kpi-cell" style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px; padding: 5px 4px; text-align: center; width: 25%; vertical-align: middle; page-break-inside: avoid !important; break-inside: avoid !important;">
+              <div class="kpi-val" style="font-size: 11pt; font-weight: 800; color: #c2410c; white-space: nowrap;">${lateCount}</div>
+              <div class="kpi-lbl" style="font-size: 7.5pt; color: #64748b; font-weight: 700; text-transform: uppercase; margin-top: 2px; white-space: nowrap;">Latecomers</div>
+            </td>
+            <td class="kpi-cell" style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px; padding: 5px 4px; text-align: center; width: 25%; vertical-align: middle; page-break-inside: avoid !important; break-inside: avoid !important;">
+              <div class="kpi-val" style="font-size: 11pt; font-weight: 800; color: #1e40af; white-space: nowrap;">${attendancePercentage}%</div>
+              <div class="kpi-lbl" style="font-size: 7.5pt; color: #64748b; font-weight: 700; text-transform: uppercase; margin-top: 2px; white-space: nowrap;">Attendance Rate</div>
+            </td>
+          </tr>
+        </table>
+      </div>
 
       <table>
         <thead>
@@ -1136,30 +1207,32 @@ function getStudentProfileHtml(student, extraData = {}) {
     </div>
 
     <!-- Section 6: Examination Results & Academic Marksheets -->
-    <div class="profile-section" style="page-break-inside: avoid; break-inside: avoid; margin-bottom: 14px;">
-      <h2 class="section-title" style="margin-top: 14px;">6. Examination & Academic Marksheets</h2>
-      <table class="kpi-table" style="width: 100% !important; table-layout: fixed !important; border-collapse: separate !important; border-spacing: 6px !important; margin: 6px 0 10px 0 !important; border: none !important; background: transparent !important;">
-        <tr>
-          <td class="kpi-cell" style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px; padding: 6px 4px; text-align: center; width: 25%; vertical-align: middle;">
-            <div class="kpi-val" style="font-size: 11pt; font-weight: 800; color: #0f172a; white-space: nowrap;">${totalExams}</div>
-            <div class="kpi-lbl" style="font-size: 7.5pt; color: #64748b; font-weight: 700; text-transform: uppercase; margin-top: 2px; white-space: nowrap;">Total Tests</div>
-          </td>
-          <td class="kpi-cell" style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px; padding: 6px 4px; text-align: center; width: 25%; vertical-align: middle;">
-            <div class="kpi-val" style="font-size: 11pt; font-weight: 800; color: #166534; white-space: nowrap;">${passedExams}</div>
-            <div class="kpi-lbl" style="font-size: 7.5pt; color: #64748b; font-weight: 700; text-transform: uppercase; margin-top: 2px; white-space: nowrap;">Tests Passed</div>
-          </td>
-          <td class="kpi-cell" style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px; padding: 6px 4px; text-align: center; width: 25%; vertical-align: middle;">
-            <div class="kpi-val" style="font-size: 11pt; font-weight: 800; color: #1e40af; white-space: nowrap;">${avgExamPercentage}%</div>
-            <div class="kpi-lbl" style="font-size: 7.5pt; color: #64748b; font-weight: 700; text-transform: uppercase; margin-top: 2px; white-space: nowrap;">Average Score</div>
-          </td>
-          <td class="kpi-cell" style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px; padding: 6px 4px; text-align: center; width: 25%; vertical-align: middle;">
-            <div class="kpi-val" style="font-size: 11pt; font-weight: 800; color: #6b21a8; white-space: nowrap;">
-              ${avgExamPercentage >= 80 ? 'A+' : avgExamPercentage >= 70 ? 'A' : avgExamPercentage >= 60 ? 'B' : avgExamPercentage >= 50 ? 'C' : 'Pass'}
-            </div>
-            <div class="kpi-lbl" style="font-size: 7.5pt; color: #64748b; font-weight: 700; text-transform: uppercase; margin-top: 2px; white-space: nowrap;">Academic Grade</div>
-          </td>
-        </tr>
-      </table>
+    <div class="profile-section" style="margin-bottom: 12px;">
+      <div class="section-header-block" style="page-break-inside: avoid !important; break-inside: avoid !important; page-break-after: avoid !important; break-after: avoid !important; display: block;">
+        <h2 class="section-title">6. Examination & Academic Marksheets</h2>
+        <table class="kpi-table" style="width: 100% !important; table-layout: fixed !important; border-collapse: separate !important; border-spacing: 6px !important; margin: 4px 0 8px 0 !important; border: none !important; background: transparent !important; page-break-inside: avoid !important; break-inside: avoid !important;">
+          <tr style="page-break-inside: avoid !important; break-inside: avoid !important;">
+            <td class="kpi-cell" style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px; padding: 5px 4px; text-align: center; width: 25%; vertical-align: middle; page-break-inside: avoid !important; break-inside: avoid !important;">
+              <div class="kpi-val" style="font-size: 11pt; font-weight: 800; color: #0f172a; white-space: nowrap;">${totalExams}</div>
+              <div class="kpi-lbl" style="font-size: 7.5pt; color: #64748b; font-weight: 700; text-transform: uppercase; margin-top: 2px; white-space: nowrap;">Total Tests</div>
+            </td>
+            <td class="kpi-cell" style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px; padding: 5px 4px; text-align: center; width: 25%; vertical-align: middle; page-break-inside: avoid !important; break-inside: avoid !important;">
+              <div class="kpi-val" style="font-size: 11pt; font-weight: 800; color: #166534; white-space: nowrap;">${passedExams}</div>
+              <div class="kpi-lbl" style="font-size: 7.5pt; color: #64748b; font-weight: 700; text-transform: uppercase; margin-top: 2px; white-space: nowrap;">Tests Passed</div>
+            </td>
+            <td class="kpi-cell" style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px; padding: 5px 4px; text-align: center; width: 25%; vertical-align: middle; page-break-inside: avoid !important; break-inside: avoid !important;">
+              <div class="kpi-val" style="font-size: 11pt; font-weight: 800; color: #1e40af; white-space: nowrap;">${avgExamPercentage}%</div>
+              <div class="kpi-lbl" style="font-size: 7.5pt; color: #64748b; font-weight: 700; text-transform: uppercase; margin-top: 2px; white-space: nowrap;">Average Score</div>
+            </td>
+            <td class="kpi-cell" style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px; padding: 5px 4px; text-align: center; width: 25%; vertical-align: middle; page-break-inside: avoid !important; break-inside: avoid !important;">
+              <div class="kpi-val" style="font-size: 11pt; font-weight: 800; color: #6b21a8; white-space: nowrap;">
+                ${avgExamPercentage >= 80 ? 'A+' : avgExamPercentage >= 70 ? 'A' : avgExamPercentage >= 60 ? 'B' : avgExamPercentage >= 50 ? 'C' : 'Pass'}
+              </div>
+              <div class="kpi-lbl" style="font-size: 7.5pt; color: #64748b; font-weight: 700; text-transform: uppercase; margin-top: 2px; white-space: nowrap;">Academic Grade</div>
+            </td>
+          </tr>
+        </table>
+      </div>
 
       <table>
         <thead>
@@ -1180,7 +1253,7 @@ function getStudentProfileHtml(student, extraData = {}) {
     </div>
 
     <!-- Section 7: Official Academy Signatures & Verification -->
-    <div style="margin-top: 24px; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; background: #f8fafc; display: flex; align-items: center; justify-content: space-between; gap: 16px;">
+    <div class="verification-box" style="page-break-inside: avoid !important; break-inside: avoid !important; margin-top: 18px; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 8px; background: #f8fafc; display: flex; align-items: center; justify-content: space-between; gap: 16px;">
       <div style="display: flex; align-items: center; gap: 12px;">
         <img src="${FAYSAL_BANK_QR_BASE64}" alt="Verification QR" style="width: 55px; height: 55px; object-fit: contain; border: 1px solid #cbd5e1; border-radius: 6px; padding: 2px; background: #fff;" />
         <div style="font-size: 8.5pt; color: #475569; line-height: 1.35;">

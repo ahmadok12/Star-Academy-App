@@ -12,7 +12,8 @@ import {
   GraduationCap,
   Calendar,
   Layers,
-  BookOpen
+  BookOpen,
+  Clock
 } from 'lucide-react';
 
 export default function TeacherDetailModal({
@@ -136,12 +137,20 @@ export default function TeacherDetailModal({
               Registration & Verification
             </h3>
 
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
               <div className="bg-white p-2.5 rounded-xl border border-slate-100">
                 <span className="text-[10px] text-slate-400 font-medium block">Date of Joining</span>
                 <span className="font-semibold text-slate-800 text-xs flex items-center gap-1 mt-0.5">
                   <Calendar className="w-3 h-3 text-indigo-500" />
                   {teacher.joinedAt || 'N/A'}
+                </span>
+              </div>
+
+              <div className="bg-white p-2.5 rounded-xl border border-slate-100">
+                <span className="text-[10px] text-slate-400 font-medium block">Expected Arrival</span>
+                <span className="font-semibold text-amber-900 text-xs flex items-center gap-1 mt-0.5">
+                  <Clock className="w-3 h-3 text-amber-600" />
+                  {teacher.arrivalTime || '07:45'}
                 </span>
               </div>
 

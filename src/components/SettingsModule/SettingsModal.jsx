@@ -244,14 +244,14 @@ export default function SettingsModal({
                   <div>
                     <div className="flex items-center gap-2">
                       <h3 className="text-sm font-extrabold text-slate-900 group-hover:text-emerald-600 transition-colors">
-                        Arrival Timings & Schedules
+                        Class Arrival Timings
                       </h3>
                       <span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-900 text-[10px] font-extrabold">
-                        Faculty & Classes
+                        Classes
                       </span>
                     </div>
                     <p className="text-xs text-slate-500 mt-0.5 leading-snug">
-                      Set teacher arrival reporting time and expected arrival times for 9th, 10th, FSc Part 1, and Part 2.
+                      Set expected student arrival times and start schedules for 9th, 10th, FSc Part 1, and Part 2.
                     </p>
                   </div>
                 </div>

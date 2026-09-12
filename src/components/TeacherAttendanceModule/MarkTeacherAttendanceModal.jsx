@@ -45,11 +45,18 @@ export default function MarkTeacherAttendanceModal({
     }
   }, [isOpen, attendanceTimings]);
 
+  const getTeacherExpectedTime = (teacherId) => {
+    const t = teachers.find(item => item.id === teacherId);
+    return t?.arrivalTime || expectedStartTime || '07:45';
+  };
+
   const handleStatusChange = (teacherId, status) => {
     setAttendanceMap((prev) => ({
       ...prev,
       [teacherId]: status,
     }));
+
+    const teacherExpected = getTeacherExpectedTime(teacherId);
 
     if (status === ATTENDANCE_STATUS.LATE) {
       const defaultLateArrival = '08:20';
@@ -59,12 +66,12 @@ export default function MarkTeacherAttendanceModal({
       }));
       setMinutesLateMap(prev => ({
         ...prev,
-        [teacherId]: calculateMinutesLate(defaultLateArrival, expectedStartTime) || 20
+        [teacherId]: calculateMinutesLate(defaultLateArrival, teacherExpected) || 20
       }));
     } else if (status === ATTENDANCE_STATUS.PRESENT) {
       setArrivalTimesMap(prev => ({
         ...prev,
-        [teacherId]: expectedStartTime
+        [teacherId]: teacherExpected
       }));
       setMinutesLateMap(prev => ({
         ...prev,
@@ -75,7 +82,8 @@ export default function MarkTeacherAttendanceModal({
 
   const handleArrivalTimeChange = (teacherId, arrivalVal) => {
     setArrivalTimesMap(prev => ({ ...prev, [teacherId]: arrivalVal }));
-    const lateMins = calculateMinutesLate(arrivalVal, expectedStartTime);
+    const teacherExpected = getTeacherExpectedTime(teacherId);
+    const lateMins = calculateMinutesLate(arrivalVal, teacherExpected);
     setMinutesLateMap(prev => ({ ...prev, [teacherId]: lateMins }));
     if (lateMins > 0) {
       setAttendanceMap(prev => ({ ...prev, [teacherId]: ATTENDANCE_STATUS.LATE }));
@@ -107,10 +115,11 @@ export default function MarkTeacherAttendanceModal({
     if (teachers.length === 0) return;
 
     const records = teachers.map((t) => {
+      const teacherExpected = t.arrivalTime || expectedStartTime || '07:45';
       const status = attendanceMap[t.id] || ATTENDANCE_STATUS.PRESENT;
-      const arrival = arrivalTimesMap[t.id] || (status === ATTENDANCE_STATUS.LATE ? '08:20' : expectedStartTime);
+      const arrival = arrivalTimesMap[t.id] || (status === ATTENDANCE_STATUS.LATE ? '08:20' : teacherExpected);
       const minsLate = status === ATTENDANCE_STATUS.LATE
-        ? (minutesLateMap[t.id] !== undefined ? minutesLateMap[t.id] : (calculateMinutesLate(arrival, expectedStartTime) || 20))
+        ? (minutesLateMap[t.id] !== undefined ? minutesLateMap[t.id] : (calculateMinutesLate(arrival, teacherExpected) || 20))
         : 0;
 
       return {
@@ -347,7 +356,7 @@ export default function MarkTeacherAttendanceModal({
                         <span className="text-[10px] font-semibold text-slate-500 uppercase">Arrival:</span>
                         <input
                           type="time"
-                          value={arrivalTimesMap[teacher.id] || (currentStatus === ATTENDANCE_STATUS.LATE ? '08:20' : expectedStartTime)}
+                          value={arrivalTimesMap[teacher.id] || (currentStatus === ATTENDANCE_STATUS.LATE ? '08:20' : (teacher.arrivalTime || expectedStartTime))}
                           onChange={(e) => handleArrivalTimeChange(teacher.id, e.target.value)}
                           className="px-1.5 py-0.5 bg-white border border-slate-200 rounded font-semibold text-xs text-slate-700 outline-none focus:ring-1 focus:ring-indigo-400"
                         />

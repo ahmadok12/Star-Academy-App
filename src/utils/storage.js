@@ -368,6 +368,7 @@ export const INITIAL_TEACHERS = [
     address: 'House #12, Canal View, Lahore',
     pic: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=256',
     department: 'Mathematics & Physics',
+    arrivalTime: '07:45',
     joinedAt: '2025-01-10'
   },
   {
@@ -379,6 +380,7 @@ export const INITIAL_TEACHERS = [
     address: 'Block C, Johar Town, Lahore',
     pic: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=256',
     department: 'Biology & Chemistry',
+    arrivalTime: '07:45',
     joinedAt: '2025-02-01'
   },
   {
@@ -390,6 +392,7 @@ export const INITIAL_TEACHERS = [
     address: 'Model Town, Link Road, Lahore',
     pic: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=256',
     department: 'Computer Science & IT',
+    arrivalTime: '07:45',
     joinedAt: '2025-03-15'
   },
   {
@@ -401,6 +404,7 @@ export const INITIAL_TEACHERS = [
     address: 'DHA Phase 3, Lahore',
     pic: 'https://images.unsplash.com/photo-1580894732444-8ecded7900cd?auto=format&fit=crop&q=80&w=256',
     department: 'English Literature',
+    arrivalTime: '07:45',
     joinedAt: '2025-04-10'
   },
   {
@@ -412,6 +416,7 @@ export const INITIAL_TEACHERS = [
     address: 'Gulberg II, Lahore',
     pic: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=256',
     department: 'Physics',
+    arrivalTime: '07:45',
     joinedAt: '2025-05-01'
   },
   {
@@ -423,6 +428,7 @@ export const INITIAL_TEACHERS = [
     address: 'Wapda Town, Lahore',
     pic: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=256',
     department: 'Urdu & Pak Studies',
+    arrivalTime: '07:45',
     joinedAt: '2025-06-15'
   }
 ];

@@ -14,7 +14,8 @@ import {
   BookOpen,
   Layers,
   CheckSquare,
-  Square
+  Square,
+  Clock
 } from 'lucide-react';
 import { generateNextTeacherId } from '../../utils/storage';
 import { CLASSES, CLASS_SECTIONS, TEACHER_SUBJECTS } from '../../constants/academicData';
@@ -34,6 +35,7 @@ export default function AddTeacherModal({ isOpen, onClose, onAddTeacher, existin
     secondaryContactNumber: '',
     address: '',
     department: 'Mathematics',
+    arrivalTime: '07:45',
     assignedClasses: [],
     pic: ''
   });
@@ -54,6 +56,7 @@ export default function AddTeacherModal({ isOpen, onClose, onAddTeacher, existin
         secondaryContactNumber: '',
         address: '',
         department: 'Mathematics',
+        arrivalTime: '07:45',
         assignedClasses: [],
         pic: ''
       });
@@ -342,26 +345,45 @@ export default function AddTeacherModal({ isOpen, onClose, onAddTeacher, existin
             </div>
           </div>
 
-          {/* Subject Dropdown */}
-          <div>
-            <label className="block font-semibold text-slate-700 mb-1 flex items-center gap-1">
-              <BookOpen className="w-3.5 h-3.5 text-indigo-600" />
-              <span>Teaching Subject <span className="text-rose-500">*</span></span>
-            </label>
-            <select
-              value={formData.department}
-              onChange={(e) => setFormData({ ...formData, department: e.target.value })}
-              className={`w-full px-3 py-2 rounded-xl border bg-white text-xs font-semibold focus:outline-none focus:ring-2 ${
-                errors.department ? 'border-rose-400 focus:ring-rose-200' : 'border-slate-200 focus:ring-indigo-200 focus:border-indigo-500'
-              } cursor-pointer`}
-            >
-              {TEACHER_SUBJECTS.map((sub) => (
-                <option key={sub} value={sub}>
-                  {sub}
-                </option>
-              ))}
-            </select>
-            {errors.department && <p className="text-rose-500 text-[10px] mt-0.5">{errors.department}</p>}
+          {/* Subject Dropdown & Expected Arrival Time */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label className="block font-semibold text-slate-700 mb-1 flex items-center gap-1">
+                <BookOpen className="w-3.5 h-3.5 text-indigo-600" />
+                <span>Teaching Subject <span className="text-rose-500">*</span></span>
+              </label>
+              <select
+                value={formData.department}
+                onChange={(e) => setFormData({ ...formData, department: e.target.value })}
+                className={`w-full px-3 py-2 rounded-xl border bg-white text-xs font-semibold focus:outline-none focus:ring-2 ${
+                  errors.department ? 'border-rose-400 focus:ring-rose-200' : 'border-slate-200 focus:ring-indigo-200 focus:border-indigo-500'
+                } cursor-pointer`}
+              >
+                {TEACHER_SUBJECTS.map((sub) => (
+                  <option key={sub} value={sub}>
+                    {sub}
+                  </option>
+                ))}
+              </select>
+              {errors.department && <p className="text-rose-500 text-[10px] mt-0.5">{errors.department}</p>}
+            </div>
+
+            <div>
+              <label className="block font-semibold text-slate-700 mb-1 flex items-center gap-1">
+                <Clock className="w-3.5 h-3.5 text-indigo-600" />
+                <span>Expected Arrival Time <span className="text-rose-500">*</span></span>
+              </label>
+              <div className="relative">
+                <input
+                  type="time"
+                  value={formData.arrivalTime || '07:45'}
+                  onChange={(e) => setFormData({ ...formData, arrivalTime: e.target.value })}
+                  className="w-full pl-8 pr-3 py-2 rounded-xl border border-slate-200 bg-white text-xs font-bold font-mono focus:outline-none focus:ring-2 focus:ring-indigo-200 focus:border-indigo-500"
+                  required
+                />
+                <Clock className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-2.5" />
+              </div>
+            </div>
           </div>
 
           {/* Optional Class & Section Checkboxes (one teacher can teach multiple) */}

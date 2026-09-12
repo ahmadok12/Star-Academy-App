@@ -22,8 +22,6 @@ export default function AttendanceTimingsModal({
   if (!isOpen) return null;
 
   const [timings, setTimings] = useState({
-    recordTeacherArrival: true,
-    teacherExpectedStartTime: '07:45',
     recordStudentArrival: true,
     classStartTimes: {
       '9th': '08:00',
@@ -36,8 +34,6 @@ export default function AttendanceTimingsModal({
   useEffect(() => {
     if (attendanceTimings) {
       setTimings({
-        recordTeacherArrival: attendanceTimings.recordTeacherArrival ?? true,
-        teacherExpectedStartTime: attendanceTimings.teacherExpectedStartTime || '07:45',
         recordStudentArrival: attendanceTimings.recordStudentArrival ?? true,
         classStartTimes: {
           '9th': attendanceTimings.classStartTimes?.['9th'] || '08:00',
@@ -60,13 +56,24 @@ export default function AttendanceTimingsModal({
   };
 
   const handleResetDefaults = () => {
-    setTimings(DEFAULT_ATTENDANCE_TIMINGS);
+    setTimings({
+      recordStudentArrival: true,
+      classStartTimes: {
+        '9th': '08:00',
+        '10th': '08:00',
+        'FSc Part 1': '08:30',
+        'FSc Part 2': '08:30'
+      }
+    });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (onSaveAttendanceTimings) {
-      onSaveAttendanceTimings(timings);
+      onSaveAttendanceTimings({
+        ...attendanceTimings,
+        ...timings
+      });
     }
     onClose();
   };
@@ -85,10 +92,10 @@ export default function AttendanceTimingsModal({
             </div>
             <div>
               <h2 className="text-base font-extrabold tracking-tight flex items-center gap-1.5">
-                <span>Attendance & Arrival Timings</span>
+                <span>Class Arrival Timings</span>
               </h2>
               <p className="text-xs text-indigo-100 font-medium">
-                Configure teacher arrival time & class start times for students
+                Configure class start & expected arrival times for students
               </p>
             </div>
           </div>
@@ -103,61 +110,7 @@ export default function AttendanceTimingsModal({
         {/* Body Form */}
         <form onSubmit={handleSubmit} className="p-4 space-y-4 overflow-y-auto flex-1 bg-slate-50/50 text-xs">
           
-          {/* Section 1: Teacher Arrival Timing Settings */}
-          <div className="bg-white p-4 rounded-2xl border border-slate-200/90 shadow-xs space-y-3">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-2.5">
-              <div className="flex items-center gap-2">
-                <div className="w-7 h-7 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center">
-                  <GraduationCap className="w-4 h-4" />
-                </div>
-                <div>
-                  <h3 className="font-bold text-slate-900 text-xs">Teacher Arrival Time Configuration</h3>
-                  <p className="text-[10px] text-slate-400">Shift start & late reporting calculation</p>
-                </div>
-              </div>
-
-              {/* Toggle switch */}
-              <label className="flex items-center gap-2 cursor-pointer select-none">
-                <span className="text-[10.5px] font-semibold text-slate-600">
-                  {timings.recordTeacherArrival ? 'Enabled' : 'Disabled'}
-                </span>
-                <input
-                  type="checkbox"
-                  checked={timings.recordTeacherArrival}
-                  onChange={(e) => setTimings(prev => ({ ...prev, recordTeacherArrival: e.target.checked }))}
-                  className="sr-only peer"
-                />
-                <div className="w-9 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-indigo-600"></div>
-              </label>
-            </div>
-
-            {timings.recordTeacherArrival ? (
-              <div className="space-y-2 pt-1">
-                <label className="block font-semibold text-slate-700 text-xs">
-                  Expected Teacher Arrival Time <span className="text-rose-500">*</span>
-                </label>
-                <div className="relative max-w-[180px]">
-                  <input
-                    type="time"
-                    value={timings.teacherExpectedStartTime}
-                    onChange={(e) => setTimings(prev => ({ ...prev, teacherExpectedStartTime: e.target.value }))}
-                    className="w-full pl-8 pr-3 py-2 rounded-xl border border-slate-200 bg-white font-bold text-slate-900 text-xs focus:ring-2 focus:ring-indigo-100 focus:border-indigo-500"
-                    required
-                  />
-                  <Clock className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-2.5 pointer-events-none" />
-                </div>
-                <p className="text-[10.5px] text-slate-500 leading-relaxed">
-                  Teachers arriving after this time will automatically be flagged as <span className="text-amber-700 font-semibold">Late</span> and their late minutes recorded on the faculty attendance register.
-                </p>
-              </div>
-            ) : (
-              <p className="text-[11px] text-slate-400 italic py-1">
-                Teacher arrival time recording is currently disabled. Attendance will only record Present, Absent, or Leave.
-              </p>
-            )}
-          </div>
-
-          {/* Section 2: Student Arrival Timing Settings Per Class */}
+          {/* Section: Student Arrival Timing Settings Per Class */}
           <div className="bg-white p-4 rounded-2xl border border-slate-200/90 shadow-xs space-y-3">
             <div className="flex items-center justify-between border-b border-slate-100 pb-2.5">
               <div className="flex items-center gap-2">
