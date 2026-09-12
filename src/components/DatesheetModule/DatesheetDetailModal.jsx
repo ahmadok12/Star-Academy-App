@@ -12,9 +12,10 @@ import {
   Check,
   FileText,
   Download,
-  MessageCircle
+  MessageCircle,
+  Printer
 } from 'lucide-react';
-import { exportDatesheetPDF, shareDatesheetWhatsApp } from '../../utils/exportShareUtils';
+import { exportDatesheetPDF, shareDatesheetWhatsApp, printDatesheet, getDayNameFromDate } from '../../utils/exportShareUtils';
 
 export default function DatesheetDetailModal({
   isOpen,
@@ -35,7 +36,8 @@ export default function DatesheetDetailModal({
     text += `Class: ${datesheet.studentClass} • Section: ${datesheet.section}\n`;
     text += `------------------------------------\n`;
     datesheet.rows?.forEach((r, idx) => {
-      text += `${idx + 1}. *${r.subject}*\n   📅 Date: ${r.date}\n   ⏰ Time: ${r.time}\n`;
+      const dayName = getDayNameFromDate(r.date, r.day);
+      text += `${idx + 1}. *${r.subject}*\n   📅 Date: ${r.date} (${dayName})\n   ⏰ Time: ${r.time}\n`;
       if (r.syllabus) text += `   📖 Syllabus: ${r.syllabus}\n`;
     });
     if (datesheet.instructions) {
@@ -143,7 +145,7 @@ export default function DatesheetDetailModal({
                     </div>
 
                     <span className="text-[11px] font-mono font-bold text-amber-800 bg-amber-50 px-2 py-0.5 rounded-md border border-amber-100">
-                      {paper.date}
+                      {paper.date} • {getDayNameFromDate(paper.date, paper.day)}
                     </span>
                   </div>
 
@@ -168,23 +170,32 @@ export default function DatesheetDetailModal({
 
         {/* Footer with Actions */}
         <div className="p-3.5 bg-slate-50 border-t border-slate-100 space-y-2">
-          {/* Download PDF & Share on WhatsApp row */}
+          {/* Print Preview, Download PDF & Share on WhatsApp row */}
           <div className="flex items-center gap-2">
             <button
               type="button"
+              onClick={() => printDatesheet(datesheet)}
+              className="flex-1 py-2 px-2.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-colors shadow-2xs cursor-pointer"
+              title="Print Preview Datesheet"
+            >
+              <Printer className="w-3.5 h-3.5" />
+              <span>Print Preview</span>
+            </button>
+            <button
+              type="button"
               onClick={() => exportDatesheetPDF(datesheet)}
-              className="flex-1 py-2 px-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs flex items-center justify-center gap-1.5 transition-colors border border-slate-300/80 cursor-pointer shadow-2xs"
+              className="flex-1 py-2 px-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs flex items-center justify-center gap-1.5 transition-colors border border-slate-300/80 cursor-pointer shadow-2xs"
             >
               <Download className="w-3.5 h-3.5 text-slate-600" />
-              <span>Download PDF</span>
+              <span>PDF</span>
             </button>
             <button
               type="button"
               onClick={() => shareDatesheetWhatsApp(datesheet)}
-              className="flex-1 py-2 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-colors shadow-2xs cursor-pointer"
+              className="flex-1 py-2 px-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-colors shadow-2xs cursor-pointer"
             >
               <MessageCircle className="w-3.5 h-3.5" />
-              <span>Share on WhatsApp</span>
+              <span>WhatsApp</span>
             </button>
           </div>
 

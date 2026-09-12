@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { X, Calendar, Plus, Trash2, Clock, BookOpen, FileText, ShieldCheck, Award } from 'lucide-react';
 import { CLASSES, CLASS_SECTIONS } from '../../constants/academicData';
 import { generateNextDatesheetId, getCurriculumSubjects } from '../../utils/storage';
+import { getDayNameFromDate } from '../../utils/exportShareUtils';
 
 export default function AddDatesheetModal({
   isOpen,
@@ -97,7 +98,10 @@ export default function AddDatesheetModal({
       section,
       title: defaultTitle,
       instructions: instructions.trim(),
-      rows,
+      rows: rows.map(r => ({
+        ...r,
+        day: getDayNameFromDate(r.date, r.day)
+      })),
       createdAt: new Date().toISOString().slice(0, 10)
     });
 

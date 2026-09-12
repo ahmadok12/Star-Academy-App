@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { X, Calendar, Plus, Trash2, Clock, Award } from 'lucide-react';
 import { CLASSES, CLASS_SECTIONS } from '../../constants/academicData';
+import { getDayNameFromDate } from '../../utils/exportShareUtils';
 
 export default function EditDatesheetModal({
   isOpen,
@@ -89,7 +90,10 @@ export default function EditDatesheetModal({
       section,
       title: title.trim() || `${studentClass} ${section} - ${testName} Datesheet`,
       instructions: instructions.trim(),
-      rows
+      rows: rows.map(r => ({
+        ...r,
+        day: getDayNameFromDate(r.date, r.day)
+      }))
     });
 
     onClose();

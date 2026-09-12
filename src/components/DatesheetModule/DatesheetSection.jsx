@@ -11,9 +11,10 @@ import {
   CheckCircle2,
   Share2,
   Download,
-  MessageCircle
+  MessageCircle,
+  Printer
 } from 'lucide-react';
-import { exportDatesheetPDF, shareDatesheetWhatsApp } from '../../utils/exportShareUtils';
+import { exportDatesheetPDF, shareDatesheetWhatsApp, printDatesheet } from '../../utils/exportShareUtils';
 import { CLASSES, CLASS_SECTIONS } from '../../constants/academicData';
 import AddTestModal from './AddTestModal';
 import EditTestModal from './EditTestModal';
@@ -289,6 +290,16 @@ export default function DatesheetSection({
                     </span>
 
                     <div className="flex items-center gap-1.5 flex-wrap">
+                      <button
+                        type="button"
+                        onClick={() => printDatesheet(ds)}
+                        title="Print Preview Datesheet"
+                        className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-900 text-[11px] font-bold transition-colors border border-amber-200"
+                      >
+                        <Printer className="w-3 h-3 text-amber-700" />
+                        <span>Print</span>
+                      </button>
+
                       <button
                         type="button"
                         onClick={() => exportDatesheetPDF(ds)}

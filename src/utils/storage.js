@@ -1137,11 +1137,11 @@ export const INITIAL_DATESHEETS = [
     title: '9th Science - Mockup Exam 1 Datesheet',
     instructions: 'Reporting time 08:30 AM. Candidates must bring official roll number slip and transparent pencil box.',
     rows: [
-      { id: 'ds-1', subject: 'Physics', date: '2026-09-22', time: '09:00 AM - 12:00 PM', syllabus: 'Chapters 1 to 4 with numericals & short questions' },
-      { id: 'ds-2', subject: 'Chemistry', date: '2026-09-24', time: '09:00 AM - 12:00 PM', syllabus: 'Chapters 1 to 5 Fundamentals & Periodic Table' },
-      { id: 'ds-3', subject: 'Mathematics', date: '2026-09-26', time: '09:00 AM - 12:00 PM', syllabus: 'Chapters 1 to 6 Real numbers, matrices & polynomials' },
-      { id: 'ds-4', subject: 'English', date: '2026-09-29', time: '09:00 AM - 12:00 PM', syllabus: 'Lessons 1-7, Essay writing, grammar and translation' },
-      { id: 'ds-5', subject: 'Biology', date: '2026-10-01', time: '09:00 AM - 12:00 PM', syllabus: 'Chapters 1 to 5 Cell biology, enzymes & bioenergetics' }
+      { id: 'ds-1', subject: 'Physics', date: '2026-09-22', day: 'Tuesday', time: '09:00 AM - 12:00 PM', syllabus: 'Chapters 1 to 4 with numericals & short questions' },
+      { id: 'ds-2', subject: 'Chemistry', date: '2026-09-24', day: 'Thursday', time: '09:00 AM - 12:00 PM', syllabus: 'Chapters 1 to 5 Fundamentals & Periodic Table' },
+      { id: 'ds-3', subject: 'Mathematics', date: '2026-09-26', day: 'Saturday', time: '09:00 AM - 12:00 PM', syllabus: 'Chapters 1 to 6 Real numbers, matrices & polynomials' },
+      { id: 'ds-4', subject: 'English', date: '2026-09-29', day: 'Tuesday', time: '09:00 AM - 12:00 PM', syllabus: 'Lessons 1-7, Essay writing, grammar and translation' },
+      { id: 'ds-5', subject: 'Biology', date: '2026-10-01', day: 'Thursday', time: '09:00 AM - 12:00 PM', syllabus: 'Chapters 1 to 5 Cell biology, enzymes & bioenergetics' }
     ],
     createdAt: '2026-09-02'
   },
@@ -1154,11 +1154,11 @@ export const INITIAL_DATESHEETS = [
     title: '10th Science - Mockup Exam 1 Datesheet',
     instructions: 'Morning shift begins promptly at 09:00 AM. No mobile phones or digital smartwatches allowed in exam hall.',
     rows: [
-      { id: 'ds-10-1', subject: 'Mathematics', date: '2026-09-21', time: '09:00 AM - 12:00 PM', syllabus: 'Quadratic Equations, Theory of Quadratic, Variations' },
-      { id: 'ds-10-2', subject: 'Physics', date: '2026-09-23', time: '09:00 AM - 12:00 PM', syllabus: 'Simple Harmonic Motion, Sound, Geometrical Optics' },
-      { id: 'ds-10-3', subject: 'Chemistry', date: '2026-09-25', time: '09:00 AM - 12:00 PM', syllabus: 'Chemical Equilibrium, Acids, Bases and Salts, Organic Chemistry' },
-      { id: 'ds-10-4', subject: 'English', date: '2026-09-28', time: '09:00 AM - 12:00 PM', syllabus: 'Full book objective + subjective board pattern' },
-      { id: 'ds-10-5', subject: 'Biology', date: '2026-09-30', time: '09:00 AM - 12:00 PM', syllabus: 'Gaseous Exchange, Homeostasis, Coordination & Control' }
+      { id: 'ds-10-1', subject: 'Mathematics', date: '2026-09-21', day: 'Monday', time: '09:00 AM - 12:00 PM', syllabus: 'Quadratic Equations, Theory of Quadratic, Variations' },
+      { id: 'ds-10-2', subject: 'Physics', date: '2026-09-23', day: 'Wednesday', time: '09:00 AM - 12:00 PM', syllabus: 'Simple Harmonic Motion, Sound, Geometrical Optics' },
+      { id: 'ds-10-3', subject: 'Chemistry', date: '2026-09-25', day: 'Friday', time: '09:00 AM - 12:00 PM', syllabus: 'Chemical Equilibrium, Acids, Bases and Salts, Organic Chemistry' },
+      { id: 'ds-10-4', subject: 'English', date: '2026-09-28', day: 'Monday', time: '09:00 AM - 12:00 PM', syllabus: 'Full book objective + subjective board pattern' },
+      { id: 'ds-10-5', subject: 'Biology', date: '2026-09-30', day: 'Wednesday', time: '09:00 AM - 12:00 PM', syllabus: 'Gaseous Exchange, Homeostasis, Coordination & Control' }
     ],
     createdAt: '2026-09-02'
   },
@@ -1171,10 +1171,10 @@ export const INITIAL_DATESHEETS = [
     title: 'FSc Part 1 Eng - Send Up 2 Datesheet',
     instructions: 'Calculators are permitted for Mathematics & Physics only. Examination hall entry closes 15 minutes prior to start.',
     rows: [
-      { id: 'ds-fsc-1', subject: 'Mathematics (Calculus & Algebra)', date: '2026-10-05', time: '08:30 AM - 11:30 AM', syllabus: 'Full book syllabus comprehensive send up paper' },
-      { id: 'ds-fsc-2', subject: 'Physics (Mechanics & Heat)', date: '2026-10-07', time: '08:30 AM - 11:30 AM', syllabus: 'Full book theoretical board format' },
-      { id: 'ds-fsc-3', subject: 'Chemistry', date: '2026-10-09', time: '08:30 AM - 11:30 AM', syllabus: 'Physical, Inorganic and Analytical Chapters' },
-      { id: 'ds-fsc-4', subject: 'English', date: '2026-10-12', time: '08:30 AM - 11:30 AM', syllabus: 'Book 1 short stories, Book 3 plays and poems' }
+      { id: 'ds-fsc-1', subject: 'Mathematics (Calculus & Algebra)', date: '2026-10-05', day: 'Monday', time: '08:30 AM - 11:30 AM', syllabus: 'Full book syllabus comprehensive send up paper' },
+      { id: 'ds-fsc-2', subject: 'Physics (Mechanics & Heat)', date: '2026-10-07', day: 'Wednesday', time: '08:30 AM - 11:30 AM', syllabus: 'Full book theoretical board format' },
+      { id: 'ds-fsc-3', subject: 'Chemistry', date: '2026-10-09', day: 'Friday', time: '08:30 AM - 11:30 AM', syllabus: 'Physical, Inorganic and Analytical Chapters' },
+      { id: 'ds-fsc-4', subject: 'English', date: '2026-10-12', day: 'Monday', time: '08:30 AM - 11:30 AM', syllabus: 'Book 1 short stories, Book 3 plays and poems' }
     ],
     createdAt: '2026-09-03'
   },
@@ -1187,10 +1187,10 @@ export const INITIAL_DATESHEETS = [
     title: 'FSc Part 1 ICS - Physics - Send Up 2 Datesheet',
     instructions: 'Both objective and coding practical exams will be evaluated on the scheduled date.',
     rows: [
-      { id: 'ds-ics-1', subject: 'Computer Science (C++ & IT)', date: '2026-10-05', time: '08:30 AM - 11:30 AM', syllabus: 'Overview of Computer System, C++ Basics, Control Structures' },
-      { id: 'ds-ics-2', subject: 'Mathematics', date: '2026-10-07', time: '08:30 AM - 11:30 AM', syllabus: 'Complex numbers, matrices, sequences and series' },
-      { id: 'ds-ics-3', subject: 'Physics / Stats', date: '2026-10-09', time: '08:30 AM - 11:30 AM', syllabus: 'Vectors, Equilibrium, Circular Motion' },
-      { id: 'ds-ics-4', subject: 'English', date: '2026-10-12', time: '08:30 AM - 11:30 AM', syllabus: 'Comprehension, application and grammar test' }
+      { id: 'ds-ics-1', subject: 'Computer Science (C++ & IT)', date: '2026-10-05', day: 'Monday', time: '08:30 AM - 11:30 AM', syllabus: 'Overview of Computer System, C++ Basics, Control Structures' },
+      { id: 'ds-ics-2', subject: 'Mathematics', date: '2026-10-07', day: 'Wednesday', time: '08:30 AM - 11:30 AM', syllabus: 'Complex numbers, matrices, sequences and series' },
+      { id: 'ds-ics-3', subject: 'Physics / Stats', date: '2026-10-09', day: 'Friday', time: '08:30 AM - 11:30 AM', syllabus: 'Vectors, Equilibrium, Circular Motion' },
+      { id: 'ds-ics-4', subject: 'English', date: '2026-10-12', day: 'Monday', time: '08:30 AM - 11:30 AM', syllabus: 'Comprehension, application and grammar test' }
     ],
     createdAt: '2026-09-03'
   }

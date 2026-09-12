@@ -1292,18 +1292,56 @@ export function shareTimetableWhatsApp(timetable) {
 // -------------------------------------------------------------
 // 3. DATESHEET EXPORT & SHARE
 // -------------------------------------------------------------
+export function getDayNameFromDate(dateStr, fallbackDay = '') {
+  if (fallbackDay && fallbackDay !== 'N/A' && fallbackDay.trim() !== '') {
+    return fallbackDay.trim();
+  }
+  if (!dateStr || typeof dateStr !== 'string') {
+    return fallbackDay && fallbackDay !== 'N/A' ? fallbackDay : 'N/A';
+  }
+
+  const trimmed = dateStr.trim();
+  let d = null;
+
+  // YYYY-MM-DD
+  if (/^\d{4}-\d{2}-\d{2}$/.test(trimmed)) {
+    const [y, m, day] = trimmed.split('-').map(Number);
+    d = new Date(y, m - 1, day);
+  }
+  // DD-MM-YYYY or DD/MM/YYYY
+  else if (/^\d{2}[/-]\d{2}[/-]\d{4}$/.test(trimmed)) {
+    const parts = trimmed.split(/[/-]/).map(Number);
+    d = new Date(parts[2], parts[1] - 1, parts[0]);
+  } else {
+    const parsed = new Date(trimmed);
+    if (!isNaN(parsed.getTime())) {
+      d = parsed;
+    }
+  }
+
+  if (d && !isNaN(d.getTime())) {
+    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    return days[d.getDay()];
+  }
+
+  return fallbackDay && fallbackDay !== 'N/A' ? fallbackDay : 'N/A';
+}
+
 function getDatesheetHtml(datesheet) {
   const rows = datesheet.rows || [];
-  const rowsHtml = rows.map((r, idx) => `
+  const rowsHtml = rows.map((r, idx) => {
+    const dayName = getDayNameFromDate(r.date, r.day);
+    return `
     <tr>
       <td style="text-align: center; font-weight: bold;">${idx + 1}</td>
       <td><strong>${r.date}</strong></td>
-      <td>${r.day || 'N/A'}</td>
+      <td><strong>${dayName}</strong></td>
       <td><strong>${r.subject}</strong></td>
       <td>${r.time || '09:00 AM - 12:00 PM'}</td>
       <td>${r.syllabus || r.chapters || 'Complete syllabus'}</td>
     </tr>
-  `).join('');
+  `;
+  }).join('');
 
   return `
     <h2 class="section-title">Official Examination Datesheet</h2>
@@ -1348,6 +1386,11 @@ function getDatesheetHtml(datesheet) {
       </div>
     ` : ''}
   `;
+}
+
+export function printDatesheet(datesheet) {
+  const title = `Datesheet - ${datesheet.title || datesheet.testName} (${datesheet.studentClass} ${datesheet.section})`;
+  printHtmlAsPDF(title, getDatesheetHtml(datesheet));
 }
 
 export function exportDatesheetPDF(datesheet) {
