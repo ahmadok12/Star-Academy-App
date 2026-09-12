@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { X, Calendar, Edit3, Trash2, Clock, Coffee, BookOpen, AlertTriangle, Download, MessageCircle } from 'lucide-react';
-import { exportTimetablePDF, shareTimetableWhatsApp } from '../../utils/exportShareUtils';
+import { X, Calendar, Edit3, Trash2, Clock, Coffee, BookOpen, AlertTriangle, Download, MessageCircle, Printer } from 'lucide-react';
+import { exportTimetablePDF, shareTimetableWhatsApp, printTimetable } from '../../utils/exportShareUtils';
 
 export default function TimetableDetailModal({
   isOpen,
@@ -138,23 +138,32 @@ export default function TimetableDetailModal({
 
         {/* Footer with Actions */}
         <div className="p-3.5 bg-slate-50 border-t border-slate-100 space-y-2">
-          {/* Download PDF & Share on WhatsApp row */}
+          {/* Print Preview, Download PDF & Share on WhatsApp row */}
           <div className="flex items-center gap-2">
             <button
               type="button"
+              onClick={() => printTimetable(timetable)}
+              className="flex-1 py-2 px-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-colors shadow-2xs cursor-pointer"
+              title="Print Preview Timetable"
+            >
+              <Printer className="w-3.5 h-3.5" />
+              <span>Print Preview</span>
+            </button>
+            <button
+              type="button"
               onClick={() => exportTimetablePDF(timetable)}
-              className="flex-1 py-2 px-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs flex items-center justify-center gap-1.5 transition-colors border border-slate-300/80 cursor-pointer shadow-2xs"
+              className="flex-1 py-2 px-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs flex items-center justify-center gap-1.5 transition-colors border border-slate-300/80 cursor-pointer shadow-2xs"
             >
               <Download className="w-3.5 h-3.5 text-slate-600" />
-              <span>Download PDF</span>
+              <span>PDF</span>
             </button>
             <button
               type="button"
               onClick={() => shareTimetableWhatsApp(timetable)}
-              className="flex-1 py-2 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-colors shadow-2xs cursor-pointer"
+              className="flex-1 py-2 px-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-colors shadow-2xs cursor-pointer"
             >
               <MessageCircle className="w-3.5 h-3.5" />
-              <span>Share on WhatsApp</span>
+              <span>WhatsApp</span>
             </button>
           </div>
 

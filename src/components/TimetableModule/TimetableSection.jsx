@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
-import { Plus, Search, Calendar, Clock, Coffee, Eye, BookOpen, Download, MessageCircle } from 'lucide-react';
+import { Plus, Search, Calendar, Clock, Coffee, Eye, BookOpen, Download, MessageCircle, Printer } from 'lucide-react';
 import { CLASSES, CLASS_SECTIONS } from '../../constants/academicData';
-import { exportTimetablePDF, shareTimetableWhatsApp } from '../../utils/exportShareUtils';
+import { exportTimetablePDF, shareTimetableWhatsApp, printTimetable } from '../../utils/exportShareUtils';
 import AddTimetableModal from './AddTimetableModal';
 import EditTimetableModal from './EditTimetableModal';
 import TimetableDetailModal from './TimetableDetailModal';
@@ -197,6 +197,16 @@ export default function TimetableSection({
                   </div>
 
                   <div className="flex items-center gap-1.5 flex-wrap">
+                    <button
+                      type="button"
+                      onClick={() => printTimetable(tt)}
+                      title="Print Preview Timetable"
+                      className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-700 text-[11px] font-bold transition-colors border border-blue-200"
+                    >
+                      <Printer className="w-3 h-3 text-blue-600" />
+                      <span>Print</span>
+                    </button>
+
                     <button
                       type="button"
                       onClick={() => exportTimetablePDF(tt)}

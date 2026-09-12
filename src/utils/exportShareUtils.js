@@ -1229,7 +1229,6 @@ function getTimetableHtml(timetable) {
       <td style="text-align: center; font-weight: bold;">${idx + 1}</td>
       <td><strong>${p.time || `${p.fromTime} - ${p.toTime}`}</strong></td>
       <td><strong>${p.subject}</strong></td>
-      <td>${p.teacherName || p.teacher || 'Assigned Faculty'}</td>
       <td><span class="badge ${p.type === 'break' || p.isBreak ? 'badge-amber' : 'badge-blue'}">${p.type || (p.isBreak ? 'Break' : 'Lecture')}</span></td>
       <td>${p.room || 'Room 101'}</td>
     </tr>
@@ -1262,16 +1261,20 @@ function getTimetableHtml(timetable) {
           <th style="width: 35px; text-align: center;">#</th>
           <th>Timing Slot</th>
           <th>Subject</th>
-          <th>Teacher</th>
           <th>Period Type</th>
           <th>Room</th>
         </tr>
       </thead>
       <tbody>
-        ${rowsHtml || '<tr><td colspan="6" style="text-align: center;">No period slots recorded</td></tr>'}
+        ${rowsHtml || '<tr><td colspan="5" style="text-align: center;">No period slots recorded</td></tr>'}
       </tbody>
     </table>
   `;
+}
+
+export function printTimetable(timetable) {
+  const title = `Timetable - Class ${timetable.studentClass} (${timetable.section})`;
+  printHtmlAsPDF(title, getTimetableHtml(timetable));
 }
 
 export function exportTimetablePDF(timetable) {
