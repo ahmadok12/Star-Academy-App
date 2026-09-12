@@ -50,7 +50,8 @@ export default function AdminTabHub({
   onAddScheme,
   onUpdateScheme,
   onDeleteScheme,
-  currentSession = '2026 - 27'
+  currentSession = '2026 - 27',
+  batches = []
 }) {
   const menuItems = [
     {
@@ -182,6 +183,7 @@ export default function AdminTabHub({
               onUpdateScheme={onUpdateScheme}
               onDeleteScheme={onDeleteScheme}
               currentSession={currentSession}
+              batches={batches}
             />
           </div>
         )}

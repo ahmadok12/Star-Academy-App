@@ -78,8 +78,16 @@ export default function SOSViewModal({
               <h2 className="text-base font-extrabold tracking-tight truncate text-white">
                 {scheme.title || 'Scheme of Study'}
               </h2>
-              <div className="flex items-center gap-2 text-xs text-rose-100 font-medium">
+              <div className="flex items-center gap-2 text-xs text-rose-100 font-medium flex-wrap">
                 <span className="font-bold">{scheme.studentClass} ({scheme.section})</span>
+                {scheme.batch && (
+                  <>
+                    <span>•</span>
+                    <span className="px-2 py-0.5 rounded-full bg-white/20 text-white text-[10.5px] font-bold">
+                      {scheme.batch}
+                    </span>
+                  </>
+                )}
                 <span>•</span>
                 <span>Session {scheme.academicYear || '2026 - 27'}</span>
               </div>

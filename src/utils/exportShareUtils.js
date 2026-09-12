@@ -1328,6 +1328,11 @@ function getSOSHtml(scheme) {
         <span class="info-label">Class & Section:</span>
         <span class="info-value">${scheme.studentClass} (${scheme.section})</span>
       </div>
+      ${scheme.batch ? `
+      <div class="info-item">
+        <span class="info-label">Batch:</span>
+        <span class="info-value">${scheme.batch}</span>
+      </div>` : ''}
       <div class="info-item">
         <span class="info-label">Academic Session:</span>
         <span class="info-value">${scheme.academicYear || '2026 - 27'}</span>
@@ -1358,14 +1363,16 @@ function getSOSHtml(scheme) {
 }
 
 export function exportSOSPDF(scheme) {
-  const title = `Scheme of Study - ${scheme.title || ''} (${scheme.studentClass} ${scheme.section})`;
-  const filename = `Scheme_of_Study_${scheme.studentClass}_${scheme.section}`;
+  const batchSuffix = scheme.batch ? ` [${scheme.batch}]` : '';
+  const title = `Scheme of Study - ${scheme.title || ''} (${scheme.studentClass} ${scheme.section})${batchSuffix}`;
+  const filename = `Scheme_of_Study_${scheme.studentClass}_${scheme.section}${scheme.batch ? `_${scheme.batch.replace(/\s+/g, '_')}` : ''}`;
   downloadHtmlAsPDF(title, getSOSHtml(scheme), filename);
 }
 
 export function shareSOSWhatsApp(scheme) {
-  const title = `Scheme of Study - ${scheme.title || ''} (${scheme.studentClass} ${scheme.section})`;
-  const filename = `Scheme_of_Study_${scheme.studentClass}_${scheme.section}`;
+  const batchSuffix = scheme.batch ? ` [${scheme.batch}]` : '';
+  const title = `Scheme of Study - ${scheme.title || ''} (${scheme.studentClass} ${scheme.section})${batchSuffix}`;
+  const filename = `Scheme_of_Study_${scheme.studentClass}_${scheme.section}${scheme.batch ? `_${scheme.batch.replace(/\s+/g, '_')}` : ''}`;
   shareHtmlAsPDFToWhatsApp(title, getSOSHtml(scheme), filename);
 }
 

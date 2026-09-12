@@ -17,6 +17,7 @@ const STORAGE_KEYS = {
   ACADEMIC_SESSION: 'star_academy_academic_session_v1',
   ACADEMIC_SESSIONS_LIST: 'star_academy_academic_sessions_list_v1',
   SCHEMES_OF_STUDY: 'star_academy_schemes_of_study_v1',
+  BATCHES: 'star_academy_batches_v1',
   INQUIRIES: 'star_academy_inquiries_v1'
 };
 
@@ -1517,6 +1518,7 @@ export const INITIAL_SCHEMES_OF_STUDY = [
     title: '9th Science - Annual Scheme of Study',
     studentClass: '9th',
     section: 'Science',
+    batch: 'Morning Batch',
     academicYear: '2026 - 27',
     createdAt: '2026-05-10',
     description: 'Annual curriculum roadmap, chapter distribution, and test schedule for Class 9th Science group.',
@@ -1608,6 +1610,7 @@ export const INITIAL_SCHEMES_OF_STUDY = [
     title: '10th Computer - Annual Scheme of Study',
     studentClass: '10th',
     section: 'Computer',
+    batch: 'Evening Batch',
     academicYear: '2026 - 27',
     createdAt: '2026-05-12',
     description: 'Syllabus distribution and programming lab milestones for 10th Computer Science students.',
@@ -1659,6 +1662,7 @@ export const INITIAL_SCHEMES_OF_STUDY = [
     title: 'FSc Part 1 Med - Scheme of Study',
     studentClass: 'FSc Part 1',
     section: 'Med',
+    batch: 'Morning Batch',
     academicYear: '2026 - 27',
     createdAt: '2026-07-15',
     description: 'Intermediate Pre-Medical curriculum pacing with weekly assessment breakdown.',
@@ -1729,6 +1733,59 @@ export function generateNextSchemeOfStudyId(schemes) {
     }
   });
   return `SOS-${String(max + 1).padStart(4, '0')}`;
+}
+
+// ----------------- ACADEMIC BATCHES STORAGE -----------------
+export const INITIAL_BATCHES = [
+  { id: 'BATCH-001', name: 'Morning Batch', createdAt: '2026-05-01' },
+  { id: 'BATCH-002', name: 'Evening Batch', createdAt: '2026-05-01' },
+  { id: 'BATCH-003', name: 'Weekend Batch', createdAt: '2026-05-01' }
+];
+
+export function getBatches() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEYS.BATCHES);
+    if (!raw) {
+      localStorage.setItem(STORAGE_KEYS.BATCHES, JSON.stringify(INITIAL_BATCHES));
+      return INITIAL_BATCHES;
+    }
+    const parsed = JSON.parse(raw);
+    if (!Array.isArray(parsed)) return INITIAL_BATCHES;
+    return parsed.map((item, idx) => {
+      if (typeof item === 'string') {
+        return {
+          id: `BATCH-${String(idx + 1).padStart(3, '0')}`,
+          name: item,
+          createdAt: new Date().toISOString().split('T')[0]
+        };
+      }
+      return item;
+    });
+  } catch (e) {
+    console.error('Failed to load batches', e);
+    return INITIAL_BATCHES;
+  }
+}
+
+export function saveBatches(batches) {
+  try {
+    localStorage.setItem(STORAGE_KEYS.BATCHES, JSON.stringify(batches));
+  } catch (e) {
+    console.error('Failed to save batches', e);
+  }
+}
+
+export function generateNextBatchId(batches) {
+  if (!batches || batches.length === 0) return 'BATCH-001';
+  let max = 0;
+  batches.forEach(b => {
+    const idStr = typeof b === 'string' ? '' : (b.id || '');
+    if (idStr.startsWith('BATCH-')) {
+      const num = parseInt(idStr.replace('BATCH-', ''), 10);
+      if (!isNaN(num) && num > max) max = num;
+    }
+  });
+  return `BATCH-${String(max + 1).padStart(3, '0')}`;
 }
 
 // ----------------- STUDENT INQUIRIES & FOLLOW-UPS MODULE -----------------

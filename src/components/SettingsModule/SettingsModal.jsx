@@ -11,10 +11,12 @@ import {
   Calendar,
   Clock,
   RotateCcw,
-  CheckCircle2
+  CheckCircle2,
+  Layers
 } from 'lucide-react';
 import SubjectsManagerModal from './SubjectsManagerModal';
 import StartAcademicYearModal from './StartAcademicYearModal';
+import BatchesManagerModal from './BatchesManagerModal';
 
 export default function SettingsModal({
   isOpen,
@@ -24,9 +26,12 @@ export default function SettingsModal({
   studentCount,
   teacherCount,
   currentSession = '2026 - 27',
-  onStartNewYear
+  onStartNewYear,
+  batches = [],
+  onSaveBatches
 }) {
   const [isSubjectsOpen, setIsSubjectsOpen] = useState(false);
+  const [isBatchesOpen, setIsBatchesOpen] = useState(false);
   const [isStartYearOpen, setIsStartYearOpen] = useState(false);
   const [toastMsg, setToastMsg] = useState(null);
 
@@ -168,6 +173,53 @@ export default function SettingsModal({
                   <ChevronRight className="w-4 h-4" />
                 </div>
               </button>
+
+              {/* BATCHES BUTTON */}
+              <button
+                type="button"
+                onClick={() => setIsBatchesOpen(true)}
+                className="w-full text-left bg-white p-4 rounded-2xl border border-purple-200/80 hover:border-purple-500 shadow-xs hover:shadow-md transition-all group flex items-center justify-between gap-3 mt-2.5"
+              >
+                <div className="flex items-center gap-3.5">
+                  <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-purple-600 to-indigo-700 text-white flex items-center justify-center shadow-md shadow-purple-200 group-hover:scale-105 transition-transform shrink-0">
+                    <Layers className="w-6 h-6 text-amber-300" />
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <h3 className="text-sm font-extrabold text-slate-900 group-hover:text-purple-600 transition-colors">
+                        Batches Master
+                      </h3>
+                      <span className="px-2 py-0.5 rounded-full bg-purple-100 text-purple-900 text-[10px] font-extrabold">
+                        {batches.length} Batches
+                      </span>
+                    </div>
+                    <p className="text-xs text-slate-500 mt-0.5 leading-snug">
+                      Add, edit, or remove academy batches (Morning, Evening, Weekend) for Schemes of Study and class cohorts.
+                    </p>
+                    {batches.length > 0 && (
+                      <div className="flex items-center gap-1.5 flex-wrap mt-2">
+                        {batches.slice(0, 4).map((b) => (
+                          <span
+                            key={b.id || b}
+                            className="px-2 py-0.5 rounded-md bg-purple-50 border border-purple-100 text-purple-700 font-bold text-[10px]"
+                          >
+                            {b.name || b}
+                          </span>
+                        ))}
+                        {batches.length > 4 && (
+                          <span className="text-[10px] font-bold text-slate-400">
+                            +{batches.length - 4} more
+                          </span>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                <div className="w-8 h-8 rounded-xl bg-purple-50 group-hover:bg-purple-600 text-purple-600 group-hover:text-white flex items-center justify-center transition-all shrink-0">
+                  <ChevronRight className="w-4 h-4" />
+                </div>
+              </button>
             </div>
 
             {/* Academy Profile Card */}
@@ -226,6 +278,14 @@ export default function SettingsModal({
         onClose={() => setIsSubjectsOpen(false)}
         curriculumSubjects={curriculumSubjects}
         onSaveCurriculumSubjects={onSaveCurriculumSubjects}
+      />
+
+      {/* Batches Manager Modal Sub-Dialog */}
+      <BatchesManagerModal
+        isOpen={isBatchesOpen}
+        onClose={() => setIsBatchesOpen(false)}
+        batches={batches}
+        onSaveBatches={onSaveBatches}
       />
 
       {/* Start Academic Year Modal Sub-Dialog */}

@@ -51,6 +51,8 @@ import {
   DEFAULT_ACADEMIC_SESSION,
   getSchemesOfStudy,
   saveSchemesOfStudy,
+  getBatches,
+  saveBatches,
   getInquiries,
   saveInquiries
 } from './utils/storage';
@@ -85,6 +87,7 @@ export default function App() {
 
   // Settings & Curriculum Subjects Data
   const [curriculumSubjects, setCurriculumSubjects] = useState({});
+  const [batches, setBatches] = useState([]);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
   // Inquiry / Walk-in Leads Data
@@ -217,6 +220,7 @@ export default function App() {
     setTests(getTestDefinitions());
     setDatesheets(getDatesheets());
     setCurriculumSubjects(getCurriculumSubjects());
+    setBatches(getBatches());
     setMarksheets(getMarksheets(loadedStudents));
     setSchemesOfStudy(getSchemesOfStudy());
     setInquiries(getInquiries());
@@ -250,6 +254,12 @@ export default function App() {
     setCurriculumSubjects(updatedMap);
     saveCurriculumSubjects(updatedMap);
     showToast('Subjects configuration saved successfully!');
+  };
+
+  const handleSaveBatches = (updatedBatches) => {
+    setBatches(updatedBatches);
+    saveBatches(updatedBatches);
+    showToast('Batches configuration saved successfully!');
   };
 
   const handleAddMarksheet = (newMarksheet) => {
@@ -838,6 +848,7 @@ export default function App() {
           onUpdateScheme={handleUpdateSchemeOfStudy}
           onDeleteScheme={handleDeleteSchemeOfStudy}
           currentSession={currentSession}
+          batches={batches}
         />
       )}
 
@@ -982,6 +993,8 @@ export default function App() {
         teacherCount={teachers.length}
         currentSession={currentSession}
         onStartNewYear={handleStartNewAcademicYear}
+        batches={batches}
+        onSaveBatches={handleSaveBatches}
       />
     </>
   );

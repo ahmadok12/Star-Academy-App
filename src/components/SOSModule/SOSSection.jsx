@@ -30,7 +30,8 @@ export default function SOSSection({
   onUpdateScheme,
   onDeleteScheme,
   currentSession = '2026 - 27',
-  readOnly = false
+  readOnly = false,
+  batches = []
 }) {
   const [selectedClass, setSelectedClass] = useState('ALL');
   const [searchQuery, setSearchQuery] = useState('');
@@ -56,8 +57,9 @@ export default function SOSSection({
         const title = (s.title || '').toLowerCase();
         const cls = (s.studentClass || '').toLowerCase();
         const sec = (s.section || '').toLowerCase();
+        const batch = (s.batch || '').toLowerCase();
         const desc = (s.description || '').toLowerCase();
-        return title.includes(q) || cls.includes(q) || sec.includes(q) || desc.includes(q);
+        return title.includes(q) || cls.includes(q) || sec.includes(q) || batch.includes(q) || desc.includes(q);
       }
       return true;
     });
@@ -299,6 +301,12 @@ export default function SOSSection({
                         <span className="px-2.5 py-0.5 rounded-lg bg-indigo-50 text-indigo-700 font-extrabold text-[11px]">
                           {sch.section}
                         </span>
+                        {sch.batch && (
+                          <span className="px-2.5 py-0.5 rounded-lg bg-purple-100 text-purple-800 font-extrabold text-[11px] border border-purple-200/60 flex items-center gap-1">
+                            <Layers className="w-3 h-3 text-purple-600" />
+                            {sch.batch}
+                          </span>
+                        )}
                         <span className="text-[10px] font-mono text-slate-400">
                           {sch.id}
                         </span>
@@ -422,6 +430,7 @@ export default function SOSSection({
         onSave={handleSaveScheme}
         existingSchemes={schemes}
         currentSession={currentSession}
+        batches={batches}
       />
 
       {/* View Modal */}

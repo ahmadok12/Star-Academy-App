@@ -14,7 +14,7 @@ import {
   GraduationCap
 } from 'lucide-react';
 import { CLASSES, CLASS_SECTIONS } from '../../constants/academicData';
-import { INITIAL_CURRICULUM_SUBJECTS, generateNextSchemeOfStudyId } from '../../utils/storage';
+import { INITIAL_CURRICULUM_SUBJECTS, generateNextSchemeOfStudyId, getBatches } from '../../utils/storage';
 
 const MONTHS = [
   'May',
@@ -39,12 +39,19 @@ export default function SOSModal({
   initialData = null,
   onSave,
   existingSchemes = [],
-  currentSession = '2026 - 27'
+  currentSession = '2026 - 27',
+  batches = []
 }) {
   const isEditing = Boolean(initialData);
 
+  const availableBatches = React.useMemo(() => {
+    if (Array.isArray(batches) && batches.length > 0) return batches;
+    return getBatches();
+  }, [batches]);
+
   const [studentClass, setStudentClass] = useState('');
   const [section, setSection] = useState('');
+  const [batch, setBatch] = useState('');
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [rows, setRows] = useState([]);
@@ -69,6 +76,7 @@ export default function SOSModal({
     if (initialData) {
       setStudentClass(initialData.studentClass || '');
       setSection(initialData.section || '');
+      setBatch(initialData.batch || '');
       setTitle(initialData.title || '');
       setDescription(initialData.description || '');
       setRows(
@@ -79,6 +87,7 @@ export default function SOSModal({
     } else {
       setStudentClass('');
       setSection('');
+      setBatch('');
       setTitle('');
       setDescription('');
       setRows([]);
@@ -176,6 +185,7 @@ export default function SOSModal({
       title: cleanTitle,
       studentClass,
       section,
+      batch: batch.trim(),
       academicYear: initialData?.academicYear || currentSession,
       createdAt: initialData?.createdAt || new Date().toISOString().split('T')[0],
       description: description.trim(),
@@ -236,7 +246,7 @@ export default function SOSModal({
               </span>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               {/* Class Selector */}
               <div>
                 <label className="block text-xs font-bold text-slate-700 mb-1">
@@ -272,6 +282,28 @@ export default function SOSModal({
                       {sec}
                     </option>
                   ))}
+                </select>
+              </div>
+
+              {/* Batch Selector */}
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1">
+                  Batch:
+                </label>
+                <select
+                  value={batch}
+                  onChange={(e) => setBatch(e.target.value)}
+                  className="w-full text-xs font-bold text-slate-800 bg-slate-50 px-3 py-2.5 rounded-xl border border-slate-200 focus:border-rose-500 focus:bg-white outline-none transition-all cursor-pointer"
+                >
+                  <option value="">-- Select Batch --</option>
+                  {availableBatches.map((b) => {
+                    const bName = typeof b === 'string' ? b : b.name;
+                    return (
+                      <option key={b.id || bName} value={bName}>
+                        {bName}
+                      </option>
+                    );
+                  })}
                 </select>
               </div>
             </div>
