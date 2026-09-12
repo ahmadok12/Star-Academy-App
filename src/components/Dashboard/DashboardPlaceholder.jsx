@@ -88,7 +88,12 @@ export default function DashboardPlaceholder({
   ];
 
   // Subpage: Student Profile Directory
-  if (subPage === 'directory') {
+  if (
+    subPage === 'directory' ||
+    subPage === 'student_profile' ||
+    subPage === 'active_students' ||
+    subPage === 'students_overview'
+  ) {
     return (
       <div className="flex flex-col flex-1 pb-16">
         <StudentProfileDirectory
@@ -104,17 +109,32 @@ export default function DashboardPlaceholder({
   }
 
   // Subpage: Student Profile Detail View
-  if (subPage === 'profile' && selectedStudent) {
+  if (subPage === 'profile') {
+    const studentToDisplay = selectedStudent || displayStudents[0];
+    if (studentToDisplay) {
+      return (
+        <div className="flex flex-col flex-1 pb-16">
+          <StudentProfileDetail
+            student={studentToDisplay}
+            onBack={() => setSubPage('directory')}
+            attendanceSessions={attendanceSessions}
+            marksheets={marksheets}
+            feeVouchers={feeVouchers}
+            banks={banks}
+            currentSession={currentSession}
+          />
+        </div>
+      );
+    }
     return (
       <div className="flex flex-col flex-1 pb-16">
-        <StudentProfileDetail
-          student={selectedStudent}
-          onBack={() => setSubPage('directory')}
-          attendanceSessions={attendanceSessions}
-          marksheets={marksheets}
-          feeVouchers={feeVouchers}
-          banks={banks}
-          currentSession={currentSession}
+        <StudentProfileDirectory
+          students={displayStudents}
+          onBack={() => setSubPage(null)}
+          onSelectStudent={(student) => {
+            setSelectedStudent(student);
+            setSubPage('profile');
+          }}
         />
       </div>
     );
@@ -127,6 +147,22 @@ export default function DashboardPlaceholder({
     else if (subPage === 'datesheet') pageTitle = 'Datesheets (View Only)';
     else if (subPage === 'marksheet') pageTitle = 'Marksheets (View Only)';
     else if (subPage === 'sos') pageTitle = 'Scheme of Study (View Only)';
+
+    // If subPage is unrecognized, show StudentProfileDirectory instead of blank screen
+    if (!pageTitle) {
+      return (
+        <div className="flex flex-col flex-1 pb-16">
+          <StudentProfileDirectory
+            students={displayStudents}
+            onBack={() => setSubPage(null)}
+            onSelectStudent={(student) => {
+              setSelectedStudent(student);
+              setSubPage('profile');
+            }}
+          />
+        </div>
+      );
+    }
 
     return (
       <div className="flex flex-col flex-1 pb-16">

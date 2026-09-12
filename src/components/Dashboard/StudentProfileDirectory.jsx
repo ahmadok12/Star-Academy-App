@@ -15,7 +15,8 @@ import {
   ChevronDown,
   ChevronUp,
   Download,
-  Printer
+  Printer,
+  MessageCircle
 } from 'lucide-react';
 import {
   exportStudentProfilePDF,
@@ -59,15 +60,17 @@ export default function StudentProfileDirectory({
 
   const filteredStudents = useMemo(() => {
     return students.filter((s) => {
+      const sClass = s.studentClass || s.class || '';
+      const sSection = s.section || s.subject || '';
+
       // Class filter
-      if (selectedClass !== 'All' && s.class !== selectedClass) {
+      if (selectedClass !== 'All' && sClass !== selectedClass) {
         return false;
       }
 
       // Section filter
       if (selectedSection !== 'All') {
-        const sec = s.section || s.subject;
-        if (sec !== selectedSection) {
+        if (sSection !== selectedSection) {
           return false;
         }
       }
@@ -79,10 +82,11 @@ export default function StudentProfileDirectory({
       const fullName = `${s.firstName || ''} ${s.lastName || ''}`.toLowerCase();
       const id = (s.id || '').toLowerCase();
       const fatherName = (s.fatherName || '').toLowerCase();
-      const phone = (s.phone || '').toLowerCase();
-      const rollNo = (s.rollNo || '').toLowerCase();
-      const cnic = (s.cnic || '').toLowerCase();
-      const sClass = (s.class || '').toLowerCase();
+      const phone = (s.contactNumber || s.whatsappNumber || s.phone || '').toLowerCase();
+      const rollNo = (s.rollNo || s.id || '').toLowerCase();
+      const cnic = (s.cnic || s.fatherCnic || '').toLowerCase();
+      const clsLower = sClass.toLowerCase();
+      const secLower = sSection.toLowerCase();
 
       return (
         fullName.includes(term) ||
@@ -91,7 +95,8 @@ export default function StudentProfileDirectory({
         phone.includes(term) ||
         rollNo.includes(term) ||
         cnic.includes(term) ||
-        sClass.includes(term)
+        clsLower.includes(term) ||
+        secLower.includes(term)
       );
     });
   }, [students, searchTerm, selectedClass, selectedSection]);
@@ -319,10 +324,10 @@ export default function StudentProfileDirectory({
                       </span>
                       <span
                         className={`text-[9px] font-bold px-1.5 py-0.5 rounded-full border ${getClassBadgeStyle(
-                          student.class
+                          student.studentClass || student.class
                         )}`}
                       >
-                        {student.class} - {student.section || 'A'}
+                        {student.studentClass || student.class || 'N/A'} - {student.section || student.subject || 'All'}
                       </span>
                     </div>
 
@@ -335,22 +340,22 @@ export default function StudentProfileDirectory({
                     </div>
 
                     <div className="flex items-center gap-3 text-[10px] text-slate-500 pt-0.5 flex-wrap">
-                      {student.phone && (
+                      {(student.contactNumber || student.whatsappNumber || student.phone) && (
                         <div className="flex items-center gap-1">
                           <Phone className="w-2.5 h-2.5 text-slate-400" />
-                          <span>{student.phone}</span>
+                          <span>{student.contactNumber || student.whatsappNumber || student.phone}</span>
                         </div>
                       )}
-                      {student.dateOfAdmission && (
+                      {(student.dateOfJoining || student.registeredAt || student.dateOfAdmission) && (
                         <div className="flex items-center gap-1">
                           <Calendar className="w-2.5 h-2.5 text-slate-400" />
-                          <span>Joined: {student.dateOfAdmission}</span>
+                          <span>Joined: {student.dateOfJoining || student.registeredAt || student.dateOfAdmission}</span>
                         </div>
                       )}
-                      {student.monthlyFee && (
+                      {(student.fees || student.monthlyFee) && (
                         <div className="flex items-center gap-0.5 font-semibold text-emerald-700 bg-emerald-50 px-1.5 py-0.2 rounded">
                           <DollarSign className="w-2.5 h-2.5" />
-                          <span>Rs. {Number(student.monthlyFee).toLocaleString()}/mo</span>
+                          <span>Rs. {Number(student.fees || student.monthlyFee).toLocaleString()}/mo</span>
                         </div>
                       )}
                     </div>
