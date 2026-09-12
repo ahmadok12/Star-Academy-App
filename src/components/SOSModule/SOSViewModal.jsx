@@ -14,9 +14,10 @@ import {
   BookmarkCheck,
   FileText,
   Download,
-  MessageCircle
+  MessageCircle,
+  Printer
 } from 'lucide-react';
-import { exportSOSPDF, shareSOSWhatsApp } from '../../utils/exportShareUtils';
+import { exportSOSPDF, shareSOSWhatsApp, printSOS, formatDisplayDate } from '../../utils/exportShareUtils';
 
 export default function SOSViewModal({
   isOpen,
@@ -253,15 +254,15 @@ export default function SOSViewModal({
                       {/* Timeline Dates */}
                       {(r.fromDate || r.toDate) && (
                         <div className="flex items-center justify-between text-[11px] pt-2 border-t border-slate-100 text-slate-500">
-                          <div className="flex items-center gap-1.5">
+                          <div className="flex items-center gap-1.5 flex-wrap">
                             <Clock className="w-3 h-3 text-slate-400" />
                             <span>Schedule:</span>
-                            <span className="font-semibold text-slate-700">
-                              {r.fromDate || 'N/A'}
+                            <span className="font-bold text-slate-800 bg-slate-100 px-1.5 py-0.5 rounded">
+                              {formatDisplayDate(r.fromDate)}
                             </span>
                             <span>to</span>
-                            <span className="font-semibold text-slate-700">
-                              {r.toDate || 'N/A'}
+                            <span className="font-bold text-slate-800 bg-slate-100 px-1.5 py-0.5 rounded">
+                              {formatDisplayDate(r.toDate)}
                             </span>
                           </div>
                         </div>
@@ -279,19 +280,28 @@ export default function SOSViewModal({
           <div className="flex items-center gap-2 flex-1">
             <button
               type="button"
+              onClick={() => printSOS(scheme)}
+              className="flex-1 py-2 px-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-colors shadow-2xs cursor-pointer"
+              title="Print Preview Scheme of Study (Landscape)"
+            >
+              <Printer className="w-3.5 h-3.5" />
+              <span>Print Preview</span>
+            </button>
+            <button
+              type="button"
               onClick={() => exportSOSPDF(scheme)}
-              className="flex-1 py-2 px-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs flex items-center justify-center gap-1.5 transition-colors border border-slate-300/80 cursor-pointer shadow-2xs"
+              className="flex-1 py-2 px-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs flex items-center justify-center gap-1.5 transition-colors border border-slate-300/80 cursor-pointer shadow-2xs"
             >
               <Download className="w-3.5 h-3.5 text-slate-600" />
-              <span>Download PDF</span>
+              <span>PDF</span>
             </button>
             <button
               type="button"
               onClick={() => shareSOSWhatsApp(scheme)}
-              className="flex-1 py-2 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-colors shadow-2xs cursor-pointer"
+              className="flex-1 py-2 px-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-colors shadow-2xs cursor-pointer"
             >
               <MessageCircle className="w-3.5 h-3.5" />
-              <span>Share on WhatsApp</span>
+              <span>WhatsApp</span>
             </button>
           </div>
 

@@ -16,9 +16,10 @@ import {
   AlertTriangle,
   X,
   Download,
-  MessageCircle
+  MessageCircle,
+  Printer
 } from 'lucide-react';
-import { exportSOSPDF, shareSOSWhatsApp } from '../../utils/exportShareUtils';
+import { exportSOSPDF, shareSOSWhatsApp, printSOS } from '../../utils/exportShareUtils';
 import { CLASSES, CLASS_SECTIONS } from '../../constants/academicData';
 import SOSModal from './SOSModal';
 import SOSViewModal from './SOSViewModal';
@@ -370,6 +371,16 @@ export default function SOSSection({
                     >
                       <Eye className="w-3.5 h-3.5 text-slate-500" />
                       <span>View</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => printSOS(sch)}
+                      title="Print Preview Scheme of Study (Landscape)"
+                      className="py-1.5 px-2.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-bold flex items-center justify-center gap-1 transition-all border border-rose-200 shadow-2xs cursor-pointer"
+                    >
+                      <Printer className="w-3.5 h-3.5 text-rose-600" />
+                      <span>Print</span>
                     </button>
 
                     <button

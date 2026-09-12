@@ -8,8 +8,9 @@ import { getAttendanceSessions, getFeeVouchers, getMarksheets, getBanks } from '
 /**
  * Trigger native Print / Save as PDF using an offscreen printable window
  */
-export function printHtmlAsPDF(title, bodyContent) {
-  const printWindow = window.open('', '_blank', 'width=850,height=900');
+export function printHtmlAsPDF(title, bodyContent, orientation = 'portrait') {
+  const isLandscape = orientation === 'landscape';
+  const printWindow = window.open('', '_blank', isLandscape ? 'width=1150,height=800' : 'width=850,height=900');
   if (!printWindow) {
     // If popup blocked, create an invisible iframe fallback
     const iframe = document.createElement('iframe');
@@ -23,7 +24,7 @@ export function printHtmlAsPDF(title, bodyContent) {
 
     const doc = iframe.contentWindow.document;
     doc.open();
-    doc.write(getCompleteHtmlDocument(title, bodyContent));
+    doc.write(getCompleteHtmlDocument(title, bodyContent, orientation));
     doc.close();
 
     setTimeout(() => {
@@ -35,7 +36,7 @@ export function printHtmlAsPDF(title, bodyContent) {
   }
 
   printWindow.document.open();
-  printWindow.document.write(getCompleteHtmlDocument(title, bodyContent));
+  printWindow.document.write(getCompleteHtmlDocument(title, bodyContent, orientation));
   printWindow.document.close();
 
   printWindow.onload = () => {
@@ -53,7 +54,8 @@ export function printHtmlAsPDF(title, bodyContent) {
   }, 500);
 }
 
-function getCompleteHtmlDocument(title, content) {
+function getCompleteHtmlDocument(title, content, orientation = 'portrait') {
+  const isLandscape = orientation === 'landscape';
   return `
     <!DOCTYPE html>
     <html>
@@ -62,8 +64,8 @@ function getCompleteHtmlDocument(title, content) {
         <title>${title} - Star Academy Lahore</title>
         <style>
           @page {
-            size: A4 portrait;
-            margin: 14mm 12mm;
+            size: ${isLandscape ? 'A4 landscape' : 'A4 portrait'};
+            margin: ${isLandscape ? '10mm 14mm' : '14mm 12mm'};
           }
           * {
             box-sizing: border-box;
@@ -370,7 +372,8 @@ function hideLoadingToast(toast) {
   }
 }
 
-async function generatePdfDocument(title, bodyContent) {
+async function generatePdfDocument(title, bodyContent, orientation = 'portrait') {
+  const isLandscape = orientation === 'landscape';
   const container = document.createElement('div');
   container.id = 'star-academy-pdf-render';
 
@@ -379,10 +382,10 @@ async function generatePdfDocument(title, bodyContent) {
   container.style.position = 'absolute';
   container.style.left = '0px';
   container.style.top = '0px';
-  container.style.width = '794px'; // 210mm A4 width at 96 DPI
+  container.style.width = isLandscape ? '1123px' : '794px'; // 297mm A4 landscape or 210mm portrait at 96 DPI
   container.style.backgroundColor = '#ffffff';
   container.style.color = '#1e293b';
-  container.style.padding = '24px 30px';
+  container.style.padding = isLandscape ? '20px 28px' : '24px 30px';
   container.style.boxSizing = 'border-box';
   container.style.zIndex = '-9999';
   container.style.opacity = '1';
@@ -638,7 +641,9 @@ async function generatePdfDocument(title, bodyContent) {
   await new Promise((resolve) => setTimeout(resolve, 80));
 
   try {
-    const contentHeight = Math.max(container.scrollHeight, container.offsetHeight, 1123);
+    const minContentHeight = isLandscape ? 794 : 1123;
+    const contentHeight = Math.max(container.scrollHeight, container.offsetHeight, minContentHeight);
+    const renderWidth = isLandscape ? 1123 : 794;
 
     const canvas = await html2canvas(container, {
       scale: 2,
@@ -649,20 +654,20 @@ async function generatePdfDocument(title, bodyContent) {
       scrollY: 0,
       x: 0,
       y: 0,
-      width: 794,
+      width: renderWidth,
       height: contentHeight,
-      windowWidth: 1024,
+      windowWidth: isLandscape ? 1200 : 1024,
       windowHeight: contentHeight + 200
     });
 
     const pdf = new jsPDF({
-      orientation: 'portrait',
+      orientation: isLandscape ? 'landscape' : 'portrait',
       unit: 'mm',
       format: 'a4'
     });
 
-    const pageWidth = 210;
-    const pageHeight = 297;
+    const pageWidth = isLandscape ? 297 : 210;
+    const pageHeight = isLandscape ? 210 : 297;
     const imgWidth = pageWidth;
     const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
@@ -675,7 +680,7 @@ async function generatePdfDocument(title, bodyContent) {
 
     while (heightLeft > 0) {
       position = heightLeft - imgHeight;
-      pdf.addPage();
+      pdf.addPage(undefined, isLandscape ? 'landscape' : 'portrait');
       pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight, undefined, 'FAST');
       heightLeft -= pageHeight;
     }
@@ -691,7 +696,7 @@ async function generatePdfDocument(title, bodyContent) {
 /**
  * Direct PDF File Downloader using html2canvas & jsPDF (bypasses browser print dialog)
  */
-export async function downloadHtmlAsPDF(title, bodyContent, filename) {
+export async function downloadHtmlAsPDF(title, bodyContent, filename, orientation = 'portrait') {
   const cleanFilename = (filename || title || 'Star_Academy_Document')
     .replace(/[^a-zA-Z0-9_-]/g, '_')
     .replace(/_+/g, '_');
@@ -699,11 +704,11 @@ export async function downloadHtmlAsPDF(title, bodyContent, filename) {
   const toast = showLoadingToast('Downloading PDF...');
 
   try {
-    const pdf = await generatePdfDocument(title, bodyContent);
+    const pdf = await generatePdfDocument(title, bodyContent, orientation);
     pdf.save(`${cleanFilename}.pdf`);
   } catch (err) {
     console.error('Error downloading PDF directly:', err);
-    printHtmlAsPDF(title, bodyContent);
+    printHtmlAsPDF(title, bodyContent, orientation);
   } finally {
     hideLoadingToast(toast);
   }
@@ -712,7 +717,7 @@ export async function downloadHtmlAsPDF(title, bodyContent, filename) {
 /**
  * WhatsApp share trigger - shares the downloaded PDF file directly
  */
-export async function shareHtmlAsPDFToWhatsApp(title, bodyContent, filename, targetPhone = null) {
+export async function shareHtmlAsPDFToWhatsApp(title, bodyContent, filename, targetPhone = null, orientation = 'portrait') {
   const cleanFilename = (filename || title || 'Star_Academy_Document')
     .replace(/[^a-zA-Z0-9_-]/g, '_')
     .replace(/_+/g, '_');
@@ -720,7 +725,7 @@ export async function shareHtmlAsPDFToWhatsApp(title, bodyContent, filename, tar
   const toast = showLoadingToast('Preparing PDF for WhatsApp...');
 
   try {
-    const pdf = await generatePdfDocument(title, bodyContent);
+    const pdf = await generatePdfDocument(title, bodyContent, orientation);
     const pdfBlob = pdf.output('blob');
     const file = new File([pdfBlob], `${cleanFilename}.pdf`, { type: 'application/pdf' });
 
@@ -1495,19 +1500,55 @@ export function shareMarksheetWhatsApp(marksheet, students = []) {
 // -------------------------------------------------------------
 // 5. SCHEME OF STUDY (SOS) EXPORT & SHARE
 // -------------------------------------------------------------
+export function formatDisplayDate(dateStr) {
+  if (!dateStr || typeof dateStr !== 'string') return '-';
+  const trimmed = dateStr.trim();
+  if (!trimmed || trimmed === 'N/A' || trimmed === '-') return '-';
+
+  // YYYY-MM-DD
+  if (/^\d{4}-\d{2}-\d{2}$/.test(trimmed)) {
+    const [y, m, d] = trimmed.split('-').map(Number);
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const dayStr = String(d).padStart(2, '0');
+    return `${dayStr} ${months[m - 1]} ${y}`;
+  }
+
+  // DD-MM-YYYY or DD/MM/YYYY
+  if (/^\d{2}[/-]\d{2}[/-]\d{4}$/.test(trimmed)) {
+    const parts = trimmed.split(/[/-]/).map(Number);
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const dayStr = String(parts[0]).padStart(2, '0');
+    return `${dayStr} ${months[parts[1] - 1]} ${parts[2]}`;
+  }
+
+  const parsed = new Date(trimmed);
+  if (!isNaN(parsed.getTime())) {
+    const d = String(parsed.getDate()).padStart(2, '0');
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    return `${d} ${months[parsed.getMonth()]} ${parsed.getFullYear()}`;
+  }
+
+  return trimmed;
+}
+
 function getSOSHtml(scheme) {
   const rows = scheme.rows || [];
-  const rowsHtml = rows.map((r, idx) => `
+  const rowsHtml = rows.map((r, idx) => {
+    const fromFormatted = formatDisplayDate(r.fromDate);
+    const toFormatted = formatDisplayDate(r.toDate);
+    return `
     <tr>
       <td style="text-align: center; font-weight: bold;">${idx + 1}</td>
-      <td><strong>${r.month || 'Monthly'}</strong></td>
+      <td style="text-align: center;"><strong>${r.month || 'Monthly'}</strong></td>
       <td><strong>${r.subject}</strong></td>
-      <td><span class="badge ${r.activity?.toLowerCase() === 'test' ? 'badge-amber' : 'badge-blue'}">${r.activity || 'Study'}</span></td>
+      <td style="text-align: center;"><span class="badge ${r.activity?.toLowerCase() === 'test' ? 'badge-amber' : 'badge-blue'}">${r.activity || 'Study'}</span></td>
       <td><strong>${r.topic || 'N/A'}</strong></td>
       <td>${r.chapter || 'N/A'}</td>
-      <td style="font-size: 8.5pt;">${r.fromDate && r.toDate ? `${r.fromDate} to ${r.toDate}` : '-'}</td>
+      <td style="text-align: center; font-size: 8.5pt; white-space: nowrap; font-weight: 700; color: #334155;">${fromFormatted}</td>
+      <td style="text-align: center; font-size: 8.5pt; white-space: nowrap; font-weight: 700; color: #334155;">${toFormatted}</td>
     </tr>
-  `).join('');
+  `;
+  }).join('');
 
   return `
     <h2 class="section-title">Curriculum Scheme of Study (SOS)</h2>
@@ -1539,33 +1580,40 @@ function getSOSHtml(scheme) {
       <thead>
         <tr>
           <th style="width: 35px; text-align: center;">#</th>
-          <th>Month</th>
-          <th>Subject</th>
-          <th>Activity</th>
+          <th style="width: 80px; text-align: center;">Month</th>
+          <th style="width: 100px;">Subject</th>
+          <th style="width: 75px; text-align: center;">Activity</th>
           <th>Topic Name</th>
-          <th>Chapter</th>
-          <th>Schedule Dates</th>
+          <th style="width: 120px;">Chapter</th>
+          <th style="width: 110px; text-align: center; white-space: nowrap;">From Date</th>
+          <th style="width: 110px; text-align: center; white-space: nowrap;">To Date</th>
         </tr>
       </thead>
       <tbody>
-        ${rowsHtml || '<tr><td colspan="7" style="text-align: center;">No syllabus milestones recorded</td></tr>'}
+        ${rowsHtml || '<tr><td colspan="8" style="text-align: center;">No syllabus milestones recorded</td></tr>'}
       </tbody>
     </table>
   `;
+}
+
+export function printSOS(scheme) {
+  const batchSuffix = scheme.batch ? ` [${scheme.batch}]` : '';
+  const title = `Scheme of Study - ${scheme.title || ''} (${scheme.studentClass} ${scheme.section})${batchSuffix}`;
+  printHtmlAsPDF(title, getSOSHtml(scheme), 'landscape');
 }
 
 export function exportSOSPDF(scheme) {
   const batchSuffix = scheme.batch ? ` [${scheme.batch}]` : '';
   const title = `Scheme of Study - ${scheme.title || ''} (${scheme.studentClass} ${scheme.section})${batchSuffix}`;
   const filename = `Scheme_of_Study_${scheme.studentClass}_${scheme.section}${scheme.batch ? `_${scheme.batch.replace(/\s+/g, '_')}` : ''}`;
-  downloadHtmlAsPDF(title, getSOSHtml(scheme), filename);
+  downloadHtmlAsPDF(title, getSOSHtml(scheme), filename, 'landscape');
 }
 
 export function shareSOSWhatsApp(scheme) {
   const batchSuffix = scheme.batch ? ` [${scheme.batch}]` : '';
   const title = `Scheme of Study - ${scheme.title || ''} (${scheme.studentClass} ${scheme.section})${batchSuffix}`;
   const filename = `Scheme_of_Study_${scheme.studentClass}_${scheme.section}${scheme.batch ? `_${scheme.batch.replace(/\s+/g, '_')}` : ''}`;
-  shareHtmlAsPDFToWhatsApp(title, getSOSHtml(scheme), filename);
+  shareHtmlAsPDFToWhatsApp(title, getSOSHtml(scheme), filename, null, 'landscape');
 }
 
 // -------------------------------------------------------------
