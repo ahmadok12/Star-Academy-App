@@ -12,6 +12,7 @@ import {
   Users
 } from 'lucide-react';
 import { downloadHtmlAsPDF, shareHtmlAsPDFToWhatsApp } from '../../utils/exportShareUtils';
+import { CLASS_SECTIONS } from '../../constants/academicData';
 
 export default function StudentAttendanceReport({
   attendanceSessions = [],
@@ -20,6 +21,7 @@ export default function StudentAttendanceReport({
   onBack
 }) {
   const [selectedClass, setSelectedClass] = useState('ALL');
+  const [selectedSection, setSelectedSection] = useState('ALL');
   const [searchQuery, setSearchQuery] = useState('');
 
   // Calculate Student Attendance Aggregates
@@ -95,10 +97,35 @@ export default function StudentAttendanceReport({
     };
   }, [attendanceSessions, allStudents]);
 
+  const allUniqueSections = useMemo(() => {
+    const set = new Set();
+    Object.values(CLASS_SECTIONS).forEach(arr => arr.forEach(s => set.add(s)));
+    return Array.from(set);
+  }, []);
+
+  const availableSections = useMemo(() => {
+    if (selectedClass === 'ALL') return allUniqueSections;
+    return CLASS_SECTIONS[selectedClass] || [];
+  }, [selectedClass, allUniqueSections]);
+
+  const handleSelectClass = (cls) => {
+    setSelectedClass(cls);
+    if (cls !== 'ALL') {
+      const allowed = CLASS_SECTIONS[cls] || [];
+      if (selectedSection !== 'ALL' && !allowed.includes(selectedSection)) {
+        setSelectedSection('ALL');
+      }
+    }
+  };
+
   const filteredStudents = useMemo(() => {
     return attendanceData.studentsList.filter(item => {
       const s = item.student;
       if (selectedClass !== 'ALL' && s.studentClass !== selectedClass) return false;
+      if (selectedSection !== 'ALL') {
+        const sec = s.section || s.subject;
+        if (sec !== selectedSection) return false;
+      }
       if (searchQuery.trim()) {
         const q = searchQuery.toLowerCase();
         const fullName = `${s.firstName || ''} ${s.lastName || ''}`.toLowerCase();
@@ -107,7 +134,7 @@ export default function StudentAttendanceReport({
       }
       return true;
     });
-  }, [attendanceData.studentsList, selectedClass, searchQuery]);
+  }, [attendanceData.studentsList, selectedClass, selectedSection, searchQuery]);
 
   const classes = ['ALL', '9th', '10th', 'FSc Part 1', 'FSc Part 2'];
 
@@ -271,7 +298,7 @@ export default function StudentAttendanceReport({
             <button
               key={c}
               type="button"
-              onClick={() => setSelectedClass(c)}
+              onClick={() => handleSelectClass(c)}
               className={`px-2.5 py-1 rounded-lg text-xs font-bold shrink-0 transition-all cursor-pointer ${
                 selectedClass === c
                   ? 'bg-emerald-600 text-white shadow-2xs'
@@ -279,6 +306,38 @@ export default function StudentAttendanceReport({
               }`}
             >
               {c}
+            </button>
+          ))}
+        </div>
+
+        {/* Section Filter Chips */}
+        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar text-xs pt-1 border-t border-slate-100">
+          <span className="text-[11px] font-bold text-slate-400 shrink-0 flex items-center gap-1">
+            Section:
+          </span>
+          <button
+            type="button"
+            onClick={() => setSelectedSection('ALL')}
+            className={`px-2.5 py-1 rounded-lg text-xs font-bold shrink-0 transition-all cursor-pointer ${
+              selectedSection === 'ALL'
+                ? 'bg-emerald-600 text-white shadow-2xs'
+                : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+            }`}
+          >
+            All Sections
+          </button>
+          {availableSections.map(sec => (
+            <button
+              key={sec}
+              type="button"
+              onClick={() => setSelectedSection(sec)}
+              className={`px-2.5 py-1 rounded-lg text-xs font-bold shrink-0 transition-all cursor-pointer ${
+                selectedSection === sec
+                  ? 'bg-emerald-600 text-white shadow-2xs'
+                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+              }`}
+            >
+              {sec}
             </button>
           ))}
         </div>

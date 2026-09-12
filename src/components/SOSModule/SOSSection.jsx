@@ -19,7 +19,7 @@ import {
   MessageCircle
 } from 'lucide-react';
 import { exportSOSPDF, shareSOSWhatsApp } from '../../utils/exportShareUtils';
-import { CLASSES } from '../../constants/academicData';
+import { CLASSES, CLASS_SECTIONS } from '../../constants/academicData';
 import SOSModal from './SOSModal';
 import SOSViewModal from './SOSViewModal';
 import SOSDeleteModal from './SOSDeleteModal';
@@ -34,6 +34,7 @@ export default function SOSSection({
   batches = []
 }) {
   const [selectedClass, setSelectedClass] = useState('ALL');
+  const [selectedSection, setSelectedSection] = useState('ALL');
   const [searchQuery, setSearchQuery] = useState('');
 
   // Modals state
@@ -46,10 +47,34 @@ export default function SOSSection({
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [schemeToDelete, setSchemeToDelete] = useState(null);
 
+  const allUniqueSections = useMemo(() => {
+    const set = new Set();
+    Object.values(CLASS_SECTIONS).forEach(arr => arr.forEach(s => set.add(s)));
+    return Array.from(set);
+  }, []);
+
+  const availableSections = useMemo(() => {
+    if (selectedClass === 'ALL') return allUniqueSections;
+    return CLASS_SECTIONS[selectedClass] || [];
+  }, [selectedClass, allUniqueSections]);
+
+  const handleSelectClass = (cls) => {
+    setSelectedClass(cls);
+    if (cls !== 'ALL') {
+      const allowed = CLASS_SECTIONS[cls] || [];
+      if (selectedSection !== 'ALL' && !allowed.includes(selectedSection)) {
+        setSelectedSection('ALL');
+      }
+    }
+  };
+
   // Filter schemes
   const filteredSchemes = useMemo(() => {
     return schemes.filter((s) => {
       if (selectedClass !== 'ALL' && s.studentClass !== selectedClass) {
+        return false;
+      }
+      if (selectedSection !== 'ALL' && s.section !== selectedSection) {
         return false;
       }
       if (searchQuery.trim()) {
@@ -63,7 +88,7 @@ export default function SOSSection({
       }
       return true;
     });
-  }, [schemes, selectedClass, searchQuery]);
+  }, [schemes, selectedClass, selectedSection, searchQuery]);
 
   // High-level statistics
   const stats = useMemo(() => {
@@ -148,8 +173,8 @@ export default function SOSSection({
       {/* Class Filter Bar */}
       <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar text-xs">
         <button
-          onClick={() => setSelectedClass('ALL')}
-          className={`px-3 py-1 rounded-full text-xs font-bold whitespace-nowrap transition-all ${
+          onClick={() => handleSelectClass('ALL')}
+          className={`px-3 py-1 rounded-full text-xs font-bold whitespace-nowrap transition-all cursor-pointer ${
             selectedClass === 'ALL'
               ? 'bg-rose-600 text-white shadow-xs'
               : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
@@ -157,23 +182,59 @@ export default function SOSSection({
         >
           All Classes ({schemes.length})
         </button>
-          {CLASSES.map((cls) => {
-            const count = schemes.filter(s => s.studentClass === cls).length;
-            return (
-              <button
-                key={cls}
-                onClick={() => setSelectedClass(cls)}
-                className={`px-3 py-1 rounded-full text-xs font-bold whitespace-nowrap transition-all ${
-                  selectedClass === cls
-                    ? 'bg-rose-600 text-white shadow-xs'
-                    : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
-                }`}
-              >
-                {cls} ({count})
-              </button>
-            );
-          })}
-        </div>
+        {CLASSES.map((cls) => {
+          const count = schemes.filter(s => s.studentClass === cls).length;
+          return (
+            <button
+              key={cls}
+              onClick={() => handleSelectClass(cls)}
+              className={`px-3 py-1 rounded-full text-xs font-bold whitespace-nowrap transition-all cursor-pointer ${
+                selectedClass === cls
+                  ? 'bg-rose-600 text-white shadow-xs'
+                  : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
+              }`}
+            >
+              {cls} ({count})
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Section Filter Bar */}
+      <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar text-xs">
+        <span className="text-[11px] font-bold text-slate-400 shrink-0 flex items-center gap-1 pl-1">
+          Section:
+        </span>
+        <button
+          onClick={() => setSelectedSection('ALL')}
+          className={`px-3 py-1 rounded-full text-xs font-bold whitespace-nowrap transition-all cursor-pointer ${
+            selectedSection === 'ALL'
+              ? 'bg-rose-600 text-white shadow-xs'
+              : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
+          }`}
+        >
+          All Sections
+        </button>
+        {availableSections.map((sec) => {
+          const count = schemes.filter(s => {
+            const matchClass = selectedClass === 'ALL' || s.studentClass === selectedClass;
+            return matchClass && s.section === sec;
+          }).length;
+          return (
+            <button
+              key={sec}
+              onClick={() => setSelectedSection(sec)}
+              className={`px-3 py-1 rounded-full text-xs font-bold whitespace-nowrap transition-all cursor-pointer ${
+                selectedSection === sec
+                  ? 'bg-rose-600 text-white shadow-xs'
+                  : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
+              }`}
+            >
+              {sec} ({count})
+            </button>
+          );
+        })}
+      </div>
 
       {/* List of Schemes Added */}
       <div className="space-y-3">

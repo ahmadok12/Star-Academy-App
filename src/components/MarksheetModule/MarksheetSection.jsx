@@ -37,6 +37,27 @@ export default function MarksheetSection({
   const [selectedClass, setSelectedClass] = useState('ALL');
   const [selectedSection, setSelectedSection] = useState('ALL');
 
+  const allUniqueSections = useMemo(() => {
+    const set = new Set();
+    Object.values(CLASS_SECTIONS).forEach(arr => arr.forEach(s => set.add(s)));
+    return Array.from(set);
+  }, []);
+
+  const availableSections = useMemo(() => {
+    if (selectedClass === 'ALL') return allUniqueSections;
+    return CLASS_SECTIONS[selectedClass] || [];
+  }, [selectedClass, allUniqueSections]);
+
+  const handleSelectClass = (cls) => {
+    setSelectedClass(cls);
+    if (cls !== 'ALL') {
+      const allowed = CLASS_SECTIONS[cls] || [];
+      if (selectedSection !== 'ALL' && !allowed.includes(selectedSection)) {
+        setSelectedSection('ALL');
+      }
+    }
+  };
+
   // Modals state
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [selectedMarksheet, setSelectedMarksheet] = useState(null);
@@ -108,10 +129,7 @@ export default function MarksheetSection({
         {/* Class Filter Pills */}
         <div className="flex items-center gap-1.5 overflow-x-auto pb-0.5 text-xs">
           <button
-            onClick={() => {
-              setSelectedClass('ALL');
-              setSelectedSection('ALL');
-            }}
+            onClick={() => handleSelectClass('ALL')}
             className={`px-3 py-1 rounded-xl font-bold transition-all shrink-0 cursor-pointer ${
               selectedClass === 'ALL'
                 ? 'bg-amber-600 text-white shadow-xs'
@@ -123,10 +141,7 @@ export default function MarksheetSection({
           {CLASSES.map((cls) => (
             <button
               key={cls}
-              onClick={() => {
-                setSelectedClass(cls);
-                setSelectedSection('ALL');
-              }}
+              onClick={() => handleSelectClass(cls)}
               className={`px-3 py-1 rounded-xl font-bold transition-all shrink-0 cursor-pointer ${
                 selectedClass === cls
                   ? 'bg-amber-600 text-white shadow-xs'
@@ -138,35 +153,35 @@ export default function MarksheetSection({
           ))}
         </div>
 
-        {/* Section Filter Pills (if specific class selected) */}
-        {selectedClass !== 'ALL' && (
-          <div className="flex items-center gap-1.5 overflow-x-auto pt-1.5 border-t border-slate-100 text-[11px]">
-            <span className="text-slate-400 font-bold shrink-0">Section:</span>
+        {/* Section Filter Pills */}
+        <div className="flex items-center gap-1.5 overflow-x-auto pt-1.5 border-t border-slate-100 text-[11px]">
+          <span className="text-slate-400 font-bold shrink-0">Section:</span>
+          <button
+            type="button"
+            onClick={() => setSelectedSection('ALL')}
+            className={`px-2.5 py-0.5 rounded-lg font-bold transition-all shrink-0 cursor-pointer ${
+              selectedSection === 'ALL'
+                ? 'bg-indigo-600 text-white'
+                : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+            }`}
+          >
+            All Sections
+          </button>
+          {availableSections.map((sec) => (
             <button
-              onClick={() => setSelectedSection('ALL')}
+              key={sec}
+              type="button"
+              onClick={() => setSelectedSection(sec)}
               className={`px-2.5 py-0.5 rounded-lg font-bold transition-all shrink-0 cursor-pointer ${
-                selectedSection === 'ALL'
+                selectedSection === sec
                   ? 'bg-indigo-600 text-white'
                   : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
               }`}
             >
-              All Sections
+              {sec}
             </button>
-            {(CLASS_SECTIONS[selectedClass] || []).map((sec) => (
-              <button
-                key={sec}
-                onClick={() => setSelectedSection(sec)}
-                className={`px-2.5 py-0.5 rounded-lg font-bold transition-all shrink-0 cursor-pointer ${
-                  selectedSection === sec
-                    ? 'bg-indigo-600 text-white'
-                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                }`}
-              >
-                {sec}
-              </button>
-            ))}
-          </div>
-        )}
+          ))}
+        </div>
       </div>
 
       {/* Summary Info Bar */}

@@ -5,7 +5,7 @@ import AddStudentModal from './AddStudentModal';
 import StudentDetailModal from './StudentDetailModal';
 import EditStudentModal from './EditStudentModal';
 import StudentIDCardModal from './StudentIDCardModal';
-import { CLASSES } from '../../constants/academicData';
+import { CLASSES, CLASS_SECTIONS } from '../../constants/academicData';
 
 export default function StudentList({
   students,
@@ -18,6 +18,7 @@ export default function StudentList({
 }) {
   const [searchTerm, setSearchTerm] = useState(initialSearchTerm || '');
   const [selectedClass, setSelectedClass] = useState('All');
+  const [selectedSection, setSelectedSection] = useState('All');
   const [statusFilter, setStatusFilter] = useState('active'); // 'active' | 'all' | 'left'
   const [isSearchOpen, setIsSearchOpen] = useState(Boolean(initialSearchTerm));
   const [isFilterOpen, setIsFilterOpen] = useState(false);
@@ -41,6 +42,27 @@ export default function StudentList({
     return students.find((s) => s.id === viewingStudent.id) || null;
   }, [students, viewingStudent]);
 
+  const allUniqueSections = useMemo(() => {
+    const set = new Set();
+    Object.values(CLASS_SECTIONS).forEach(arr => arr.forEach(s => set.add(s)));
+    return Array.from(set);
+  }, []);
+
+  const availableSections = useMemo(() => {
+    if (selectedClass === 'All') return allUniqueSections;
+    return CLASS_SECTIONS[selectedClass] || [];
+  }, [selectedClass, allUniqueSections]);
+
+  const handleSelectClass = (cls) => {
+    setSelectedClass(cls);
+    if (cls !== 'All') {
+      const allowed = CLASS_SECTIONS[cls] || [];
+      if (selectedSection !== 'All' && !allowed.includes(selectedSection)) {
+        setSelectedSection('All');
+      }
+    }
+  };
+
   // Filter students
   const filteredStudents = useMemo(() => {
     return students.filter((student) => {
@@ -54,6 +76,14 @@ export default function StudentList({
       const cls = student.studentClass || student.class;
       if (selectedClass !== 'All' && cls !== selectedClass) {
         return false;
+      }
+
+      // Section filter
+      if (selectedSection !== 'All') {
+        const sec = student.section || student.subject;
+        if (sec !== selectedSection) {
+          return false;
+        }
       }
 
       // Search term filter
@@ -70,7 +100,7 @@ export default function StudentList({
         student.fatherName?.toLowerCase().includes(q)
       );
     });
-  }, [students, statusFilter, selectedClass, searchTerm]);
+  }, [students, statusFilter, selectedClass, selectedSection, searchTerm]);
 
   const activeCount = useMemo(
     () => students.filter((s) => !s.isLeft && s.isActive !== false).length,
@@ -138,7 +168,7 @@ export default function StudentList({
                   if (!isFilterOpen) setIsSearchOpen(false);
                 }}
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-bold transition-all tap-active cursor-pointer ${
-                  isFilterOpen || statusFilter !== 'active' || selectedClass !== 'All'
+                  isFilterOpen || statusFilter !== 'active' || selectedClass !== 'All' || selectedSection !== 'All'
                     ? 'bg-blue-50 text-blue-700 border-blue-200 shadow-2xs'
                     : 'bg-slate-100 hover:bg-slate-200 text-slate-700 border-slate-200'
                 }`}
@@ -146,7 +176,7 @@ export default function StudentList({
               >
                 <Filter className="w-3.5 h-3.5" />
                 <span>Filter</span>
-                {(statusFilter !== 'active' || selectedClass !== 'All') && (
+                {(statusFilter !== 'active' || selectedClass !== 'All' || selectedSection !== 'All') && (
                   <span className="w-1.5 h-1.5 rounded-full bg-blue-600"></span>
                 )}
               </button>
@@ -217,7 +247,7 @@ export default function StudentList({
               {/* Class Filter Pills */}
               <div className="flex items-center gap-1.5 overflow-x-auto pb-0.5 no-scrollbar text-xs">
                 <button
-                  onClick={() => setSelectedClass('All')}
+                  onClick={() => handleSelectClass('All')}
                   className={`px-3 py-1 rounded-lg text-xs font-semibold whitespace-nowrap transition-all ${
                     selectedClass === 'All'
                       ? 'bg-blue-600 text-white shadow-xs'
@@ -229,7 +259,7 @@ export default function StudentList({
                 {CLASSES.map((cls) => (
                   <button
                     key={cls}
-                    onClick={() => setSelectedClass(cls)}
+                    onClick={() => handleSelectClass(cls)}
                     className={`px-3 py-1 rounded-lg text-xs font-semibold whitespace-nowrap transition-all ${
                       selectedClass === cls
                         ? 'bg-blue-600 text-white shadow-xs'
@@ -237,6 +267,38 @@ export default function StudentList({
                     }`}
                   >
                     {cls}
+                  </button>
+                ))}
+              </div>
+
+              {/* Section Filter Pills */}
+              <div className="flex items-center gap-1.5 overflow-x-auto pb-0.5 no-scrollbar text-xs pt-1.5 border-t border-slate-100">
+                <span className="text-[11px] font-bold text-slate-400 shrink-0 flex items-center gap-1 pl-1">
+                  Section:
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setSelectedSection('All')}
+                  className={`px-3 py-1 rounded-lg text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
+                    selectedSection === 'All'
+                      ? 'bg-indigo-600 text-white shadow-xs'
+                      : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                  }`}
+                >
+                  All Sections
+                </button>
+                {availableSections.map((sec) => (
+                  <button
+                    key={sec}
+                    type="button"
+                    onClick={() => setSelectedSection(sec)}
+                    className={`px-3 py-1 rounded-lg text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
+                      selectedSection === sec
+                        ? 'bg-indigo-600 text-white shadow-xs'
+                        : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                    }`}
+                  >
+                    {sec}
                   </button>
                 ))}
               </div>

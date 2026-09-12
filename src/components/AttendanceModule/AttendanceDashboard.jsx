@@ -3,7 +3,7 @@ import { ClipboardCheck, Plus, Calendar, Filter, ChevronRight, CheckCircle2, XCi
 import MarkAttendanceModal from './MarkAttendanceModal';
 import AttendanceSessionDetailModal from './AttendanceSessionDetailModal';
 import TeacherAttendanceDashboard from '../TeacherAttendanceModule/TeacherAttendanceDashboard';
-import { CLASSES, ATTENDANCE_STATUS } from '../../constants/academicData';
+import { CLASSES, CLASS_SECTIONS, ATTENDANCE_STATUS } from '../../constants/academicData';
 
 export default function AttendanceDashboard({
   students,
@@ -24,13 +24,40 @@ export default function AttendanceDashboard({
   const [isMarkModalOpen, setIsMarkModalOpen] = useState(false);
   const [selectedSessionId, setSelectedSessionId] = useState(null);
   const [filterClass, setFilterClass] = useState('All');
+  const [filterSection, setFilterSection] = useState('All');
+
+  const allUniqueSections = useMemo(() => {
+    const set = new Set();
+    Object.values(CLASS_SECTIONS).forEach(arr => arr.forEach(s => set.add(s)));
+    return Array.from(set);
+  }, []);
+
+  const availableSections = useMemo(() => {
+    if (filterClass === 'All') return allUniqueSections;
+    return CLASS_SECTIONS[filterClass] || [];
+  }, [filterClass, allUniqueSections]);
+
+  const handleSelectClass = (cls) => {
+    setFilterClass(cls);
+    if (cls !== 'All') {
+      const allowed = CLASS_SECTIONS[cls] || [];
+      if (filterSection !== 'All' && !allowed.includes(filterSection)) {
+        setFilterSection('All');
+      }
+    }
+  };
 
   // Filter student sessions
   const filteredSessions = useMemo(() => {
     return attendanceSessions
-      .filter((session) => filterClass === 'All' || session.studentClass === filterClass)
+      .filter((session) => {
+        const matchClass = filterClass === 'All' || session.studentClass === filterClass;
+        const sessionSec = session.section || session.subject;
+        const matchSection = filterSection === 'All' || sessionSec === filterSection;
+        return matchClass && matchSection;
+      })
       .sort((a, b) => new Date(b.date) - new Date(a.date));
-  }, [attendanceSessions, filterClass]);
+  }, [attendanceSessions, filterClass, filterSection]);
 
   const selectedSession = useMemo(() => {
     if (!selectedSessionId) return null;
@@ -122,8 +149,8 @@ export default function AttendanceDashboard({
               {/* Filter by class pills */}
               <div className="flex items-center gap-1.5 overflow-x-auto pb-0.5 no-scrollbar text-xs">
                 <button
-                  onClick={() => setFilterClass('All')}
-                  className={`px-3 py-1 rounded-lg text-xs font-semibold whitespace-nowrap transition-all ${
+                  onClick={() => handleSelectClass('All')}
+                  className={`px-3 py-1 rounded-lg text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
                     filterClass === 'All'
                       ? 'bg-slate-900 text-white shadow-xs'
                       : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
@@ -134,14 +161,46 @@ export default function AttendanceDashboard({
                 {CLASSES.map((cls) => (
                   <button
                     key={cls}
-                    onClick={() => setFilterClass(cls)}
-                    className={`px-3 py-1 rounded-lg text-xs font-semibold whitespace-nowrap transition-all ${
+                    onClick={() => handleSelectClass(cls)}
+                    className={`px-3 py-1 rounded-lg text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
                       filterClass === cls
                         ? 'bg-emerald-600 text-white shadow-xs'
                         : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                     }`}
                   >
                     {cls}
+                  </button>
+                ))}
+              </div>
+
+              {/* Filter by section pills */}
+              <div className="flex items-center gap-1.5 overflow-x-auto pb-0.5 no-scrollbar text-xs pt-1 border-t border-slate-100">
+                <span className="text-[11px] font-bold text-slate-400 shrink-0 flex items-center gap-1 pl-1">
+                  Section:
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setFilterSection('All')}
+                  className={`px-3 py-1 rounded-lg text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
+                    filterSection === 'All'
+                      ? 'bg-indigo-600 text-white shadow-xs'
+                      : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                  }`}
+                >
+                  All Sections
+                </button>
+                {availableSections.map((sec) => (
+                  <button
+                    key={sec}
+                    type="button"
+                    onClick={() => setFilterSection(sec)}
+                    className={`px-3 py-1 rounded-lg text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
+                      filterSection === sec
+                        ? 'bg-indigo-600 text-white shadow-xs'
+                        : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                    }`}
+                  >
+                    {sec}
                   </button>
                 ))}
               </div>

@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { Plus, Search, Calendar, Clock, Coffee, Eye, BookOpen, Download, MessageCircle } from 'lucide-react';
-import { CLASSES } from '../../constants/academicData';
+import { CLASSES, CLASS_SECTIONS } from '../../constants/academicData';
 import { exportTimetablePDF, shareTimetableWhatsApp } from '../../utils/exportShareUtils';
 import AddTimetableModal from './AddTimetableModal';
 import EditTimetableModal from './EditTimetableModal';
@@ -16,22 +16,45 @@ export default function TimetableSection({
   readOnly = false
 }) {
   const [selectedClass, setSelectedClass] = useState('All');
+  const [selectedSection, setSelectedSection] = useState('All');
   const [searchTerm, setSearchTerm] = useState('');
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [viewingTimetable, setViewingTimetable] = useState(null);
   const [editingTimetable, setEditingTimetable] = useState(null);
 
+  const allUniqueSections = useMemo(() => {
+    const set = new Set();
+    Object.values(CLASS_SECTIONS).forEach(arr => arr.forEach(s => set.add(s)));
+    return Array.from(set);
+  }, []);
+
+  const availableSections = useMemo(() => {
+    if (selectedClass === 'All') return allUniqueSections;
+    return CLASS_SECTIONS[selectedClass] || [];
+  }, [selectedClass, allUniqueSections]);
+
+  const handleSelectClass = (cls) => {
+    setSelectedClass(cls);
+    if (cls !== 'All') {
+      const allowed = CLASS_SECTIONS[cls] || [];
+      if (selectedSection !== 'All' && !allowed.includes(selectedSection)) {
+        setSelectedSection('All');
+      }
+    }
+  };
+
   const filteredTimetables = useMemo(() => {
     return timetables.filter(tt => {
       const matchClass = selectedClass === 'All' || tt.studentClass === selectedClass;
+      const matchSection = selectedSection === 'All' || tt.section === selectedSection;
       const matchQuery =
         tt.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         tt.studentClass.toLowerCase().includes(searchTerm.toLowerCase()) ||
         tt.section.toLowerCase().includes(searchTerm.toLowerCase()) ||
         tt.id.toLowerCase().includes(searchTerm.toLowerCase());
-      return matchClass && matchQuery;
+      return matchClass && matchSection && matchQuery;
     });
-  }, [timetables, selectedClass, searchTerm]);
+  }, [timetables, selectedClass, selectedSection, searchTerm]);
 
   return (
     <div className="space-y-3">
@@ -42,17 +65,49 @@ export default function TimetableSection({
           return (
             <button
               key={cls}
-              onClick={() => setSelectedClass(cls)}
+              onClick={() => handleSelectClass(cls)}
               className={`px-3.5 py-1.5 rounded-xl font-bold whitespace-nowrap transition-all border cursor-pointer ${
                 isSelected
                   ? 'bg-teal-600 text-white border-teal-600 shadow-xs'
                   : 'bg-white text-slate-600 border-slate-200 hover:border-slate-300'
               }`}
             >
-              {cls}
+              {cls === 'All' ? 'All Classes' : cls}
             </button>
           );
         })}
+      </div>
+
+      {/* Section Selector Filter Pills */}
+      <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar text-xs">
+        <span className="text-[11px] font-bold text-slate-400 shrink-0 flex items-center gap-1 pl-1">
+          Section:
+        </span>
+        <button
+          type="button"
+          onClick={() => setSelectedSection('All')}
+          className={`px-3 py-1.5 rounded-xl font-bold whitespace-nowrap transition-all border cursor-pointer ${
+            selectedSection === 'All'
+              ? 'bg-teal-600 text-white border-teal-600 shadow-xs'
+              : 'bg-white text-slate-600 border-slate-200 hover:border-slate-300'
+          }`}
+        >
+          All Sections
+        </button>
+        {availableSections.map((sec) => (
+          <button
+            key={sec}
+            type="button"
+            onClick={() => setSelectedSection(sec)}
+            className={`px-3 py-1.5 rounded-xl font-bold whitespace-nowrap transition-all border cursor-pointer ${
+              selectedSection === sec
+                ? 'bg-teal-600 text-white border-teal-600 shadow-xs'
+                : 'bg-white text-slate-600 border-slate-200 hover:border-slate-300'
+            }`}
+          >
+            {sec}
+          </button>
+        ))}
       </div>
 
       {/* Action Bar */}

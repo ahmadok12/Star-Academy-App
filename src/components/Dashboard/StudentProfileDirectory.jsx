@@ -15,7 +15,6 @@ import {
   ChevronDown,
   ChevronUp,
   Download,
-  MessageCircle,
   Printer
 } from 'lucide-react';
 import {
@@ -23,6 +22,7 @@ import {
   printStudentProfile,
   shareStudentProfileWhatsApp
 } from '../../utils/exportShareUtils';
+import { CLASS_SECTIONS } from '../../constants/academicData';
 
 export default function StudentProfileDirectory({
   students = [],
@@ -31,15 +31,45 @@ export default function StudentProfileDirectory({
 }) {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedClass, setSelectedClass] = useState('All');
+  const [selectedSection, setSelectedSection] = useState('All');
   const [isFiltersExpanded, setIsFiltersExpanded] = useState(false);
 
   const classes = ['All', '9th', '10th', 'FSc Part 1', 'FSc Part 2'];
+
+  const allUniqueSections = useMemo(() => {
+    const set = new Set();
+    Object.values(CLASS_SECTIONS).forEach(arr => arr.forEach(s => set.add(s)));
+    return Array.from(set);
+  }, []);
+
+  const availableSections = useMemo(() => {
+    if (selectedClass === 'All') return allUniqueSections;
+    return CLASS_SECTIONS[selectedClass] || [];
+  }, [selectedClass, allUniqueSections]);
+
+  const handleSelectClass = (cls) => {
+    setSelectedClass(cls);
+    if (cls !== 'All') {
+      const allowed = CLASS_SECTIONS[cls] || [];
+      if (selectedSection !== 'All' && !allowed.includes(selectedSection)) {
+        setSelectedSection('All');
+      }
+    }
+  };
 
   const filteredStudents = useMemo(() => {
     return students.filter((s) => {
       // Class filter
       if (selectedClass !== 'All' && s.class !== selectedClass) {
         return false;
+      }
+
+      // Section filter
+      if (selectedSection !== 'All') {
+        const sec = s.section || s.subject;
+        if (sec !== selectedSection) {
+          return false;
+        }
       }
 
       // Search term filter
@@ -64,7 +94,7 @@ export default function StudentProfileDirectory({
         sClass.includes(term)
       );
     });
-  }, [students, searchTerm, selectedClass]);
+  }, [students, searchTerm, selectedClass, selectedSection]);
 
   const getClassBadgeStyle = (cls) => {
     switch (cls) {
@@ -168,14 +198,46 @@ export default function StudentProfileDirectory({
               {classes.map((cls) => (
                 <button
                   key={cls}
-                  onClick={() => setSelectedClass(cls)}
-                  className={`px-2.5 py-1 rounded-lg text-xs font-semibold shrink-0 transition-all ${
+                  onClick={() => handleSelectClass(cls)}
+                  className={`px-2.5 py-1 rounded-lg text-xs font-semibold shrink-0 transition-all cursor-pointer ${
                     selectedClass === cls
                       ? 'bg-indigo-600 text-white shadow-2xs'
                       : 'bg-slate-100 text-slate-600 hover:bg-slate-200/80'
                   }`}
                 >
                   {cls}
+                </button>
+              ))}
+            </div>
+
+            {/* Section Filter Chips */}
+            <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar pt-1 border-t border-slate-100">
+              <span className="text-[11px] font-semibold text-slate-400 shrink-0 flex items-center gap-1 pl-1 pr-1">
+                Section:
+              </span>
+              <button
+                type="button"
+                onClick={() => setSelectedSection('All')}
+                className={`px-2.5 py-1 rounded-lg text-xs font-semibold shrink-0 transition-all cursor-pointer ${
+                  selectedSection === 'All'
+                    ? 'bg-indigo-600 text-white shadow-2xs'
+                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200/80'
+                }`}
+              >
+                All Sections
+              </button>
+              {availableSections.map((sec) => (
+                <button
+                  key={sec}
+                  type="button"
+                  onClick={() => setSelectedSection(sec)}
+                  className={`px-2.5 py-1 rounded-lg text-xs font-semibold shrink-0 transition-all cursor-pointer ${
+                    selectedSection === sec
+                      ? 'bg-indigo-600 text-white shadow-2xs'
+                      : 'bg-slate-100 text-slate-600 hover:bg-slate-200/80'
+                  }`}
+                >
+                  {sec}
                 </button>
               ))}
             </div>
