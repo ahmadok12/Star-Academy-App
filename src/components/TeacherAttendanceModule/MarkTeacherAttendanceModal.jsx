@@ -1,18 +1,21 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { X, Check, CheckCircle2, XCircle, Clock, Save, GraduationCap } from 'lucide-react';
 import { ATTENDANCE_STATUS } from '../../constants/academicData';
+import { getAttendanceTimings } from '../../utils/storage';
 
 export default function MarkTeacherAttendanceModal({
   isOpen,
   onClose,
   teachers,
-  onSaveTeacherAttendance
+  onSaveTeacherAttendance,
+  attendanceTimings = getAttendanceTimings()
 }) {
   if (!isOpen) return null;
 
   const todayStr = new Date().toISOString().split('T')[0];
   const [sessionDate, setSessionDate] = useState(todayStr);
-  const [expectedStartTime, setExpectedStartTime] = useState('08:00');
+  const defaultTeacherTime = attendanceTimings?.teacherExpectedStartTime || '07:45';
+  const [expectedStartTime, setExpectedStartTime] = useState(defaultTeacherTime);
 
   // Map of teacherId -> status
   const [attendanceMap, setAttendanceMap] = useState({});
@@ -25,6 +28,7 @@ export default function MarkTeacherAttendanceModal({
     if (!arrivalTime || !startTime) return 0;
     const [arrH, arrM] = arrivalTime.split(':').map(Number);
     const [startH, startM] = startTime.split(':').map(Number);
+    if (isNaN(arrH) || isNaN(arrM) || isNaN(startH) || isNaN(startM)) return 0;
     const diff = arrH * 60 + arrM - (startH * 60 + startM);
     return diff > 0 ? diff : 0;
   };
@@ -33,13 +37,13 @@ export default function MarkTeacherAttendanceModal({
   useEffect(() => {
     if (isOpen) {
       setSessionDate(todayStr);
-      setExpectedStartTime('08:00');
+      setExpectedStartTime(attendanceTimings?.teacherExpectedStartTime || '07:45');
       setAttendanceMap({});
       setArrivalTimesMap({});
       setMinutesLateMap({});
       setSaveSuccess(false);
     }
-  }, [isOpen]);
+  }, [isOpen, attendanceTimings]);
 
   const handleStatusChange = (teacherId, status) => {
     setAttendanceMap((prev) => ({

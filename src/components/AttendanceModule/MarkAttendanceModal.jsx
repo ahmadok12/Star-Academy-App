@@ -1,14 +1,22 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { X, Check, CheckCircle2, XCircle, Clock, Save, AlertCircle, Users, UserCheck } from 'lucide-react';
 import { CLASSES, CLASS_SUBJECTS, ATTENDANCE_STATUS } from '../../constants/academicData';
+import { getAttendanceTimings } from '../../utils/storage';
 
-export default function MarkAttendanceModal({ isOpen, onClose, students, onSaveAttendance }) {
+export default function MarkAttendanceModal({
+  isOpen,
+  onClose,
+  students,
+  onSaveAttendance,
+  attendanceTimings = getAttendanceTimings()
+}) {
   if (!isOpen) return null;
 
   const todayStr = new Date().toISOString().split('T')[0];
   const [sessionDate, setSessionDate] = useState(todayStr);
   const [selectedClass, setSelectedClass] = useState('');
   const [selectedSubject, setSelectedSubject] = useState('');
+  const [selectedSubjectGroup, setSelectedSubjectGroup] = useState('All');
 
   // Map of studentId -> status ('Present' | 'Absent' | 'Leave')
   const [attendanceMap, setAttendanceMap] = useState({});
@@ -33,6 +41,7 @@ export default function MarkAttendanceModal({ isOpen, onClose, students, onSaveA
       setSessionDate(todayStr);
       setSelectedClass('');
       setSelectedSubject('');
+      setSelectedSubjectGroup('All');
       setAttendanceMap({});
       setArrivalTimesMap({});
       setMinutesLateMap({});
@@ -40,26 +49,49 @@ export default function MarkAttendanceModal({ isOpen, onClose, students, onSaveA
     }
   }, [isOpen]);
 
-  // When class changes, reset subject
+  // When class changes, reset subject and set start time according to settings
   const handleClassChange = (newClass) => {
     setSelectedClass(newClass);
     setSelectedSubject('');
+    setSelectedSubjectGroup('All');
     setAttendanceMap({});
     setArrivalTimesMap({});
     setMinutesLateMap({});
+    const classStartTime = attendanceTimings?.classStartTimes?.[newClass] || '08:00';
+    setExpectedStartTime(classStartTime);
   };
+
+  const availableSubjectGroups = useMemo(() => {
+    if (selectedSubject !== 'Individual Subjects') return [];
+    const set = new Set();
+    students.forEach((s) => {
+      const cls = s.studentClass || s.class;
+      const sec = s.section || s.subject;
+      if (cls === selectedClass && sec === 'Individual Subjects') {
+        const grp = s.subjectGroup || (s.enrolledSubjects && s.enrolledSubjects.length > 0 ? s.enrolledSubjects.join(' + ') : '');
+        if (grp) set.add(grp);
+      }
+    });
+    return Array.from(set).sort();
+  }, [students, selectedClass, selectedSubject]);
 
   // ONLY ACTIVE STUDENTS are available for selection and attendance marking
   const respectiveStudents = useMemo(() => {
     if (!selectedClass || !selectedSubject) return [];
-    return students.filter(
-      (s) =>
-        s.studentClass === selectedClass &&
-        s.subject === selectedSubject &&
-        !s.isLeft &&
-        s.isActive !== false
-    );
-  }, [students, selectedClass, selectedSubject]);
+    return students.filter((s) => {
+      const cls = s.studentClass || s.class;
+      const sec = s.section || s.subject;
+      const matchClass = cls === selectedClass;
+      const matchSec = sec === selectedSubject;
+      if (!matchClass || !matchSec || s.isLeft || s.isActive === false) return false;
+
+      if (selectedSubject === 'Individual Subjects' && selectedSubjectGroup !== 'All') {
+        const grp = s.subjectGroup || (s.enrolledSubjects && s.enrolledSubjects.length > 0 ? s.enrolledSubjects.join(' + ') : '');
+        return grp === selectedSubjectGroup;
+      }
+      return true;
+    });
+  }, [students, selectedClass, selectedSubject, selectedSubjectGroup]);
 
   const inactiveCount = useMemo(() => {
     if (!selectedClass || !selectedSubject) return 0;
@@ -164,6 +196,7 @@ export default function MarkAttendanceModal({ isOpen, onClose, students, onSaveA
       expectedStartTime,
       studentClass: selectedClass,
       subject: selectedSubject,
+      subjectGroup: selectedSubject === 'Individual Subjects' && selectedSubjectGroup !== 'All' ? selectedSubjectGroup : null,
       createdAt: new Date().toISOString(),
       records,
     };
@@ -243,6 +276,27 @@ export default function MarkAttendanceModal({ isOpen, onClose, students, onSaveA
               </select>
             </div>
           </div>
+
+          {/* Enrolled Group Sub-Selector for Individual Subjects */}
+          {selectedSubject === 'Individual Subjects' && (
+            <div className="p-2.5 rounded-xl bg-indigo-50/80 border border-indigo-200 flex items-center justify-between gap-2">
+              <span className="text-[11px] font-bold text-indigo-900 shrink-0">
+                Filter by Enrolled Group:
+              </span>
+              <select
+                value={selectedSubjectGroup}
+                onChange={(e) => setSelectedSubjectGroup(e.target.value)}
+                className="px-3 py-1.5 bg-white rounded-lg border border-indigo-200 text-xs font-bold text-indigo-950 focus:outline-none focus:ring-2 focus:ring-indigo-200"
+              >
+                <option value="All">All Groups (All {respectiveStudents.length} Students)</option>
+                {availableSubjectGroups.map((grp) => (
+                  <option key={grp} value={grp}>
+                    {grp}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
 
           {/* Date Selector & Session Start Time */}
           <div className="flex items-center justify-between gap-2 pt-1 flex-wrap">

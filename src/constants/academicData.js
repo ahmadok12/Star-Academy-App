@@ -1,10 +1,10 @@
 export const CLASSES = ['9th', '10th', 'FSc Part 1', 'FSc Part 2'];
 
 export const CLASS_SECTIONS = {
-  '9th': ['Science', 'Computer'],
-  '10th': ['Science', 'Computer'],
-  'FSc Part 1': ['Pre- Medical', 'Pre-Engineering', 'ICS - Physics', 'ICS - Statistics', 'FA IT'],
-  'FSc Part 2': ['Pre- Medical', 'Pre-Engineering', 'ICS - Physics', 'ICS - Statistics', 'FA IT'],
+  '9th': ['Science', 'Computer', 'Individual Subjects'],
+  '10th': ['Science', 'Computer', 'Individual Subjects'],
+  'FSc Part 1': ['Pre- Medical', 'Pre-Engineering', 'ICS - Physics', 'ICS - Statistics', 'FA IT', 'Individual Subjects'],
+  'FSc Part 2': ['Pre- Medical', 'Pre-Engineering', 'ICS - Physics', 'ICS - Statistics', 'FA IT', 'Individual Subjects'],
 };
 
 // Aliased for seamless compatibility across existing components

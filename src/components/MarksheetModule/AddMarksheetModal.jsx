@@ -96,14 +96,36 @@ export default function AddMarksheetModal({
     });
   }, [activeSubjects]);
 
+  const [selectedSubjectGroup, setSelectedSubjectGroup] = useState('All');
+
+  const availableSubjectGroups = useMemo(() => {
+    if (section !== 'Individual Subjects') return [];
+    const set = new Set();
+    students.forEach((s) => {
+      const cls = s.studentClass || s.class;
+      const sec = s.section || s.subject;
+      if (cls === studentClass && sec === 'Individual Subjects') {
+        const grp = s.subjectGroup || (s.enrolledSubjects && s.enrolledSubjects.length > 0 ? s.enrolledSubjects.join(' + ') : '');
+        if (grp) set.add(grp);
+      }
+    });
+    return Array.from(set).sort();
+  }, [students, studentClass, section]);
+
   // Get active enrolled students for current class & section
   const enrolledStudents = useMemo(() => {
     return students.filter(s => {
       const matchClass = s.studentClass === studentClass;
       const matchSection = (s.section === section) || (s.subject === section);
-      return matchClass && matchSection && !s.isLeft;
+      if (!matchClass || !matchSection || s.isLeft) return false;
+
+      if (section === 'Individual Subjects' && selectedSubjectGroup !== 'All') {
+        const grp = s.subjectGroup || (s.enrolledSubjects && s.enrolledSubjects.length > 0 ? s.enrolledSubjects.join(' + ') : '');
+        return grp === selectedSubjectGroup;
+      }
+      return true;
     });
-  }, [students, studentClass, section]);
+  }, [students, studentClass, section, selectedSubjectGroup]);
 
   // Update total marks for a specific subject at top (applies to all students)
   const handleTopTotalMarksChange = (subject, value) => {
@@ -394,6 +416,30 @@ export default function AddMarksheetModal({
                   </select>
                 </div>
               </div>
+
+              {/* Enrolled Group Sub-Selector for Individual Subjects */}
+              {section === 'Individual Subjects' && (
+                <div className="p-2 rounded-xl bg-indigo-50/80 border border-indigo-200 flex items-center justify-between gap-2">
+                  <span className="text-[11px] font-bold text-indigo-900 shrink-0">
+                    Enrolled Group:
+                  </span>
+                  <select
+                    value={selectedSubjectGroup}
+                    onChange={(e) => {
+                      setSelectedSubjectGroup(e.target.value);
+                      setStudentScores({});
+                    }}
+                    className="px-3 py-1.5 bg-white rounded-lg border border-indigo-200 text-xs font-bold text-indigo-950 focus:outline-none focus:ring-2 focus:ring-indigo-200"
+                  >
+                    <option value="All">All Groups (All Students)</option>
+                    {availableSubjectGroups.map((grp) => (
+                      <option key={grp} value={grp}>
+                        {grp}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
 
               {/* Autoloaded Status Bar */}
               <div className="p-2.5 rounded-xl bg-indigo-50/70 border border-indigo-100 flex items-center justify-between text-xs">

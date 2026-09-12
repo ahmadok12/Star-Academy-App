@@ -48,19 +48,41 @@ export default function StudentList({
     return Array.from(set);
   }, []);
 
+  const [selectedSubjectGroup, setSelectedSubjectGroup] = useState('All');
+
   const availableSections = useMemo(() => {
     if (selectedClass === 'All') return allUniqueSections;
     return CLASS_SECTIONS[selectedClass] || [];
   }, [selectedClass, allUniqueSections]);
 
+  const availableSubjectGroups = useMemo(() => {
+    if (selectedSection !== 'Individual Subjects') return [];
+    const groupSet = new Set();
+    students.forEach((s) => {
+      const cls = s.studentClass || s.class;
+      const sec = s.section || s.subject;
+      if (sec === 'Individual Subjects' && (selectedClass === 'All' || cls === selectedClass)) {
+        const group = s.subjectGroup || (s.enrolledSubjects && s.enrolledSubjects.length > 0 ? s.enrolledSubjects.join(' + ') : '');
+        if (group) groupSet.add(group);
+      }
+    });
+    return Array.from(groupSet).sort();
+  }, [students, selectedClass, selectedSection]);
+
   const handleSelectClass = (cls) => {
     setSelectedClass(cls);
+    setSelectedSubjectGroup('All');
     if (cls !== 'All') {
       const allowed = CLASS_SECTIONS[cls] || [];
       if (selectedSection !== 'All' && !allowed.includes(selectedSection)) {
         setSelectedSection('All');
       }
     }
+  };
+
+  const handleSelectSection = (sec) => {
+    setSelectedSection(sec);
+    setSelectedSubjectGroup('All');
   };
 
   // Filter students
@@ -84,6 +106,14 @@ export default function StudentList({
         if (sec !== selectedSection) {
           return false;
         }
+
+        // Sub-filter for Individual Subjects combinations
+        if (selectedSection === 'Individual Subjects' && selectedSubjectGroup !== 'All') {
+          const group = student.subjectGroup || (student.enrolledSubjects && student.enrolledSubjects.length > 0 ? student.enrolledSubjects.join(' + ') : '');
+          if (group !== selectedSubjectGroup) {
+            return false;
+          }
+        }
       }
 
       // Search term filter
@@ -97,10 +127,11 @@ export default function StudentList({
         student.contactNumber?.includes(q) ||
         student.section?.toLowerCase().includes(q) ||
         student.subject?.toLowerCase().includes(q) ||
+        student.subjectGroup?.toLowerCase().includes(q) ||
         student.fatherName?.toLowerCase().includes(q)
       );
     });
-  }, [students, statusFilter, selectedClass, selectedSection, searchTerm]);
+  }, [students, statusFilter, selectedClass, selectedSection, selectedSubjectGroup, searchTerm]);
 
   const activeCount = useMemo(
     () => students.filter((s) => !s.isLeft && s.isActive !== false).length,
@@ -278,7 +309,7 @@ export default function StudentList({
                 </span>
                 <button
                   type="button"
-                  onClick={() => setSelectedSection('All')}
+                  onClick={() => handleSelectSection('All')}
                   className={`px-3 py-1 rounded-lg text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
                     selectedSection === 'All'
                       ? 'bg-indigo-600 text-white shadow-xs'
@@ -291,7 +322,7 @@ export default function StudentList({
                   <button
                     key={sec}
                     type="button"
-                    onClick={() => setSelectedSection(sec)}
+                    onClick={() => handleSelectSection(sec)}
                     className={`px-3 py-1 rounded-lg text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
                       selectedSection === sec
                         ? 'bg-indigo-600 text-white shadow-xs'
@@ -302,6 +333,56 @@ export default function StudentList({
                   </button>
                 ))}
               </div>
+
+              {/* Dynamic Individual Subjects Combination Filter */}
+              {selectedSection === 'Individual Subjects' && (
+                <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar text-xs pt-1.5 border-t border-indigo-100 bg-indigo-50/60 p-2 rounded-xl">
+                  <span className="text-[11px] font-bold text-indigo-800 shrink-0 flex items-center gap-1 pl-1">
+                    Enrolled Group:
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => setSelectedSubjectGroup('All')}
+                    className={`px-2.5 py-1 rounded-lg text-xs font-bold whitespace-nowrap transition-all cursor-pointer ${
+                      selectedSubjectGroup === 'All'
+                        ? 'bg-indigo-700 text-white shadow-xs'
+                        : 'bg-white text-indigo-900 hover:bg-indigo-100 border border-indigo-200'
+                    }`}
+                  >
+                    All Groups
+                  </button>
+
+                  {availableSubjectGroups.map((grp) => {
+                    const count = students.filter((s) => {
+                      const cls = s.studentClass || s.class;
+                      const sec = s.section || s.subject;
+                      const g = s.subjectGroup || (s.enrolledSubjects && s.enrolledSubjects.length > 0 ? s.enrolledSubjects.join(' + ') : '');
+                      return sec === 'Individual Subjects' && (selectedClass === 'All' || cls === selectedClass) && g === grp;
+                    }).length;
+
+                    return (
+                      <button
+                        key={grp}
+                        type="button"
+                        onClick={() => setSelectedSubjectGroup(grp)}
+                        className={`px-2.5 py-1 rounded-lg text-xs font-bold whitespace-nowrap transition-all cursor-pointer ${
+                          selectedSubjectGroup === grp
+                            ? 'bg-indigo-700 text-white shadow-xs'
+                            : 'bg-white text-indigo-900 hover:bg-indigo-100 border border-indigo-200'
+                        }`}
+                      >
+                        {grp} ({count})
+                      </button>
+                    );
+                  })}
+
+                  {availableSubjectGroups.length === 0 && (
+                    <span className="text-[11px] text-slate-400 italic pl-1">
+                      No individual subject students found in this class yet.
+                    </span>
+                  )}
+                </div>
+              )}
             </div>
           )}
         </div>

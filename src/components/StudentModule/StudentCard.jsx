@@ -95,6 +95,11 @@ export default function StudentCard({ student, onView, onShowIdCard }) {
             <span className="text-[10px] font-semibold px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-700 border border-emerald-200">
               {student.subject}
             </span>
+            {student.subjectGroup && student.subjectGroup !== student.subject && (
+              <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-indigo-50 text-indigo-700 border border-indigo-200">
+                {student.subjectGroup}
+              </span>
+            )}
           </div>
 
           {/* Guardian line */}

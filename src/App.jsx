@@ -54,7 +54,9 @@ import {
   getBatches,
   saveBatches,
   getInquiries,
-  saveInquiries
+  saveInquiries,
+  getAttendanceTimings,
+  saveAttendanceTimings
 } from './utils/storage';
 import { CheckCircle, Info, Trash2, AlertCircle } from 'lucide-react';
 
@@ -92,6 +94,9 @@ export default function App() {
 
   // Inquiry / Walk-in Leads Data
   const [inquiries, setInquiries] = useState([]);
+
+  // Attendance & Arrival Timings Configuration
+  const [attendanceTimings, setAttendanceTimings] = useState(() => getAttendanceTimings());
 
   // Academic Session Management (User Request: Default '2026 - 27')
   const [currentSession, setCurrentSession] = useState(getAcademicSession() || DEFAULT_ACADEMIC_SESSION);
@@ -268,6 +273,12 @@ export default function App() {
     setBatches(updatedBatches);
     saveBatches(updatedBatches);
     showToast('Batches configuration saved successfully!');
+  };
+
+  const handleSaveAttendanceTimings = (newTimings) => {
+    setAttendanceTimings(newTimings);
+    saveAttendanceTimings(newTimings);
+    showToast('Attendance & arrival timings updated successfully!');
   };
 
   const handleAddMarksheet = (newMarksheet) => {
@@ -1013,6 +1024,8 @@ export default function App() {
         onStartNewYear={handleStartNewAcademicYear}
         batches={batches}
         onSaveBatches={handleSaveBatches}
+        attendanceTimings={attendanceTimings}
+        onSaveAttendanceTimings={handleSaveAttendanceTimings}
       />
     </>
   );

@@ -17,6 +17,7 @@ import {
 import SubjectsManagerModal from './SubjectsManagerModal';
 import StartAcademicYearModal from './StartAcademicYearModal';
 import BatchesManagerModal from './BatchesManagerModal';
+import AttendanceTimingsModal from './AttendanceTimingsModal';
 
 export default function SettingsModal({
   isOpen,
@@ -28,11 +29,14 @@ export default function SettingsModal({
   currentSession = '2026 - 27',
   onStartNewYear,
   batches = [],
-  onSaveBatches
+  onSaveBatches,
+  attendanceTimings,
+  onSaveAttendanceTimings
 }) {
   const [isSubjectsOpen, setIsSubjectsOpen] = useState(false);
   const [isBatchesOpen, setIsBatchesOpen] = useState(false);
   const [isStartYearOpen, setIsStartYearOpen] = useState(false);
+  const [isTimingsOpen, setIsTimingsOpen] = useState(false);
   const [toastMsg, setToastMsg] = useState(null);
 
   if (!isOpen) return null;
@@ -222,6 +226,42 @@ export default function SettingsModal({
               </button>
             </div>
 
+            {/* Attendance & Arrival Timings Section */}
+            <div>
+              <p className="text-[11px] font-bold tracking-wider text-slate-400 uppercase px-1 mb-2">
+                Attendance & Timings
+              </p>
+
+              <button
+                type="button"
+                onClick={() => setIsTimingsOpen(true)}
+                className="w-full text-left bg-white p-4 rounded-2xl border border-emerald-200/80 hover:border-emerald-500 shadow-xs hover:shadow-md transition-all group flex items-center justify-between gap-3 cursor-pointer"
+              >
+                <div className="flex items-center gap-3.5">
+                  <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-700 text-white flex items-center justify-center shadow-md shadow-emerald-200 group-hover:scale-105 transition-transform shrink-0">
+                    <Clock className="w-6 h-6 text-amber-300" />
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <h3 className="text-sm font-extrabold text-slate-900 group-hover:text-emerald-600 transition-colors">
+                        Arrival Timings & Schedules
+                      </h3>
+                      <span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-900 text-[10px] font-extrabold">
+                        Faculty & Classes
+                      </span>
+                    </div>
+                    <p className="text-xs text-slate-500 mt-0.5 leading-snug">
+                      Set teacher arrival reporting time and expected arrival times for 9th, 10th, FSc Part 1, and Part 2.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="w-8 h-8 rounded-xl bg-emerald-50 group-hover:bg-emerald-600 text-emerald-600 group-hover:text-white flex items-center justify-center transition-all shrink-0">
+                  <ChevronRight className="w-4 h-4" />
+                </div>
+              </button>
+            </div>
+
             {/* Academy Profile Card */}
             <div>
               <p className="text-[11px] font-bold tracking-wider text-slate-400 uppercase px-1 mb-2">
@@ -295,6 +335,14 @@ export default function SettingsModal({
         currentSession={currentSession}
         onStartNewYear={handleStartNewYearWrapper}
         activeStudentCount={studentCount}
+      />
+
+      {/* Attendance & Arrival Timings Modal Sub-Dialog */}
+      <AttendanceTimingsModal
+        isOpen={isTimingsOpen}
+        onClose={() => setIsTimingsOpen(false)}
+        attendanceTimings={attendanceTimings}
+        onSaveAttendanceTimings={onSaveAttendanceTimings}
       />
     </>
   );

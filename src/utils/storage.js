@@ -18,7 +18,8 @@ const STORAGE_KEYS = {
   ACADEMIC_SESSIONS_LIST: 'star_academy_academic_sessions_list_v1',
   SCHEMES_OF_STUDY: 'star_academy_schemes_of_study_v1',
   BATCHES: 'star_academy_batches_v1',
-  INQUIRIES: 'star_academy_inquiries_v1'
+  INQUIRIES: 'star_academy_inquiries_v1',
+  ATTENDANCE_TIMINGS: 'star_academy_attendance_timings_v1'
 };
 
 // Generates 5 students for each of the 12 class-subject combinations (60 students total)
@@ -1287,6 +1288,12 @@ export const INITIAL_CURRICULUM_SUBJECTS = {
   'FSc Part 2_ICS - Statistics': ['Statistics', 'Computer', 'Math', 'Eng', 'Urdu', 'Islamiyat', 'Tarjama tul Quran'],
   'FSc Part 2_FA IT': ['Economics', 'Computer', 'Physical Education', 'Eng', 'Urdu', 'Pak Studies', 'Islamiyat Elective', 'Tarjama tul Quran'],
 
+  // Individual Subjects curriculum options
+  '9th_Individual Subjects': ['Physics', 'Chemistry', 'Bio', 'Math', 'Computer', 'Eng', 'Urdu', 'Islamiyat', 'Tarjama tul Quran'],
+  '10th_Individual Subjects': ['Physics', 'Chemistry', 'Bio', 'Math', 'Computer', 'Eng', 'Urdu', 'Pak Studies', 'Tarjama tul Quran'],
+  'FSc Part 1_Individual Subjects': ['Physics', 'Chemistry', 'Bio', 'Math', 'Computer', 'Statistics', 'Economics', 'Eng', 'Urdu', 'Islamiyat', 'Tarjama tul Quran'],
+  'FSc Part 2_Individual Subjects': ['Physics', 'Chemistry', 'Bio', 'Math', 'Computer', 'Statistics', 'Economics', 'Eng', 'Urdu', 'Pak Studies', 'Tarjama tul Quran'],
+
   // Legacy aliases for backward compatibility
   'FSc Part 1_Pre Medical': ['Physics', 'Chemistry', 'Bio', 'Eng', 'Urdu', 'Islamiyat', 'Tarjama tul Quran'],
   'FSc Part 1_Pre Engineering': ['Physics', 'Chemistry', 'Math', 'Eng', 'Urdu', 'Islamiyat', 'Tarjama tul Quran'],
@@ -1899,6 +1906,49 @@ export function generateNextInquiryId(inquiries) {
     }
   });
   return `INQ-${String(max + 1).padStart(4, '0')}`;
+}
+
+// Attendance & Arrival Timings Configuration
+export const DEFAULT_ATTENDANCE_TIMINGS = {
+  recordTeacherArrival: true,
+  teacherExpectedStartTime: '07:45',
+  recordStudentArrival: true,
+  classStartTimes: {
+    '9th': '08:00',
+    '10th': '08:00',
+    'FSc Part 1': '08:30',
+    'FSc Part 2': '08:30'
+  }
+};
+
+export function getAttendanceTimings() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEYS.ATTENDANCE_TIMINGS);
+    if (!raw) {
+      localStorage.setItem(STORAGE_KEYS.ATTENDANCE_TIMINGS, JSON.stringify(DEFAULT_ATTENDANCE_TIMINGS));
+      return DEFAULT_ATTENDANCE_TIMINGS;
+    }
+    const parsed = JSON.parse(raw);
+    return {
+      ...DEFAULT_ATTENDANCE_TIMINGS,
+      ...parsed,
+      classStartTimes: {
+        ...DEFAULT_ATTENDANCE_TIMINGS.classStartTimes,
+        ...(parsed.classStartTimes || {})
+      }
+    };
+  } catch (e) {
+    console.error('Failed to load attendance timings', e);
+    return DEFAULT_ATTENDANCE_TIMINGS;
+  }
+}
+
+export function saveAttendanceTimings(timings) {
+  try {
+    localStorage.setItem(STORAGE_KEYS.ATTENDANCE_TIMINGS, JSON.stringify(timings));
+  } catch (e) {
+    console.error('Failed to save attendance timings', e);
+  }
 }
 
 

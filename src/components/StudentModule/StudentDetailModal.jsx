@@ -263,8 +263,13 @@ export default function StudentDetailModal({
             <div className="flex items-center justify-between">
               <div>
                 <span className="text-[10px] font-semibold text-indigo-700 uppercase">Enrolled Class & Section</span>
-                <p className="text-xs font-bold text-slate-800 mt-0.5">
-                  Class {student.studentClass} • {student.subject}
+                <p className="text-xs font-bold text-slate-800 mt-0.5 flex items-center flex-wrap gap-1">
+                  <span>Class {student.studentClass} • {student.subject}</span>
+                  {student.subjectGroup && student.subjectGroup !== student.subject && (
+                    <span className="px-2 py-0.5 rounded-md bg-indigo-100 text-indigo-800 text-[10px] font-bold">
+                      {student.subjectGroup}
+                    </span>
+                  )}
                 </p>
               </div>
               <div className="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600">

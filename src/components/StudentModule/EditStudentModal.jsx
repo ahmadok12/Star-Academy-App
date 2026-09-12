@@ -68,7 +68,13 @@ export default function EditStudentModal({ student, isOpen, onClose, onUpdateStu
       subject: newSec
     }));
     const key = `${formData.studentClass}_${newSec}`;
-    setSelectedSubjects([...(curriculumMap[key] || [])]);
+    if (newSec === 'Individual Subjects') {
+      if (student.subject !== 'Individual Subjects') {
+        setSelectedSubjects([]);
+      }
+    } else {
+      setSelectedSubjects([...(curriculumMap[key] || [])]);
+    }
   };
 
   const isAllSubjectsSelected =
@@ -140,11 +146,16 @@ export default function EditStudentModal({ student, isOpen, onClose, onUpdateStu
     e.preventDefault();
     if (!validate()) return;
 
+    const isIndividual = formData.subject === 'Individual Subjects';
     const enrolled = selectedSubjects.length > 0 ? selectedSubjects : availableCurriculumSubjects;
+    const computedGroup = isIndividual
+      ? (selectedSubjects.length > 0 ? selectedSubjects.join(' + ') : 'Individual Subjects')
+      : formData.subject;
 
     onUpdateStudent({
       ...formData,
       section: formData.subject,
+      subjectGroup: computedGroup,
       enrolledSubjects: enrolled,
       selectedSubjects: enrolled
     });
@@ -452,6 +463,17 @@ export default function EditStudentModal({ student, isOpen, onClose, onUpdateStu
                 <p className="text-[10px] text-slate-500 leading-tight">
                   Student may study all subjects or specific individual subjects:
                 </p>
+
+                {formData.subject === 'Individual Subjects' && (
+                  <div className="p-2 rounded-xl bg-indigo-50/80 border border-indigo-200 flex items-center justify-between gap-2">
+                    <span className="text-[10px] text-indigo-700 font-bold uppercase tracking-wider shrink-0">
+                      Enrolled Combination:
+                    </span>
+                    <span className="text-xs font-bold text-indigo-950 truncate">
+                      {selectedSubjects.length > 0 ? selectedSubjects.join(' + ') : 'None selected yet'}
+                    </span>
+                  </div>
+                )}
 
                 {/* Master "All Subjects" Checkbox */}
                 <label className="flex items-center gap-2 p-2 bg-white rounded-xl border border-indigo-200 cursor-pointer transition-all hover:bg-indigo-50/50 shadow-2xs">
