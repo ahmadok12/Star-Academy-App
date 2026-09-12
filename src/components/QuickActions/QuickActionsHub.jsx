@@ -8,9 +8,11 @@ import {
   Receipt,
   ChevronRight,
   ArrowLeft,
-  Sparkles
+  Sparkles,
+  HelpCircle
 } from 'lucide-react';
 import AddStudentModal from '../StudentModule/AddStudentModal';
+import AddInquiryModal from '../StudentModule/AddInquiryModal';
 import ChargeExpenseModal from '../FinanceModule/ChargeExpenseModal';
 import ReceiveFeesModal from '../FinanceModule/ReceiveFeesModal';
 import ReceiveFeesSection from '../FinanceModule/ReceiveFeesSection';
@@ -22,6 +24,10 @@ import TeacherAttendanceDashboard from '../TeacherAttendanceModule/TeacherAttend
 export default function QuickActionsHub({
   subPage,
   setSubPage,
+  // Inquiry props
+  inquiries = [],
+  onAddInquiry,
+  curriculumSubjects = {},
   // Students props
   students = [],
   onAddStudent,
@@ -49,13 +55,26 @@ export default function QuickActionsHub({
   chargedExpenses = [],
   onChargeExpense
 }) {
+  const [isAddInquiryOpen, setIsAddInquiryOpen] = useState(false);
   const [isAddStudentOpen, setIsAddStudentOpen] = useState(false);
   const [isAddExpenseOpen, setIsAddExpenseOpen] = useState(false);
   const [isReceiveFeeOpen, setIsReceiveFeeOpen] = useState(false);
   const [isMarkStudentAttendanceOpen, setIsMarkStudentAttendanceOpen] = useState(false);
   const [isMarkTeacherAttendanceOpen, setIsMarkTeacherAttendanceOpen] = useState(false);
 
+  const pendingInquiriesCount = inquiries.filter(i => i.status !== 'Registered').length;
+
   const menuItems = [
+    {
+      id: 'add_inquiry',
+      title: 'Student Inquiry',
+      subtitle: `${pendingInquiriesCount} Active Follow-ups`,
+      description: 'Record walk-in inquiry, visit & follow-up',
+      icon: HelpCircle,
+      color: 'bg-purple-50 text-purple-600 border-purple-100',
+      badgeColor: 'bg-purple-50 text-purple-700 border-purple-100',
+      actionType: 'modal'
+    },
     {
       id: 'receive_fees',
       title: 'Receive Fees',
@@ -82,8 +101,8 @@ export default function QuickActionsHub({
       subtitle: 'Daily Register',
       description: 'Mark daily attendance register of students',
       icon: ClipboardCheck,
-      color: 'bg-purple-50 text-purple-600 border-purple-100',
-      badgeColor: 'bg-purple-50 text-purple-700 border-purple-100',
+      color: 'bg-indigo-50 text-indigo-600 border-indigo-100',
+      badgeColor: 'bg-indigo-50 text-indigo-700 border-indigo-100',
       actionType: 'modal'
     },
     {
@@ -109,7 +128,9 @@ export default function QuickActionsHub({
   ];
 
   const handleItemClick = (item) => {
-    if (item.id === 'receive_fees') {
+    if (item.id === 'add_inquiry') {
+      setIsAddInquiryOpen(true);
+    } else if (item.id === 'receive_fees') {
       setIsReceiveFeeOpen(true);
     } else if (item.id === 'add_student') {
       setIsAddStudentOpen(true);
@@ -233,6 +254,14 @@ export default function QuickActionsHub({
       </div>
 
       {/* Direct Action Modals */}
+      <AddInquiryModal
+        isOpen={isAddInquiryOpen}
+        onClose={() => setIsAddInquiryOpen(false)}
+        onAddInquiry={onAddInquiry}
+        existingInquiries={inquiries}
+        curriculumSubjects={curriculumSubjects}
+      />
+
       <ReceiveFeesModal
         isOpen={isReceiveFeeOpen}
         onClose={() => setIsReceiveFeeOpen(false)}

@@ -743,6 +743,9 @@ export default function App() {
         <QuickActionsHub
           subPage={quickActionsSubPage}
           setSubPage={setQuickActionsSubPage}
+          inquiries={inquiries}
+          onAddInquiry={handleAddInquiry}
+          curriculumSubjects={curriculumSubjects}
           students={currentYearStudents}
           onAddStudent={handleAddStudent}
           feeVouchers={feeVouchers}
@@ -799,6 +802,7 @@ export default function App() {
           onAddInquiry={handleAddInquiry}
           onUpdateInquiry={handleUpdateInquiry}
           onDeleteInquiry={handleDeleteInquiry}
+          curriculumSubjects={curriculumSubjects}
           attendanceSessions={attendanceSessions}
           onSaveAttendance={handleSaveAttendance}
           onUpdateAttendanceSession={handleUpdateAttendanceSession}

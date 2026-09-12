@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Plus, Search, Users, X, UserCheck, UserX, ArrowLeft } from 'lucide-react';
+import { Plus, Search, Users, X, UserCheck, UserX, ArrowLeft, ChevronDown, ChevronUp, SlidersHorizontal, Filter } from 'lucide-react';
 import StudentCard from './StudentCard';
 import AddStudentModal from './AddStudentModal';
 import StudentDetailModal from './StudentDetailModal';
@@ -18,6 +18,7 @@ export default function StudentList({
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedClass, setSelectedClass] = useState('All');
   const [statusFilter, setStatusFilter] = useState('active'); // 'active' | 'all' | 'left'
+  const [isFiltersExpanded, setIsFiltersExpanded] = useState(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [viewingStudent, setViewingStudent] = useState(null);
   const [editingStudent, setEditingStudent] = useState(null);
@@ -104,86 +105,130 @@ export default function StudentList({
             </button>
           </div>
 
-          {/* Search Input Box */}
-          <div className="relative">
-            <Search className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
-            <input
-              type="text"
-              placeholder="Search by name, ID, phone, section..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-9 pr-8 py-2 bg-slate-100 hover:bg-slate-100/80 focus:bg-white text-xs rounded-xl border border-transparent focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all outline-none"
-            />
-            {searchTerm && (
+          {/* Collapsible Search & Filter Bar Toggle */}
+          <div className="flex items-center justify-between gap-2 pt-0.5">
+            <button
+              type="button"
+              onClick={() => setIsFiltersExpanded(prev => !prev)}
+              className="flex-1 flex items-center justify-between px-3 py-2 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 text-xs font-semibold transition-all cursor-pointer select-none"
+            >
+              <div className="flex items-center gap-2 min-w-0">
+                <SlidersHorizontal className="w-3.5 h-3.5 text-blue-600 shrink-0" />
+                <span className="font-bold">Search & Filters</span>
+                <span className="text-[10px] bg-white border border-slate-200 px-2 py-0.5 rounded-full font-bold text-slate-600 truncate">
+                  {statusFilter === 'active' ? 'Active' : statusFilter === 'all' ? 'All' : 'Left'} • {selectedClass === 'All' ? 'All Classes' : selectedClass}{searchTerm ? ` • "${searchTerm}"` : ''}
+                </span>
+              </div>
+              <div className="flex items-center gap-1 text-slate-400 shrink-0 ml-2">
+                <span className="text-[11px] font-medium text-slate-500">
+                  {isFiltersExpanded ? 'Collapse' : 'Expand'}
+                </span>
+                {isFiltersExpanded ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+              </div>
+            </button>
+
+            {(searchTerm || statusFilter !== 'active' || selectedClass !== 'All') && (
               <button
-                onClick={() => setSearchTerm('')}
-                className="absolute right-2.5 top-2.5 text-slate-400 hover:text-slate-600"
+                type="button"
+                onClick={() => {
+                  setSearchTerm('');
+                  setStatusFilter('active');
+                  setSelectedClass('All');
+                }}
+                className="px-2.5 py-2 rounded-xl bg-rose-50 text-rose-600 hover:bg-rose-100 text-[11px] font-bold transition-all cursor-pointer shrink-0 border border-rose-100"
+                title="Reset all filters"
               >
-                <X className="w-3.5 h-3.5" />
+                Reset
               </button>
             )}
           </div>
 
-          {/* Status Filter Tabs (Active vs All vs Left Academy) */}
-          <div className="grid grid-cols-3 gap-1 bg-slate-100 p-1 rounded-xl text-[11px] font-semibold">
-            <button
-              onClick={() => setStatusFilter('active')}
-              className={`py-1 rounded-lg text-center transition-all ${
-                statusFilter === 'active'
-                  ? 'bg-white text-blue-700 font-bold shadow-xs'
-                  : 'text-slate-600 hover:text-slate-800'
-              }`}
-            >
-              Active ({activeCount})
-            </button>
-            <button
-              onClick={() => setStatusFilter('all')}
-              className={`py-1 rounded-lg text-center transition-all ${
-                statusFilter === 'all'
-                  ? 'bg-white text-slate-800 font-bold shadow-xs'
-                  : 'text-slate-600 hover:text-slate-800'
-              }`}
-            >
-              All ({students.length})
-            </button>
-            <button
-              onClick={() => setStatusFilter('left')}
-              className={`py-1 rounded-lg text-center transition-all ${
-                statusFilter === 'left'
-                  ? 'bg-white text-rose-700 font-bold shadow-xs'
-                  : 'text-slate-600 hover:text-slate-800'
-              }`}
-            >
-              Left Academy ({leftCount})
-            </button>
-          </div>
+          {/* Expandable Bars (Search, Status, Class) */}
+          {isFiltersExpanded && (
+            <div className="space-y-2.5 pt-1 animate-in fade-in duration-150">
+              {/* Search Input Box */}
+              <div className="relative">
+                <Search className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
+                <input
+                  type="text"
+                  placeholder="Search by name, ID, phone, section..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-full pl-9 pr-8 py-2 bg-slate-100 hover:bg-slate-100/80 focus:bg-white text-xs rounded-xl border border-transparent focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all outline-none"
+                  autoFocus
+                />
+                {searchTerm && (
+                  <button
+                    onClick={() => setSearchTerm('')}
+                    className="absolute right-2.5 top-2.5 text-slate-400 hover:text-slate-600"
+                  >
+                    <X className="w-3.5 h-3.5" />
+                  </button>
+                )}
+              </div>
 
-          {/* Horizontal Class Filter Pills */}
-          <div className="flex items-center gap-1.5 overflow-x-auto pb-0.5 no-scrollbar text-xs">
-            <button
-              onClick={() => setSelectedClass('All')}
-              className={`px-3 py-1 rounded-lg text-xs font-semibold whitespace-nowrap transition-all ${
-                selectedClass === 'All'
-                  ? 'bg-blue-600 text-white shadow-xs'
-                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-              }`}
-            >
-              All Classes
-            </button>
-            {CLASSES.map((cls) => (
-              <button
-                key={cls}
-                onClick={() => setSelectedClass(cls)}
-                className={`px-3 py-1 rounded-lg text-xs font-semibold whitespace-nowrap transition-all ${
-                  selectedClass === cls
-                    ? 'bg-blue-600 text-white shadow-xs'
-                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                }`}
-              >
-                {cls}
-              </button>
-            ))}
-          </div>
+              {/* Status Filter Tabs (Active vs All vs Left Academy) */}
+              <div className="grid grid-cols-3 gap-1 bg-slate-100 p-1 rounded-xl text-[11px] font-semibold">
+                <button
+                  onClick={() => setStatusFilter('active')}
+                  className={`py-1 rounded-lg text-center transition-all ${
+                    statusFilter === 'active'
+                      ? 'bg-white text-blue-700 font-bold shadow-xs'
+                      : 'text-slate-600 hover:text-slate-800'
+                  }`}
+                >
+                  Active ({activeCount})
+                </button>
+                <button
+                  onClick={() => setStatusFilter('all')}
+                  className={`py-1 rounded-lg text-center transition-all ${
+                    statusFilter === 'all'
+                      ? 'bg-white text-slate-800 font-bold shadow-xs'
+                      : 'text-slate-600 hover:text-slate-800'
+                  }`}
+                >
+                  All ({students.length})
+                </button>
+                <button
+                  onClick={() => setStatusFilter('left')}
+                  className={`py-1 rounded-lg text-center transition-all ${
+                    statusFilter === 'left'
+                      ? 'bg-white text-rose-700 font-bold shadow-xs'
+                      : 'text-slate-600 hover:text-slate-800'
+                  }`}
+                >
+                  Left Academy ({leftCount})
+                </button>
+              </div>
+
+              {/* Horizontal Class Filter Pills */}
+              <div className="flex items-center gap-1.5 overflow-x-auto pb-0.5 no-scrollbar text-xs">
+                <button
+                  onClick={() => setSelectedClass('All')}
+                  className={`px-3 py-1 rounded-lg text-xs font-semibold whitespace-nowrap transition-all ${
+                    selectedClass === 'All'
+                      ? 'bg-blue-600 text-white shadow-xs'
+                      : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                  }`}
+                >
+                  All Classes
+                </button>
+                {CLASSES.map((cls) => (
+                  <button
+                    key={cls}
+                    onClick={() => setSelectedClass(cls)}
+                    className={`px-3 py-1 rounded-lg text-xs font-semibold whitespace-nowrap transition-all ${
+                      selectedClass === cls
+                        ? 'bg-blue-600 text-white shadow-xs'
+                        : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                    }`}
+                  >
+                    {cls}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </div>
 

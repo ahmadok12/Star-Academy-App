@@ -8,9 +8,13 @@ import {
   Calendar,
   Clock,
   CheckCircle2,
-  AlertTriangle,
-  UserCheck,
+  AlertCircle,
   ChevronRight,
+  ChevronDown,
+  ChevronUp,
+  UserCheck,
+  UserX,
+  FileEdit,
   Trash2,
   Sparkles,
   BookOpen,
@@ -24,10 +28,12 @@ export default function InquiriesSection({
   onAddInquiry,
   onUpdateInquiry,
   onDeleteInquiry,
-  onOpenRegisterStudent
+  onOpenRegisterStudent,
+  curriculumSubjects
 }) {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('ALL');
+  const [isFiltersExpanded, setIsFiltersExpanded] = useState(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [noteInputs, setNoteInputs] = useState({});
   const [activeNoteBoxId, setActiveNoteBoxId] = useState(null);
@@ -180,51 +186,92 @@ export default function InquiriesSection({
         </div>
       </div>
 
-      {/* Filter Tabs & Search Bar */}
+      {/* Collapsible Filter & Search Bar Toggle */}
       <div className="space-y-2.5">
-        {/* Search Input */}
-        <div className="relative">
-          <Search className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
-          <input
-            type="text"
-            placeholder="Search inquiry by student name, phone, guardian, class..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-9 pr-3.5 py-2 bg-white text-xs rounded-xl border border-slate-200 focus:border-amber-500 focus:ring-2 focus:ring-amber-100 outline-none shadow-2xs"
-          />
+        <div className="flex items-center justify-between gap-2">
+          <button
+            type="button"
+            onClick={() => setIsFiltersExpanded(prev => !prev)}
+            className="flex-1 flex items-center justify-between px-3 py-2 rounded-xl bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold transition-all cursor-pointer select-none shadow-2xs"
+          >
+            <div className="flex items-center gap-2 min-w-0">
+              <Sparkles className="w-3.5 h-3.5 text-amber-600 shrink-0" />
+              <span className="font-bold">Search & Filters</span>
+              <span className="text-[10px] bg-slate-100 border border-slate-200 px-2 py-0.5 rounded-full font-bold text-slate-600 truncate">
+                {statusFilter === 'ALL' ? 'All Inquiries' : statusFilter}{searchTerm ? ` • "${searchTerm}"` : ''}
+              </span>
+            </div>
+            <div className="flex items-center gap-1 text-slate-400 shrink-0 ml-2">
+              <span className="text-[11px] font-medium text-slate-500">
+                {isFiltersExpanded ? 'Collapse' : 'Expand'}
+              </span>
+              {isFiltersExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+            </div>
+          </button>
+
+          {(searchTerm || statusFilter !== 'ALL') && (
+            <button
+              type="button"
+              onClick={() => {
+                setSearchTerm('');
+                setStatusFilter('ALL');
+              }}
+              className="px-2.5 py-2 rounded-xl bg-rose-50 text-rose-600 hover:bg-rose-100 text-[11px] font-bold transition-all cursor-pointer shrink-0 border border-rose-100"
+              title="Reset all filters"
+            >
+              Reset
+            </button>
+          )}
         </div>
 
-        {/* Filter Pills */}
-        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar text-xs">
-          {[
-            { id: 'ALL', label: 'All Inquiries', count: counts.total },
-            { id: INQUIRY_STATUS.PENDING, label: 'Pending Follow-up', count: counts.pending },
-            { id: INQUIRY_STATUS.DID_NOT_SHOW_UP, label: 'Did Not Show Up', count: counts.didNotShowUp },
-            { id: INQUIRY_STATUS.INTERESTED, label: 'Interested', count: counts.interested },
-            { id: INQUIRY_STATUS.REGISTERED, label: 'Registered Students', count: counts.registered }
-          ].map((tab) => {
-            const isActive = statusFilter === tab.id;
-            return (
-              <button
-                key={tab.id}
-                type="button"
-                onClick={() => setStatusFilter(tab.id)}
-                className={`px-3 py-1.5 rounded-xl font-bold whitespace-nowrap transition-all flex items-center gap-1.5 cursor-pointer ${
-                  isActive
-                    ? 'bg-slate-900 text-white shadow-xs'
-                    : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
-                }`}
-              >
-                <span>{tab.label}</span>
-                <span className={`px-1.5 py-0.2 rounded-md text-[10px] ${
-                  isActive ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-600'
-                }`}>
-                  {tab.count}
-                </span>
-              </button>
-            );
-          })}
-        </div>
+        {isFiltersExpanded && (
+          <div className="space-y-2.5 pt-1 animate-in fade-in duration-150">
+            {/* Search Input */}
+            <div className="relative">
+              <Search className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
+              <input
+                type="text"
+                placeholder="Search inquiry by student name, phone, guardian, class..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-9 pr-3.5 py-2 bg-white text-xs rounded-xl border border-slate-200 focus:border-amber-500 focus:ring-2 focus:ring-amber-100 outline-none shadow-2xs"
+                autoFocus
+              />
+            </div>
+
+            {/* Filter Pills */}
+            <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar text-xs">
+              {[
+                { id: 'ALL', label: 'All Inquiries', count: counts.total },
+                { id: INQUIRY_STATUS.PENDING, label: 'Pending Follow-up', count: counts.pending },
+                { id: INQUIRY_STATUS.DID_NOT_SHOW_UP, label: 'Did Not Show Up', count: counts.didNotShowUp },
+                { id: INQUIRY_STATUS.INTERESTED, label: 'Interested', count: counts.interested },
+                { id: INQUIRY_STATUS.REGISTERED, label: 'Registered Students', count: counts.registered }
+              ].map((tab) => {
+                const isActive = statusFilter === tab.id;
+                return (
+                  <button
+                    key={tab.id}
+                    type="button"
+                    onClick={() => setStatusFilter(tab.id)}
+                    className={`px-3 py-1.5 rounded-xl font-bold whitespace-nowrap transition-all flex items-center gap-1.5 cursor-pointer ${
+                      isActive
+                        ? 'bg-slate-900 text-white shadow-xs'
+                        : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
+                    }`}
+                  >
+                    <span>{tab.label}</span>
+                    <span className={`px-1.5 py-0.2 rounded-md text-[10px] ${
+                      isActive ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-600'
+                    }`}>
+                      {tab.count}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Inquiry Cards List */}
@@ -276,6 +323,14 @@ export default function InquiriesSection({
                       <span className="px-2 py-0.5 bg-slate-100 text-slate-700 rounded-md font-semibold text-[10px]">
                         {inq.subject}
                       </span>
+                      {inq.selectedSubjects && inq.selectedSubjects.length > 0 && (
+                        <span 
+                          className="px-2 py-0.5 bg-purple-50 text-purple-700 rounded-md font-bold text-[10px]"
+                          title={`Enrolled: ${inq.selectedSubjects.join(', ')}`}
+                        >
+                          {inq.selectedSubjects.length} Subjects
+                        </span>
+                      )}
                     </div>
                   </div>
 
@@ -456,6 +511,7 @@ export default function InquiriesSection({
         onClose={() => setIsAddModalOpen(false)}
         onAddInquiry={onAddInquiry}
         existingInquiries={inquiries}
+        curriculumSubjects={curriculumSubjects}
       />
     </div>
   );

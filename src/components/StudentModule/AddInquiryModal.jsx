@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { X, User, Phone, MessageSquare, ShieldCheck, Sparkles, Calendar, FileText, Check, HelpCircle } from 'lucide-react';
+import React, { useState, useEffect, useMemo } from 'react';
+import { X, User, Phone, MessageSquare, ShieldCheck, Sparkles, Calendar, FileText, Check, HelpCircle, BookOpen } from 'lucide-react';
 import { CLASSES, CLASS_SECTIONS, GENDERS, INQUIRY_STATUS } from '../../constants/academicData';
-import { generateNextInquiryId } from '../../utils/storage';
+import { generateNextInquiryId, getCurriculumSubjects, INITIAL_CURRICULUM_SUBJECTS } from '../../utils/storage';
 
-export default function AddInquiryModal({ isOpen, onClose, onAddInquiry, existingInquiries }) {
+export default function AddInquiryModal({ isOpen, onClose, onAddInquiry, existingInquiries, curriculumSubjects }) {
   if (!isOpen) return null;
 
   const todayStr = new Date().toISOString().split('T')[0];
@@ -27,6 +27,24 @@ export default function AddInquiryModal({ isOpen, onClose, onAddInquiry, existin
 
   const [errors, setErrors] = useState({});
 
+  const [selectedSubjects, setSelectedSubjects] = useState([]);
+
+  const availableCurriculumSubjects = useMemo(() => {
+    if (!formData.studentClass || !formData.subject) return [];
+    const key = `${formData.studentClass}_${formData.subject}`;
+    if (curriculumSubjects && curriculumSubjects[key] && curriculumSubjects[key].length > 0) {
+      return curriculumSubjects[key];
+    }
+    if (INITIAL_CURRICULUM_SUBJECTS && INITIAL_CURRICULUM_SUBJECTS[key] && INITIAL_CURRICULUM_SUBJECTS[key].length > 0) {
+      return INITIAL_CURRICULUM_SUBJECTS[key];
+    }
+    const defaultSubs = getCurriculumSubjects();
+    if (defaultSubs && defaultSubs[key] && defaultSubs[key].length > 0) {
+      return defaultSubs[key];
+    }
+    return ['Physics', 'Chemistry', 'Math', 'Bio', 'Computer', 'Eng', 'Urdu', 'Islamiyat', 'Tarjama tul Quran'];
+  }, [formData.studentClass, formData.subject, curriculumSubjects]);
+
   useEffect(() => {
     if (isOpen) {
       setFormData({
@@ -47,6 +65,35 @@ export default function AddInquiryModal({ isOpen, onClose, onAddInquiry, existin
       setErrors({});
     }
   }, [isOpen]);
+
+  // Sync selected subjects with available subjects
+  useEffect(() => {
+    if (availableCurriculumSubjects.length > 0) {
+      setSelectedSubjects([...availableCurriculumSubjects]);
+    } else {
+      setSelectedSubjects([]);
+    }
+  }, [formData.studentClass, formData.subject, availableCurriculumSubjects]);
+
+  const isAllSubjectsSelected =
+    availableCurriculumSubjects.length > 0 &&
+    selectedSubjects.length === availableCurriculumSubjects.length;
+
+  const handleToggleAllSubjects = () => {
+    if (isAllSubjectsSelected) {
+      setSelectedSubjects([]);
+    } else {
+      setSelectedSubjects([...availableCurriculumSubjects]);
+    }
+  };
+
+  const handleToggleSingleSubject = (subjectName) => {
+    if (selectedSubjects.includes(subjectName)) {
+      setSelectedSubjects(selectedSubjects.filter((s) => s !== subjectName));
+    } else {
+      setSelectedSubjects([...selectedSubjects, subjectName]);
+    }
+  };
 
   const handleClassChange = (newClass) => {
     const available = CLASS_SECTIONS[newClass] || [];
@@ -73,6 +120,7 @@ export default function AddInquiryModal({ isOpen, onClose, onAddInquiry, existin
 
     const newInquiry = {
       ...formData,
+      selectedSubjects: selectedSubjects.length > 0 ? selectedSubjects : availableCurriculumSubjects,
       createdAt: new Date().toISOString(),
       followUpNotes: formData.remarks.trim() ? [
         {
@@ -285,6 +333,69 @@ export default function AddInquiryModal({ isOpen, onClose, onAddInquiry, existin
                 </button>
               ))}
             </div>
+
+            {/* Enrolled Subjects Option (Attachment 3) */}
+            {formData.subject && availableCurriculumSubjects.length > 0 && (
+              <div className="mt-3 p-3 bg-white border border-slate-200 rounded-2xl space-y-2 animate-in fade-in duration-150 shadow-2xs">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-1.5">
+                    <BookOpen className="w-3.5 h-3.5 text-indigo-600" />
+                    <label className="font-bold text-slate-800 text-xs">
+                      Enrolled Subjects
+                    </label>
+                  </div>
+                  <span className={`text-[10px] font-extrabold px-2 py-0.5 rounded-full ${
+                    isAllSubjectsSelected 
+                      ? 'bg-indigo-100 text-indigo-800' 
+                      : 'bg-amber-100 text-amber-800'
+                  }`}>
+                    {selectedSubjects.length} of {availableCurriculumSubjects.length} {isAllSubjectsSelected ? 'All Selected' : 'Custom'}
+                  </span>
+                </div>
+
+                <p className="text-[10px] text-slate-500 leading-tight">
+                  Student may study all subjects or specific individual subjects:
+                </p>
+
+                {/* Master "All Subjects" Checkbox */}
+                <label className="flex items-center gap-2 p-2 bg-slate-50 rounded-xl border border-indigo-200 cursor-pointer transition-all hover:bg-indigo-50/50 shadow-2xs">
+                  <input
+                    type="checkbox"
+                    checked={isAllSubjectsSelected}
+                    onChange={handleToggleAllSubjects}
+                    className="w-4 h-4 text-indigo-600 rounded border-slate-300 focus:ring-indigo-500 cursor-pointer"
+                  />
+                  <span className="font-bold text-xs text-indigo-950">
+                    All Subjects ({availableCurriculumSubjects.length})
+                  </span>
+                </label>
+
+                {/* Individual Subject Checkboxes */}
+                <div className="grid grid-cols-2 gap-1.5 pt-1">
+                  {availableCurriculumSubjects.map((subName) => {
+                    const isChecked = selectedSubjects.includes(subName);
+                    return (
+                      <label
+                        key={subName}
+                        className={`flex items-center gap-2 p-2 rounded-xl border text-xs cursor-pointer transition-all select-none ${
+                          isChecked
+                            ? 'bg-white border-indigo-300 text-slate-900 font-semibold shadow-2xs'
+                            : 'bg-slate-50/60 border-slate-200 text-slate-400 hover:text-slate-700'
+                        }`}
+                      >
+                        <input
+                          type="checkbox"
+                          checked={isChecked}
+                          onChange={() => handleToggleSingleSubject(subName)}
+                          className="w-3.5 h-3.5 text-indigo-600 rounded border-slate-300 focus:ring-indigo-500 cursor-pointer"
+                        />
+                        <span className="truncate">{subName}</span>
+                      </label>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Dates: Visit Date & Follow-Up Target Date */}

@@ -37,7 +37,8 @@ export default function StudentTabHub({
   onReceiveFee,
   onUpdateVoucher,
   onDeleteVoucher,
-  onGenerateMonthlyVouchers
+  onGenerateMonthlyVouchers,
+  curriculumSubjects
 }) {
   const [registeringInquiry, setRegisteringInquiry] = useState(null);
 
@@ -47,15 +48,6 @@ export default function StudentTabHub({
 
   const menuItems = [
     {
-      id: 'list',
-      title: 'List of Students',
-      subtitle: `${activeStudentCount} Students`,
-      description: 'View directory, student details & ID cards',
-      icon: Users,
-      color: 'bg-blue-50 text-blue-600 border-blue-100',
-      badgeColor: 'bg-blue-50 text-blue-700 border-blue-100'
-    },
-    {
       id: 'inquiries',
       title: 'Student Inquiries & Follow-ups',
       subtitle: `${pendingInquiriesCount} Active Follow-ups`,
@@ -63,6 +55,15 @@ export default function StudentTabHub({
       icon: HelpCircle,
       color: 'bg-purple-50 text-purple-600 border-purple-100',
       badgeColor: 'bg-purple-50 text-purple-700 border-purple-100'
+    },
+    {
+      id: 'list',
+      title: 'List of Students',
+      subtitle: `${activeStudentCount} Students`,
+      description: 'View directory, student details & ID cards',
+      icon: Users,
+      color: 'bg-blue-50 text-blue-600 border-blue-100',
+      badgeColor: 'bg-blue-50 text-blue-700 border-blue-100'
     },
     {
       id: 'attendance',
@@ -132,6 +133,7 @@ export default function StudentTabHub({
             onUpdateInquiry={onUpdateInquiry}
             onDeleteInquiry={onDeleteInquiry}
             onOpenRegisterStudent={(inq) => setRegisteringInquiry(inq)}
+            curriculumSubjects={curriculumSubjects}
           />
         )}
 
