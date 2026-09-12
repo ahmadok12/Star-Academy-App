@@ -43,23 +43,7 @@ export default function TransferList({
   }, [transfers]);
 
   return (
-    <div className="space-y-4">
-      {/* Overview Banner */}
-      <div className="p-4 rounded-3xl bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 text-white shadow-lg">
-        <div className="flex items-center justify-between text-xs text-blue-100 mb-1">
-          <span className="font-semibold">Inter-Account Transfers</span>
-          <span className="px-2 py-0.5 rounded-full bg-white/20 text-[10px] font-bold">
-            {transfers.length} Transfers
-          </span>
-        </div>
-        <div className="text-2xl font-black tracking-tight text-white">
-          Rs. {totalTransferred.toLocaleString()}
-        </div>
-        <p className="text-[11px] text-blue-100/90 mt-1">
-          Internal fund rebalancing between bank accounts and cash counter.
-        </p>
-      </div>
-
+    <div className="space-y-3">
       {/* Action Bar */}
       <div className="flex items-center justify-between gap-2">
         <div className="relative flex-1">
@@ -75,11 +59,17 @@ export default function TransferList({
 
         <button
           onClick={() => setIsAddOpen(true)}
-          className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 active:scale-98 text-white font-bold text-xs shadow-xs transition-all shrink-0"
+          className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 active:scale-98 text-white font-bold text-xs shadow-xs transition-all shrink-0 cursor-pointer"
         >
           <Plus className="w-4 h-4" />
           <span>Transfer</span>
         </button>
+      </div>
+
+      {/* Summary line */}
+      <div className="flex items-center justify-between text-xs text-slate-500 font-medium px-1">
+        <span>{filteredTransfers.length} {filteredTransfers.length === 1 ? 'transfer' : 'transfers'}</span>
+        <span>Total Rebalanced: <strong className="text-blue-700 font-bold">Rs. {totalTransferred.toLocaleString()}</strong></span>
       </div>
 
       {/* Transfers List */}

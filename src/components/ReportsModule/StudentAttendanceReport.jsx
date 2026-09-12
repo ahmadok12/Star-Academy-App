@@ -215,29 +215,6 @@ export default function StudentAttendanceReport({
         </div>
       </div>
 
-      {/* Hero Header */}
-      <div className="bg-gradient-to-br from-emerald-600 via-teal-600 to-emerald-800 text-white rounded-3xl p-5 shadow-md">
-        <div className="flex items-center justify-between flex-wrap gap-2">
-          <div className="space-y-1">
-            <div className="inline-flex items-center gap-1.5 bg-white/20 text-white border border-white/30 px-3 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider">
-              <ClipboardCheck className="w-3 h-3" />
-              <span>Disciplinary & Attendance Tracking • {currentSession}</span>
-            </div>
-            <h2 className="text-2xl font-black tracking-tight text-white">
-              Student Attendance Report
-            </h2>
-            <p className="text-xs text-emerald-100/90 font-medium">
-              Daily register compliance, class-level participation & student absenteeism flags.
-            </p>
-          </div>
-
-          <div className="text-right">
-            <span className="text-[11px] text-white/80 font-bold block">Overall Regularity</span>
-            <span className="text-2xl font-black text-amber-300">{attendanceData.overallRate}%</span>
-          </div>
-        </div>
-      </div>
-
       {/* 4 Metric Cards */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         <div className="bg-white p-4 rounded-3xl border border-slate-200/90 shadow-xs">

@@ -207,29 +207,6 @@ export default function ExpenseBreakdownReport({
         </div>
       </div>
 
-      {/* Hero Header */}
-      <div className="bg-gradient-to-br from-rose-600 via-rose-700 to-red-800 text-white rounded-3xl p-5 shadow-md">
-        <div className="flex items-center justify-between flex-wrap gap-2">
-          <div className="space-y-1">
-            <div className="inline-flex items-center gap-1.5 bg-white/20 text-white border border-white/30 px-3 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider">
-              <Receipt className="w-3 h-3" />
-              <span>Expenditure Audit • {currentSession}</span>
-            </div>
-            <h2 className="text-2xl font-black tracking-tight text-white">
-              Academy Expense Breakdown
-            </h2>
-            <p className="text-xs text-rose-100/90 font-medium">
-              Analytical categorization of utility bills, rentals, curriculum supplies, and maintenance outflows.
-            </p>
-          </div>
-
-          <div className="text-right">
-            <span className="text-[11px] text-white/80 font-bold block">Total Outflow</span>
-            <span className="text-2xl font-black text-white">Rs. {totalExpense.toLocaleString()}</span>
-          </div>
-        </div>
-      </div>
-
       {/* Category Progress Bars */}
       <div className="bg-white rounded-3xl border border-slate-200/90 shadow-xs p-4 space-y-4">
         <h3 className="text-xs font-black text-slate-800 uppercase tracking-wider flex items-center gap-1.5">

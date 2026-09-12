@@ -34,34 +34,8 @@ export default function TimetableSection({
   }, [timetables, selectedClass, searchTerm]);
 
   return (
-    <div className="space-y-4">
-      {/* Overview Banner */}
-      <div className="p-4 rounded-3xl bg-gradient-to-r from-teal-600 via-emerald-600 to-teal-700 text-white shadow-lg">
-        <div className="flex items-center justify-between text-xs text-teal-100 mb-1">
-          <span className="font-semibold">Class Schedules</span>
-          <div className="flex items-center gap-1.5">
-            {onNavigateDatesheets && (
-              <button
-                onClick={onNavigateDatesheets}
-                className="px-2.5 py-0.5 rounded-full bg-white/20 hover:bg-white/30 text-white text-[10px] font-bold transition-all shadow-xs"
-              >
-                Exam Datesheets →
-              </button>
-            )}
-            <span className="px-2 py-0.5 rounded-full bg-white/20 text-[10px] font-bold">
-              {timetables.length} Timetables
-            </span>
-          </div>
-        </div>
-        <div className="text-2xl font-black tracking-tight text-white">
-          Daily Routine & Timetables
-        </div>
-        <p className="text-[11px] text-teal-100/90 mt-1">
-          Subject lectures, laboratory sessions, and interval breaks for all classes.
-        </p>
-      </div>
-
-      {/* Class Selector Filter Pills - ONLY current selection colored */}
+    <div className="space-y-3">
+      {/* Class Selector Filter Pills */}
       <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar text-xs">
         {['All', ...CLASSES].map((cls) => {
           const isSelected = selectedClass === cls;
@@ -69,9 +43,9 @@ export default function TimetableSection({
             <button
               key={cls}
               onClick={() => setSelectedClass(cls)}
-              className={`px-3.5 py-1.5 rounded-xl font-bold whitespace-nowrap transition-all border ${
+              className={`px-3.5 py-1.5 rounded-xl font-bold whitespace-nowrap transition-all border cursor-pointer ${
                 isSelected
-                  ? 'bg-teal-600 text-white border-teal-600 shadow-md shadow-teal-200'
+                  ? 'bg-teal-600 text-white border-teal-600 shadow-xs'
                   : 'bg-white text-slate-600 border-slate-200 hover:border-slate-300'
               }`}
             >
@@ -94,10 +68,22 @@ export default function TimetableSection({
           />
         </div>
 
+        {onNavigateDatesheets && (
+          <button
+            type="button"
+            onClick={onNavigateDatesheets}
+            className="px-3 py-2 rounded-xl bg-teal-50 hover:bg-teal-100 text-teal-800 border border-teal-200 text-xs font-bold transition-all shadow-xs cursor-pointer shrink-0"
+            title="Open Exam Datesheets"
+          >
+            <span className="hidden sm:inline">Exam Datesheets →</span>
+            <span className="sm:hidden">Datesheets</span>
+          </button>
+        )}
+
         {!readOnly && (
           <button
             onClick={() => setIsAddOpen(true)}
-            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-teal-600 hover:bg-teal-700 active:scale-98 text-white font-bold text-xs shadow-xs transition-all shrink-0"
+            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-teal-600 hover:bg-teal-700 active:scale-98 text-white font-bold text-xs shadow-xs transition-all shrink-0 cursor-pointer"
           >
             <Plus className="w-4 h-4" />
             <span>Add Timetable</span>

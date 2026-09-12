@@ -57,30 +57,14 @@ export default function ExpensesSection({
   }, [chargedExpenses]);
 
   return (
-    <div className="space-y-4">
-      {/* Overview Banner */}
-      <div className="p-4 rounded-3xl bg-gradient-to-r from-rose-600 via-pink-600 to-amber-600 text-white shadow-lg">
-        <div className="flex items-center justify-between text-xs text-rose-100 mb-1">
-          <span className="font-semibold">Academy Expenditure</span>
-          <span className="px-2 py-0.5 rounded-full bg-white/20 text-[10px] font-bold">
-            {chargedExpenses.length} Vouchers
-          </span>
-        </div>
-        <div className="text-2xl font-black tracking-tight text-white">
-          Rs. {totalChargedAmount.toLocaleString()}
-        </div>
-        <p className="text-[11px] text-rose-100/90 mt-1">
-          Operational expenses, utilities, supplies, and maintenance.
-        </p>
-      </div>
-
+    <div className="space-y-3">
       {/* 2 Tabs: Charged Expenses vs List of Expenses (heads) */}
       <div className="flex p-1 bg-slate-100 rounded-2xl border border-slate-200/80">
         <button
           onClick={() => setActiveTab('charged')}
-          className={`flex-1 py-2 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 ${
+          className={`flex-1 py-2 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
             activeTab === 'charged'
-              ? 'bg-rose-600 text-white shadow-md shadow-rose-200'
+              ? 'bg-rose-600 text-white shadow-xs'
               : 'bg-transparent text-slate-600 hover:text-slate-900'
           }`}
         >
@@ -90,9 +74,9 @@ export default function ExpensesSection({
 
         <button
           onClick={() => setActiveTab('heads')}
-          className={`flex-1 py-2 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 ${
+          className={`flex-1 py-2 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
             activeTab === 'heads'
-              ? 'bg-amber-600 text-white shadow-md shadow-amber-200'
+              ? 'bg-amber-600 text-white shadow-xs'
               : 'bg-transparent text-slate-600 hover:text-slate-900'
           }`}
         >
@@ -130,6 +114,18 @@ export default function ExpensesSection({
             <Plus className="w-4 h-4" />
             <span>Add Expense</span>
           </button>
+        )}
+      </div>
+
+      {/* Summary line */}
+      <div className="flex items-center justify-between text-xs text-slate-500 font-medium px-1">
+        <span>
+          {activeTab === 'charged'
+            ? `${filteredCharged.length} ${filteredCharged.length === 1 ? 'voucher' : 'vouchers'}`
+            : `${filteredCategories.length} ${filteredCategories.length === 1 ? 'head' : 'heads'}`}
+        </span>
+        {activeTab === 'charged' && (
+          <span>Total Outflow: <strong className="text-rose-700 font-bold">Rs. {totalChargedAmount.toLocaleString()}</strong></span>
         )}
       </div>
 

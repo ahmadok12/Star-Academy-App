@@ -30,23 +30,7 @@ export default function BankList({ banks, onAddBank, onUpdateBank, onDeleteBank,
   }, [banks, liveBalances]);
 
   return (
-    <div className="space-y-4">
-      {/* Top Liquidity Card */}
-      <div className="p-4 rounded-3xl bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 text-white shadow-lg">
-        <div className="flex items-center justify-between text-xs text-emerald-100 mb-1">
-          <span className="font-semibold">Total Liquid Reserves</span>
-          <span className="px-2 py-0.5 rounded-full bg-white/20 text-[10px] font-bold">
-            {banks.length} Accounts
-          </span>
-        </div>
-        <div className="text-2xl font-black tracking-tight text-white">
-          Rs. {totalLiveLiquidity.toLocaleString()}
-        </div>
-        <p className="text-[11px] text-emerald-100/90 mt-1">
-          Sum of active bank ledger balances & reception cash counter.
-        </p>
-      </div>
-
+    <div className="space-y-3">
       {/* Action bar */}
       <div className="flex items-center justify-between gap-2">
         <div className="relative flex-1">
@@ -62,11 +46,17 @@ export default function BankList({ banks, onAddBank, onUpdateBank, onDeleteBank,
 
         <button
           onClick={() => setIsAddOpen(true)}
-          className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 active:scale-98 text-white font-bold text-xs shadow-xs transition-all shrink-0"
+          className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 active:scale-98 text-white font-bold text-xs shadow-xs transition-all shrink-0 cursor-pointer"
         >
           <Plus className="w-4 h-4" />
           <span>Add Bank</span>
         </button>
+      </div>
+
+      {/* Summary line */}
+      <div className="flex items-center justify-between text-xs text-slate-500 font-medium px-1">
+        <span>{filteredBanks.length} {filteredBanks.length === 1 ? 'account' : 'accounts'}</span>
+        <span>Total Reserves: <strong className="text-emerald-700 font-bold">Rs. {totalLiveLiquidity.toLocaleString()}</strong></span>
       </div>
 
       {/* Bank Cards List */}

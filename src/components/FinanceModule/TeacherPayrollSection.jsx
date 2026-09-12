@@ -41,23 +41,7 @@ export default function TeacherPayrollSection({
   }, [salaries]);
 
   return (
-    <div className="space-y-4">
-      {/* Overview Banner */}
-      <div className="p-4 rounded-3xl bg-gradient-to-r from-purple-600 via-indigo-600 to-purple-800 text-white shadow-lg">
-        <div className="flex items-center justify-between text-xs text-purple-100 mb-1">
-          <span className="font-semibold">Faculty Payroll Total</span>
-          <span className="px-2 py-0.5 rounded-full bg-white/20 text-[10px] font-bold">
-            {salaries.length} Disbursements
-          </span>
-        </div>
-        <div className="text-2xl font-black tracking-tight text-white">
-          Rs. {totalSalariesPaid.toLocaleString()}
-        </div>
-        <p className="text-[11px] text-purple-100/90 mt-1">
-          Salaries paid to academy teaching faculty with bank ledger deduction.
-        </p>
-      </div>
-
+    <div className="space-y-3">
       {/* Action Bar */}
       <div className="flex items-center justify-between gap-2">
         <div className="relative flex-1">
@@ -73,11 +57,17 @@ export default function TeacherPayrollSection({
 
         <button
           onClick={() => setIsPayOpen(true)}
-          className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-purple-600 hover:bg-purple-700 active:scale-98 text-white font-bold text-xs shadow-xs transition-all shrink-0"
+          className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-purple-600 hover:bg-purple-700 active:scale-98 text-white font-bold text-xs shadow-xs transition-all shrink-0 cursor-pointer"
         >
           <Plus className="w-4 h-4" />
           <span>Pay Salary</span>
         </button>
+      </div>
+
+      {/* Summary line */}
+      <div className="flex items-center justify-between text-xs text-slate-500 font-medium px-1">
+        <span>{filteredSalaries.length} {filteredSalaries.length === 1 ? 'disbursement' : 'disbursements'}</span>
+        <span>Total Payroll: <strong className="text-purple-700 font-bold">Rs. {totalSalariesPaid.toLocaleString()}</strong></span>
       </div>
 
       {/* Salaries List */}

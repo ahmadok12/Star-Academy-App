@@ -97,23 +97,6 @@ export default function StudentProfileDirectory({
         </span>
       </div>
 
-      {/* Banner */}
-      <div className="bg-gradient-to-r from-indigo-700 via-indigo-600 to-brand-800 text-white rounded-3xl p-5 shadow-sm relative overflow-hidden">
-        <div className="relative z-10 space-y-2">
-          <div className="inline-flex items-center gap-1.5 bg-amber-400/20 text-amber-300 border border-amber-300/30 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase">
-            <Sparkles className="w-3 h-3" />
-            <span>Search & 360° View</span>
-          </div>
-          <h2 className="text-xl font-black leading-tight text-white flex items-center gap-2">
-            <GraduationCap className="w-6 h-6 text-amber-300" />
-            <span>Student Profiles</span>
-          </h2>
-          <p className="text-xs text-indigo-100/90 leading-relaxed">
-            Search any student to view their complete profile including registration info, attendance history, marksheets & test scores, current fee status and past payment history.
-          </p>
-        </div>
-      </div>
-
       {/* Collapsible Search & Filter Bar Toggle */}
       <div className="space-y-2.5">
         <div className="flex items-center justify-between gap-2">

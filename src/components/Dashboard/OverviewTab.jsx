@@ -24,46 +24,6 @@ export default function OverviewTab({
 
   return (
     <div className="p-4 space-y-4 text-xs">
-      {/* Academy Welcome Banner */}
-      <div className="bg-gradient-to-br from-indigo-700 via-indigo-600 to-brand-800 text-white rounded-3xl p-4 shadow-md relative overflow-hidden">
-        <div className="relative z-10">
-          <div className="inline-flex items-center gap-1.5 bg-amber-400/20 text-amber-300 border border-amber-300/30 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase mb-2">
-            <Sparkles className="w-3 h-3" />
-            Operations Overview
-          </div>
-          <h2 className="text-lg font-black leading-tight text-white">
-            Welcome to Star Academy
-          </h2>
-          <p className="text-xs text-indigo-100/90 mt-1 max-w-[260px]">
-            Mobile operations portal for active students, faculty members, class allocations, and daily attendance.
-          </p>
-
-          <div className="mt-3.5 flex items-center gap-2 flex-wrap">
-            <button
-              onClick={() => onNavigateTab('students')}
-              className="px-3 py-1.5 bg-white text-indigo-900 rounded-xl font-bold text-[11px] shadow-sm flex items-center gap-1 tap-active"
-            >
-              <Users className="w-3.5 h-3.5 text-indigo-600" />
-              Students
-            </button>
-            <button
-              onClick={() => onNavigateTab('teachers')}
-              className="px-3 py-1.5 bg-white/20 hover:bg-white/30 border border-white/20 text-white rounded-xl font-bold text-[11px] flex items-center gap-1 tap-active"
-            >
-              <GraduationCap className="w-3.5 h-3.5 text-amber-300" />
-              Faculty
-            </button>
-            <button
-              onClick={() => onNavigateTab('attendance')}
-              className="px-3 py-1.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl font-bold text-[11px] flex items-center gap-1 tap-active shadow-xs"
-            >
-              <ClipboardCheck className="w-3.5 h-3.5" />
-              Attendance
-            </button>
-          </div>
-        </div>
-      </div>
-
       {/* Quick Metrics Grid */}
       <div className="grid grid-cols-2 gap-2.5">
         {/* Active Students */}

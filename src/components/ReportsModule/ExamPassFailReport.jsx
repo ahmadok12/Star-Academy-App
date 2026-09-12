@@ -210,29 +210,6 @@ export default function ExamPassFailReport({
         </div>
       </div>
 
-      {/* Hero Header */}
-      <div className="bg-gradient-to-br from-violet-700 via-indigo-700 to-purple-800 text-white rounded-3xl p-5 shadow-md">
-        <div className="flex items-center justify-between flex-wrap gap-2">
-          <div className="space-y-1">
-            <div className="inline-flex items-center gap-1.5 bg-white/20 text-white border border-white/30 px-3 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider">
-              <Award className="w-3 h-3" />
-              <span>Academic Quality Audit • {currentSession}</span>
-            </div>
-            <h2 className="text-2xl font-black tracking-tight text-white">
-              Student Result & Pass / Fail Analysis
-            </h2>
-            <p className="text-xs text-purple-100/90 font-medium">
-              Examination outcome analytics, pass/fail trends, subject averages & candidate grade distribution.
-            </p>
-          </div>
-
-          <div className="text-right">
-            <span className="text-[11px] text-white/80 font-bold block">Overall Pass Rate</span>
-            <span className="text-2xl font-black text-amber-300">{analysis.overallPassRate}%</span>
-          </div>
-        </div>
-      </div>
-
       {/* 3 Metric Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         <div className="bg-white p-4 rounded-3xl border border-slate-200/90 shadow-xs">

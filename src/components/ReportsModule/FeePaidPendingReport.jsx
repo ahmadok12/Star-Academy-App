@@ -231,29 +231,6 @@ export default function FeePaidPendingReport({
         </div>
       </div>
 
-      {/* Hero Header */}
-      <div className="bg-gradient-to-br from-amber-600 via-orange-600 to-amber-700 text-white rounded-3xl p-5 shadow-md">
-        <div className="flex items-center justify-between flex-wrap gap-2">
-          <div className="space-y-1">
-            <div className="inline-flex items-center gap-1.5 bg-white/20 text-white border border-white/30 px-3 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider">
-              <CreditCard className="w-3 h-3" />
-              <span>Accounts Receivable & Fee Register</span>
-            </div>
-            <h2 className="text-2xl font-black tracking-tight text-white">
-              Fee Paid & Pending Report
-            </h2>
-            <p className="text-xs text-amber-100/90 font-medium">
-              Real-time reconciliation of student dues, collected tuition & outstanding arrears for {currentSession}.
-            </p>
-          </div>
-
-          <div className="text-right">
-            <span className="text-[11px] text-white/80 font-bold block">Recovery Efficiency</span>
-            <span className="text-2xl font-black text-white">{metrics.recoveryRate}%</span>
-          </div>
-        </div>
-      </div>
-
       {/* 3 Metric Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         <div className="bg-white p-4 rounded-3xl border border-slate-200/90 shadow-xs">

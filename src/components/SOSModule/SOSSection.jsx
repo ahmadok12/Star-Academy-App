@@ -111,112 +111,52 @@ export default function SOSSection({
   };
 
   return (
-    <div className="space-y-4 pb-20 w-full min-w-0 overflow-x-hidden">
-      {!readOnly && (
-        <button
-          type="button"
-          onClick={handleOpenAdd}
-          className="w-full py-2.5 px-4 rounded-2xl bg-rose-600 hover:bg-rose-700 text-white font-extrabold text-xs shadow-md flex items-center justify-center gap-2 transition-all tap-active cursor-pointer"
-        >
-          <Plus className="w-4 h-4" />
-          <span>Add Scheme of Study</span>
-        </button>
-      )}
-
-      {/* Official Academic Calendar Rule Callout */}
-      <div className="bg-gradient-to-br from-amber-50 to-orange-50/70 p-3.5 rounded-2xl border border-amber-200/90 space-y-2">
-        <div className="flex items-center gap-2 text-amber-900 font-extrabold text-xs">
-          <Clock className="w-4 h-4 text-amber-600 shrink-0" />
-          <span>Star Academy Academic Calendar Schedule:</span>
-        </div>
-        <div className="grid grid-cols-2 gap-2 text-xs">
-          <div className="bg-white/90 p-2.5 rounded-xl border border-amber-200/60">
-            <span className="font-extrabold text-slate-900 block flex items-center gap-1 text-[11px]">
-              <GraduationCap className="w-3.5 h-3.5 text-indigo-600" />
-              9th & 10th Classes
-            </span>
-            <p className="text-[10.5px] text-amber-950 mt-0.5">
-              New session starts in <strong className="text-amber-800">May</strong> each year.
-            </p>
-          </div>
-          <div className="bg-white/90 p-2.5 rounded-xl border border-amber-200/60">
-            <span className="font-extrabold text-slate-900 block flex items-center gap-1 text-[11px]">
-              <Layers className="w-3.5 h-3.5 text-purple-600" />
-              FSc Part 1 & 2
-            </span>
-            <p className="text-[10.5px] text-amber-950 mt-0.5">
-              New session starts in <strong className="text-amber-800">July</strong> each year.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* Summary Metrics */}
-      <div className="grid grid-cols-3 gap-2">
-        <div className="bg-white p-3 rounded-2xl border border-slate-200 shadow-xs">
-          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">
-            Total Schemes
-          </span>
-          <span className="text-base font-black text-slate-900 mt-0.5 block">
-            {stats.totalSchemes}
-          </span>
-          <span className="text-[10px] text-slate-400 font-medium">Curriculums</span>
-        </div>
-
-        <div className="bg-white p-3 rounded-2xl border border-slate-200 shadow-xs">
-          <span className="text-[10px] font-bold uppercase tracking-wider text-indigo-500 block">
-            Study Items
-          </span>
-          <span className="text-base font-black text-indigo-700 mt-0.5 block">
-            {stats.totalStudy}
-          </span>
-          <span className="text-[10px] text-indigo-400 font-medium">Topic lectures</span>
-        </div>
-
-        <div className="bg-white p-3 rounded-2xl border border-slate-200 shadow-xs">
-          <span className="text-[10px] font-bold uppercase tracking-wider text-amber-500 block">
-            Tests Planned
-          </span>
-          <span className="text-base font-black text-amber-700 mt-0.5 block">
-            {stats.totalTests}
-          </span>
-          <span className="text-[10px] text-amber-400 font-medium">Evaluations</span>
-        </div>
-      </div>
-
-      {/* Search & Class Filter */}
-      <div className="space-y-2">
-        <div className="relative">
+    <div className="space-y-3 pb-20 w-full min-w-0 overflow-x-hidden">
+      {/* Search & Action Bar */}
+      <div className="flex items-center justify-between gap-2">
+        <div className="relative flex-1">
           <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
           <input
             type="text"
-            placeholder="Search schemes by title, class or group..."
+            placeholder="Search schemes by title, class, batch or group..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-9 pr-8 py-2.5 rounded-2xl bg-white border border-slate-200 text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-rose-500 shadow-xs font-medium"
+            className="w-full pl-9 pr-8 py-2 rounded-xl bg-white border border-slate-200 text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-rose-500 shadow-2xs font-medium"
           />
           {searchQuery && (
             <button
               onClick={() => setSearchQuery('')}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 cursor-pointer"
             >
               <X className="w-3.5 h-3.5" />
             </button>
           )}
         </div>
 
-        {/* Class Filter Bar */}
-        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar text-xs">
+        {!readOnly && (
           <button
-            onClick={() => setSelectedClass('ALL')}
-            className={`px-3 py-1 rounded-full text-xs font-bold whitespace-nowrap transition-all ${
-              selectedClass === 'ALL'
-                ? 'bg-rose-600 text-white shadow-xs'
-                : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
-            }`}
+            type="button"
+            onClick={handleOpenAdd}
+            className="py-2 px-3.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs shadow-xs flex items-center gap-1.5 transition-all tap-active cursor-pointer shrink-0"
           >
-            All Classes ({schemes.length})
+            <Plus className="w-4 h-4" />
+            <span>Add Scheme</span>
           </button>
+        )}
+      </div>
+
+      {/* Class Filter Bar */}
+      <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar text-xs">
+        <button
+          onClick={() => setSelectedClass('ALL')}
+          className={`px-3 py-1 rounded-full text-xs font-bold whitespace-nowrap transition-all ${
+            selectedClass === 'ALL'
+              ? 'bg-rose-600 text-white shadow-xs'
+              : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
+          }`}
+        >
+          All Classes ({schemes.length})
+        </button>
           {CLASSES.map((cls) => {
             const count = schemes.filter(s => s.studentClass === cls).length;
             return (
@@ -234,7 +174,6 @@ export default function SOSSection({
             );
           })}
         </div>
-      </div>
 
       {/* List of Schemes Added */}
       <div className="space-y-3">

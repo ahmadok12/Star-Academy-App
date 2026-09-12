@@ -78,76 +78,41 @@ export default function MarksheetSection({
       : 0;
 
   return (
-    <div className="space-y-4 pb-20">
-      {/* Top Banner */}
-      <div className="bg-gradient-to-r from-amber-600 via-amber-500 to-indigo-700 rounded-3xl p-5 text-white shadow-lg relative overflow-hidden">
-        <div className="absolute right-0 top-0 translate-x-4 -translate-y-4 w-32 h-32 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
-
-        <div className="flex items-center justify-between gap-3 relative z-10">
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/20 shadow-inner">
-              <Award className="w-6 h-6 text-amber-200" />
-            </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <h1 className="text-lg font-black tracking-tight">Student Marksheets</h1>
-                <Sparkles className="w-4 h-4 text-amber-300 fill-amber-300" />
-              </div>
-              <p className="text-xs text-amber-100 font-medium">
-                Examination results, automated grades & parent notices
-              </p>
-            </div>
-          </div>
-
-          {!readOnly && (
-            <button
-              onClick={() => setIsAddOpen(true)}
-              className="px-3.5 py-2 rounded-2xl bg-white text-amber-900 hover:bg-amber-50 text-xs font-black flex items-center gap-1.5 transition-all shadow-md active:scale-95 shrink-0"
-            >
-              <Plus className="w-4 h-4 text-amber-600 stroke-[2.5]" />
-              <span>Add Marksheet</span>
-            </button>
-          )}
-        </div>
-
-        {/* Aggregate Stats Cards */}
-        <div className="grid grid-cols-3 gap-2 mt-4 pt-4 border-t border-white/15 text-center">
-          <div className="bg-white/10 backdrop-blur-xs rounded-xl p-2">
-            <span className="text-[10px] text-amber-100 font-medium block">Total Marksheets</span>
-            <span className="text-base font-black text-white">{totalMarksheets}</span>
-          </div>
-          <div className="bg-white/10 backdrop-blur-xs rounded-xl p-2">
-            <span className="text-[10px] text-amber-100 font-medium block">Submissions</span>
-            <span className="text-base font-black text-white">{totalSubmissions}</span>
-          </div>
-          <div className="bg-white/10 backdrop-blur-xs rounded-xl p-2">
-            <span className="text-[10px] text-amber-100 font-medium block">Academy Avg</span>
-            <span className="text-base font-black text-amber-200">{overallAvg}%</span>
-          </div>
-        </div>
-      </div>
-
-      {/* Filter and Search Bar */}
-      <div className="bg-white p-3.5 rounded-2xl border border-slate-200 shadow-xs space-y-2.5">
-        <div className="relative">
+    <div className="space-y-3 pb-20">
+      {/* Top Action Bar */}
+      <div className="flex items-center justify-between gap-2">
+        <div className="relative flex-1">
           <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
           <input
             type="text"
             placeholder="Search marksheets by test, class, or title..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full text-xs font-semibold pl-9 pr-3 py-2 rounded-xl bg-slate-50 border border-slate-200 focus:bg-white focus:border-amber-500 outline-none text-slate-800 placeholder-slate-400"
+            className="w-full text-xs font-semibold pl-9 pr-3 py-2 rounded-xl bg-white border border-slate-200 focus:border-amber-500 focus:ring-2 focus:ring-amber-100 outline-none text-slate-800 placeholder-slate-400 shadow-2xs"
           />
         </div>
 
+        {!readOnly && (
+          <button
+            onClick={() => setIsAddOpen(true)}
+            className="px-3.5 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold flex items-center gap-1.5 transition-all shadow-xs shrink-0 cursor-pointer"
+          >
+            <Plus className="w-4 h-4" />
+            <span>Add Marksheet</span>
+          </button>
+        )}
+      </div>
+
+      {/* Class & Section Filter Bar */}
+      <div className="bg-white p-2.5 rounded-2xl border border-slate-200 shadow-2xs space-y-2">
         {/* Class Filter Pills */}
-        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs">
+        <div className="flex items-center gap-1.5 overflow-x-auto pb-0.5 text-xs">
           <button
             onClick={() => {
               setSelectedClass('ALL');
               setSelectedSection('ALL');
             }}
-            className={`px-3 py-1 rounded-xl font-bold transition-all shrink-0 ${
+            className={`px-3 py-1 rounded-xl font-bold transition-all shrink-0 cursor-pointer ${
               selectedClass === 'ALL'
                 ? 'bg-amber-600 text-white shadow-xs'
                 : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
@@ -162,7 +127,7 @@ export default function MarksheetSection({
                 setSelectedClass(cls);
                 setSelectedSection('ALL');
               }}
-              className={`px-3 py-1 rounded-xl font-bold transition-all shrink-0 ${
+              className={`px-3 py-1 rounded-xl font-bold transition-all shrink-0 cursor-pointer ${
                 selectedClass === cls
                   ? 'bg-amber-600 text-white shadow-xs'
                   : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
@@ -175,11 +140,11 @@ export default function MarksheetSection({
 
         {/* Section Filter Pills (if specific class selected) */}
         {selectedClass !== 'ALL' && (
-          <div className="flex items-center gap-1.5 overflow-x-auto pt-1 border-t border-slate-100 text-[11px]">
+          <div className="flex items-center gap-1.5 overflow-x-auto pt-1.5 border-t border-slate-100 text-[11px]">
             <span className="text-slate-400 font-bold shrink-0">Section:</span>
             <button
               onClick={() => setSelectedSection('ALL')}
-              className={`px-2.5 py-0.5 rounded-lg font-bold transition-all shrink-0 ${
+              className={`px-2.5 py-0.5 rounded-lg font-bold transition-all shrink-0 cursor-pointer ${
                 selectedSection === 'ALL'
                   ? 'bg-indigo-600 text-white'
                   : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
@@ -191,7 +156,7 @@ export default function MarksheetSection({
               <button
                 key={sec}
                 onClick={() => setSelectedSection(sec)}
-                className={`px-2.5 py-0.5 rounded-lg font-bold transition-all shrink-0 ${
+                className={`px-2.5 py-0.5 rounded-lg font-bold transition-all shrink-0 cursor-pointer ${
                   selectedSection === sec
                     ? 'bg-indigo-600 text-white'
                     : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
@@ -201,6 +166,14 @@ export default function MarksheetSection({
               </button>
             ))}
           </div>
+        )}
+      </div>
+
+      {/* Summary Info Bar */}
+      <div className="flex items-center justify-between text-xs text-slate-500 font-medium px-1">
+        <span>Showing {filteredMarksheets.length} {filteredMarksheets.length === 1 ? 'marksheet' : 'marksheets'}</span>
+        {overallAvg > 0 && (
+          <span>Average: <strong className="text-amber-700 font-bold">{overallAvg}%</strong></span>
         )}
       </div>
 

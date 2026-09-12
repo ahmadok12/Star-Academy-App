@@ -219,36 +219,7 @@ export default function TotalProfitReport({
         </div>
       </div>
 
-      {/* Hero Financial Banner */}
-      <div className={`p-6 rounded-3xl text-white shadow-md relative overflow-hidden ${
-        isProfit
-          ? 'bg-gradient-to-br from-emerald-600 via-teal-600 to-emerald-800'
-          : 'bg-gradient-to-br from-rose-600 via-red-600 to-rose-800'
-      }`}>
-        <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div className="space-y-1">
-            <div className="inline-flex items-center gap-1.5 bg-white/20 text-white border border-white/30 px-3 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider">
-              <TrendingUp className="w-3 h-3" />
-              <span>Net Profit Performance • Session {currentSession}</span>
-            </div>
-            <h2 className="text-2xl sm:text-3xl font-black tracking-tight text-white">
-              Rs. {financialSummary.netProfit.toLocaleString()}
-            </h2>
-            <p className="text-xs text-white/90 font-medium">
-              Net Academy Operating {isProfit ? 'Surplus (Profit)' : 'Deficit (Loss)'} with a <strong className="underline">{financialSummary.profitMargin}%</strong> profit margin.
-            </p>
-          </div>
-
-          <div className="flex sm:flex-col items-center sm:items-end justify-between border-t sm:border-t-0 sm:border-l border-white/20 pt-3 sm:pt-0 sm:pl-5 gap-1">
-            <span className="text-[11px] text-white/80 font-semibold">Total Revenue Inflow</span>
-            <span className="text-lg font-black text-amber-200">
-              Rs. {financialSummary.totalFeeRevenue.toLocaleString()}
-            </span>
-          </div>
-        </div>
-      </div>
-
-      {/* 4 KPI Grid Cards */}
+      {/* 3 Core Financial KPI Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
         <div className="bg-white p-4 rounded-3xl border border-slate-200/90 shadow-xs">
           <div className="flex items-center justify-between">

@@ -79,58 +79,46 @@ export default function DatesheetSection({
   }, [tests, searchTerm]);
 
   return (
-    <div className="space-y-4">
-      {/* Overview Banner */}
-      <div className="p-4 rounded-3xl bg-gradient-to-r from-orange-600 via-amber-600 to-amber-700 text-white shadow-lg">
-        <div className="flex items-center justify-between text-xs text-amber-100 mb-1">
-          <span className="font-semibold">Examinations & Test Schedules</span>
-          <span className="px-2 py-0.5 rounded-full bg-white/20 text-[10px] font-bold">
-            {datesheets.length} Datesheets
-          </span>
-        </div>
-        <div className="flex items-center justify-between mt-2 pt-2 border-t border-white/20">
-          <p className="text-[11px] text-amber-100/90">
-            Define assessment series (Mockups, Send ups) and schedule exam papers per class.
-          </p>
-          {onNavigateMarksheets && (
-            <button
-              type="button"
-              onClick={onNavigateMarksheets}
-              className="px-3 py-1.5 rounded-xl bg-white/20 hover:bg-white/30 text-white text-[11px] font-bold flex items-center gap-1.5 transition-colors shrink-0 shadow-xs"
-              title="Open Student Marksheets Module"
-            >
-              <Award className="w-3.5 h-3.5 text-amber-200" />
-              <span>Open Marksheets</span>
-            </button>
-          )}
-        </div>
-      </div>
+    <div className="space-y-3">
+      {/* 2 Primary Tabs: Datesheets vs Tests + Open Marksheets */}
+      <div className="flex items-center gap-2">
+        <div className="flex flex-1 p-1 bg-slate-100 rounded-2xl border border-slate-200/80">
+          <button
+            onClick={() => setActiveTab('datesheets')}
+            className={`flex-1 py-2 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+              activeTab === 'datesheets'
+                ? 'bg-amber-600 text-white shadow-xs'
+                : 'bg-transparent text-slate-600 hover:text-slate-900'
+            }`}
+          >
+            <Calendar className="w-3.5 h-3.5" />
+            <span>Datesheets ({datesheets.length})</span>
+          </button>
 
-      {/* 2 Primary Tabs: Datesheets vs Tests (ONLY current selection colored!) */}
-      <div className="flex p-1 bg-slate-100 rounded-2xl border border-slate-200/80">
-        <button
-          onClick={() => setActiveTab('datesheets')}
-          className={`flex-1 py-2 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 ${
-            activeTab === 'datesheets'
-              ? 'bg-amber-600 text-white shadow-md shadow-amber-200'
-              : 'bg-transparent text-slate-600 hover:text-slate-900'
-          }`}
-        >
-          <Calendar className="w-3.5 h-3.5" />
-          <span>Datesheets ({datesheets.length})</span>
-        </button>
+          <button
+            onClick={() => setActiveTab('tests')}
+            className={`flex-1 py-2 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+              activeTab === 'tests'
+                ? 'bg-violet-600 text-white shadow-xs'
+                : 'bg-transparent text-slate-600 hover:text-slate-900'
+            }`}
+          >
+            <Award className="w-3.5 h-3.5" />
+            <span>Tests Defined ({tests.length})</span>
+          </button>
+        </div>
 
-        <button
-          onClick={() => setActiveTab('tests')}
-          className={`flex-1 py-2 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 ${
-            activeTab === 'tests'
-              ? 'bg-violet-600 text-white shadow-md shadow-violet-200'
-              : 'bg-transparent text-slate-600 hover:text-slate-900'
-          }`}
-        >
-          <Award className="w-3.5 h-3.5" />
-          <span>Tests Defined ({tests.length})</span>
-        </button>
+        {onNavigateMarksheets && (
+          <button
+            type="button"
+            onClick={onNavigateMarksheets}
+            className="px-3 py-2 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 text-xs font-bold flex items-center gap-1.5 transition-colors shrink-0 cursor-pointer"
+            title="Open Student Marksheets Module"
+          >
+            <Award className="w-3.5 h-3.5 text-amber-600" />
+            <span className="hidden sm:inline">Marksheets</span>
+          </button>
+        )}
       </div>
 
       {/* Class Selector Filter Pills (Only visible when Datesheets tab is active) */}

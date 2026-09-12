@@ -191,29 +191,6 @@ export default function TeacherAttendanceReport({
         </div>
       </div>
 
-      {/* Hero Header */}
-      <div className="bg-gradient-to-br from-teal-700 via-emerald-700 to-teal-900 text-white rounded-3xl p-5 shadow-md">
-        <div className="flex items-center justify-between flex-wrap gap-2">
-          <div className="space-y-1">
-            <div className="inline-flex items-center gap-1.5 bg-white/20 text-white border border-white/30 px-3 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider">
-              <GraduationCap className="w-3 h-3" />
-              <span>Staff Regularity & Faculty Presence • {currentSession}</span>
-            </div>
-            <h2 className="text-2xl font-black tracking-tight text-white">
-              Teacher Attendance Report
-            </h2>
-            <p className="text-xs text-teal-100/90 font-medium">
-              Faculty presence registry, approved leaves & punctuality tracking across academic departments.
-            </p>
-          </div>
-
-          <div className="text-right">
-            <span className="text-[11px] text-white/80 font-bold block">Faculty Regularity</span>
-            <span className="text-2xl font-black text-amber-300">{attendanceData.overallRate}%</span>
-          </div>
-        </div>
-      </div>
-
       {/* 4 Metric Cards */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         <div className="bg-white p-4 rounded-3xl border border-slate-200/90 shadow-xs">
