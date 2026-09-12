@@ -1,5 +1,5 @@
 import React from 'react';
-import { Phone, Eye, Coins, ShieldCheck, MapPin } from 'lucide-react';
+import { Phone, Eye, Coins, ShieldCheck, MapPin, Layers } from 'lucide-react';
 
 export default function TeacherCard({ teacher, onView }) {
   const formattedSalary = teacher.salary
@@ -29,7 +29,7 @@ export default function TeacherCard({ teacher, onView }) {
                 {teacher.id}
               </span>
               {teacher.department && (
-                <span className="text-[10px] font-semibold text-slate-500 truncate max-w-[120px]">
+                <span className="text-[10px] font-semibold text-slate-500 truncate max-w-[140px]">
                   • {teacher.department}
                 </span>
               )}
@@ -39,7 +39,7 @@ export default function TeacherCard({ teacher, onView }) {
             <button
               type="button"
               onClick={() => onView(teacher)}
-              className="flex items-center gap-1 px-2.5 py-1 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-lg text-[10px] font-bold border border-indigo-200 transition-all tap-active shrink-0 shadow-2xs"
+              className="flex items-center gap-1 px-2.5 py-1 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-lg text-[10px] font-bold border border-indigo-200 transition-all tap-active shrink-0 shadow-2xs cursor-pointer"
             >
               <Eye className="w-3 h-3" />
               <span>View</span>
@@ -55,6 +55,12 @@ export default function TeacherCard({ teacher, onView }) {
               <Coins className="w-3 h-3 text-emerald-600" />
               PKR {formattedSalary} / mo
             </span>
+            {teacher.assignedClasses && teacher.assignedClasses.length > 0 && (
+              <span className="inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-md bg-slate-100 text-slate-700 border border-slate-200">
+                <Layers className="w-2.5 h-2.5 text-indigo-600" />
+                {teacher.assignedClasses.length} {teacher.assignedClasses.length === 1 ? 'Class/Sec' : 'Classes/Sec'}
+              </span>
+            )}
           </div>
 
           {/* CNIC and Phone Line */}

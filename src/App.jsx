@@ -174,6 +174,7 @@ export default function App() {
         inquiries: 'Student Inquiries & Follow-up'
       },
       admin: {
+        teachers_list: 'List of Teachers',
         sos: 'Curriculum Scheme of Study',
         timetable: 'Class Timetables',
         datesheet: 'Datesheets & Exams',
@@ -833,8 +834,11 @@ export default function App() {
         <AdminTabHub
           subPage={adminSubPage}
           setSubPage={setAdminSubPage}
-          timetables={timetables}
           teachers={teachers}
+          onAddTeacher={handleAddTeacher}
+          onUpdateTeacher={handleUpdateTeacher}
+          onDeleteTeacher={handleDeleteTeacher}
+          timetables={timetables}
           onAddTimetable={handleAddTimetable}
           onUpdateTimetable={handleUpdateTimetable}
           onDeleteTimetable={handleDeleteTimetable}

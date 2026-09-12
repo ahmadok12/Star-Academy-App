@@ -10,6 +10,25 @@ export const CLASS_SECTIONS = {
 // Aliased for seamless compatibility across existing components
 export const CLASS_SUBJECTS = CLASS_SECTIONS;
 
+export const TEACHER_SUBJECTS = [
+  'Mathematics',
+  'Physics',
+  'Chemistry',
+  'Biology',
+  'Computer Science & IT',
+  'English Literature & Grammar',
+  'Urdu Literature & Grammar',
+  'Islamiyat',
+  'Pakistan Studies',
+  'Statistics',
+  'Economics',
+  'Physical Education',
+  'Tarjama tul Quran',
+  'General Science',
+  'Commerce & Accounting',
+  'General Faculty / Other'
+];
+
 export const GENDERS = ['Male', 'Female', 'Other'];
 
 export const ATTENDANCE_STATUS = {

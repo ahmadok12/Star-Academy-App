@@ -8,26 +8,32 @@ import {
   ArrowLeft,
   ChevronRight,
   Sparkles,
-  Clock
+  Clock,
+  Users
 } from 'lucide-react';
 import TimetableSection from '../TimetableModule/TimetableSection';
 import DatesheetSection from '../DatesheetModule/DatesheetSection';
 import MarksheetSection from '../MarksheetModule/MarksheetSection';
 import SOSSection from '../SOSModule/SOSSection';
 import TeacherAttendanceDashboard from '../TeacherAttendanceModule/TeacherAttendanceDashboard';
+import TeacherList from '../TeacherModule/TeacherList';
 
 export default function AdminTabHub({
   subPage,
   setSubPage,
+  // Teacher props
+  teachers = [],
+  onAddTeacher,
+  onUpdateTeacher,
+  onDeleteTeacher,
   // Timetables props
-  timetables,
-  teachers,
+  timetables = [],
   onAddTimetable,
   onUpdateTimetable,
   onDeleteTimetable,
   // Datesheet props
-  datesheets,
-  tests,
+  datesheets = [],
+  tests = [],
   onAddTest,
   onUpdateTest,
   onDeleteTest,
@@ -35,13 +41,13 @@ export default function AdminTabHub({
   onUpdateDatesheet,
   onDeleteDatesheet,
   // Marksheet props
-  marksheets,
-  students,
+  marksheets = [],
+  students = [],
   onAddMarksheet,
   onUpdateMarksheet,
   onDeleteMarksheet,
   // Teacher Attendance props
-  teacherAttendanceSessions,
+  teacherAttendanceSessions = [],
   onSaveTeacherAttendance,
   onUpdateTeacherAttendanceSession,
   onDeleteTeacherAttendanceSession,
@@ -54,6 +60,15 @@ export default function AdminTabHub({
   batches = []
 }) {
   const menuItems = [
+    {
+      id: 'teachers_list',
+      title: 'List of Teachers',
+      subtitle: `${teachers.length} Teachers`,
+      description: 'Manage faculty, profiles, subjects & salaries',
+      icon: Users,
+      color: 'bg-indigo-50 text-indigo-600 border-indigo-100',
+      badgeColor: 'bg-indigo-50 text-indigo-700 border-indigo-100'
+    },
     {
       id: 'timetable',
       title: 'Timetable',
@@ -104,7 +119,8 @@ export default function AdminTabHub({
   // If a subpage is opened, render subpage with Back button
   if (subPage) {
     let pageTitle = '';
-    if (subPage === 'timetable') pageTitle = 'Timetable';
+    if (subPage === 'teachers_list') pageTitle = 'List of Teachers';
+    else if (subPage === 'timetable') pageTitle = 'Timetable';
     else if (subPage === 'datesheet') pageTitle = 'Datesheet';
     else if (subPage === 'marksheet') pageTitle = 'Marksheet';
     else if (subPage === 'sos') pageTitle = 'Scheme of Study (SOS)';
@@ -132,6 +148,18 @@ export default function AdminTabHub({
         )}
 
         {/* Subpage Content */}
+        {subPage === 'teachers_list' && (
+          <div className="max-w-6xl mx-auto w-full">
+            <TeacherList
+              teachers={teachers}
+              onAddTeacher={onAddTeacher}
+              onUpdateTeacher={onUpdateTeacher}
+              onDeleteTeacher={onDeleteTeacher}
+              onOpenTeacherAttendance={() => setSubPage('teacher_attendance')}
+            />
+          </div>
+        )}
+
         {subPage === 'timetable' && (
           <div className="max-w-6xl mx-auto w-full p-4">
             <TimetableSection
@@ -202,7 +230,7 @@ export default function AdminTabHub({
     );
   }
 
-  // Main Admin Menu: 2 in a row buttons
+  // Main Admin Menu: 2 in a row / 3 in a row buttons
   return (
     <div className="p-4 md:p-6 space-y-4 pb-20 w-full min-w-0 overflow-x-hidden">
       {/* Grid: Responsive 1/2/3 columns */}
