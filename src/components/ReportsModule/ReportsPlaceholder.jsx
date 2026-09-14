@@ -298,10 +298,10 @@ export default function ReportsPlaceholder({
       {/* List of 8 Report Cards */}
       <div className="w-full min-w-0">
         <div className="flex items-center justify-between mb-3 px-1">
-          <h3 className="text-sm md:text-base font-bold text-slate-800 uppercase tracking-wider">
+          <h3 className="text-sm md:text-base font-bold text-slate-800 uppercase tracking-wider font-display">
             Reports Directory (8 Statements)
           </h3>
-          <span className="text-xs font-semibold text-slate-600 bg-slate-100 border border-slate-200 px-2.5 py-1 rounded-md">
+          <span className="text-xs font-semibold text-[#575E70] bg-[#F4F5F7] border border-[#E5E7EB] px-3 py-1 rounded-full">
             {currentSession}
           </span>
         </div>
@@ -314,31 +314,31 @@ export default function ReportsPlaceholder({
                 key={report.id}
                 type="button"
                 onClick={() => setActiveReport(report.id)}
-                className="w-full bg-white p-4 md:p-5 rounded-2xl border border-slate-200 hover:border-slate-400 shadow-2xs hover:shadow-xs transition-all text-left flex items-center justify-between gap-3 group cursor-pointer min-w-0"
+                className="w-full bg-white p-4 md:p-5 rounded-3xl border border-[#E5E7EB] hover:border-[#111827] shadow-[0_4px_24px_-2px_rgba(17,24,39,0.04)] hover:shadow-stitch-lg transition-all text-left flex items-center justify-between gap-3 group cursor-pointer min-w-0"
               >
                 <div className="flex items-start gap-3.5 min-w-0 flex-1">
-                  <div className="w-11 h-11 rounded-xl bg-slate-100 border border-slate-200/80 text-slate-700 flex items-center justify-center group-hover:bg-slate-900 group-hover:text-white transition-colors shrink-0 mt-0.5">
+                  <div className="w-11 h-11 rounded-2xl bg-[#F4F5F7] border border-[#E5E7EB] text-[#111827] flex items-center justify-center group-hover:bg-[#111827] group-hover:text-white transition-colors shrink-0 mt-0.5">
                     <Icon className="w-5 h-5" />
                   </div>
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <h4 className="text-sm md:text-base font-bold text-slate-900 leading-tight">
+                      <h4 className="text-sm md:text-base font-bold text-slate-900 leading-tight font-display">
                         {report.title}
                       </h4>
-                      <span className="px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 border border-slate-200 text-xs font-semibold uppercase shrink-0">
+                      <span className="px-2.5 py-0.5 rounded-full bg-[#F4F5F7] text-[#575E70] border border-[#E5E7EB] text-[10px] font-bold uppercase shrink-0">
                         {report.badge}
                       </span>
                     </div>
                     <p className="text-xs md:text-sm font-semibold text-slate-700 mt-1">
                       {report.subtitle}
                     </p>
-                    <p className="text-xs md:text-sm text-slate-500 font-normal leading-relaxed mt-0.5">
+                    <p className="text-xs text-[#575E70] font-normal leading-relaxed mt-0.5">
                       {report.description}
                     </p>
                   </div>
                 </div>
 
-                <div className="w-7 h-7 rounded-lg bg-slate-50 group-hover:bg-slate-200/70 text-slate-400 group-hover:text-slate-800 flex items-center justify-center transition-colors shrink-0">
+                <div className="w-8 h-8 rounded-full bg-[#F4F5F7] group-hover:bg-[#111827] text-slate-400 group-hover:text-white flex items-center justify-center transition-colors shrink-0">
                   <ChevronRight className="w-4 h-4" />
                 </div>
               </button>
@@ -348,17 +348,17 @@ export default function ReportsPlaceholder({
       </div>
 
       {/* Historical Student Archives Section */}
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-2xs p-5 space-y-4 w-full min-w-0">
-        <div className="flex items-center justify-between flex-wrap gap-2 border-b border-slate-100 pb-3">
+      <div className="bg-white rounded-3xl border border-[#E5E7EB] shadow-[0_4px_24px_-2px_rgba(17,24,39,0.04)] p-5 space-y-4 w-full min-w-0">
+        <div className="flex items-center justify-between flex-wrap gap-2 border-b border-[#F3F4F6] pb-3">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-slate-100 border border-slate-200 text-slate-700 flex items-center justify-center shrink-0">
-              <Archive className="w-4 h-4" />
+            <div className="w-10 h-10 rounded-2xl bg-[#F4F5F7] border border-[#E5E7EB] text-[#111827] flex items-center justify-center shrink-0">
+              <Archive className="w-5 h-5" />
             </div>
             <div className="min-w-0">
-              <h3 className="text-sm md:text-base font-bold text-slate-900 leading-tight">
+              <h3 className="text-sm md:text-base font-bold text-slate-900 leading-tight font-display">
                 Academic Session Archives & Enrolled Rosters
               </h3>
-              <p className="text-xs text-slate-500">
+              <p className="text-xs text-[#575E70]">
                 Browse student records categorized by academic sessions
               </p>
             </div>
@@ -366,11 +366,11 @@ export default function ReportsPlaceholder({
 
           {/* Session Selector */}
           <div className="flex items-center gap-2">
-            <span className="text-xs font-semibold text-slate-500">Session:</span>
+            <span className="text-xs font-semibold text-[#575E70]">Session:</span>
             <select
               value={selectedSession}
               onChange={(e) => setSelectedSession(e.target.value)}
-              className="bg-slate-50 border border-slate-200 text-slate-800 text-xs md:text-sm font-semibold py-1.5 px-3 rounded-lg outline-none focus:ring-2 focus:ring-slate-400 cursor-pointer"
+              className="bg-[#F4F5F7] border border-[#E5E7EB] text-slate-800 text-xs md:text-sm font-semibold py-1.5 px-3 rounded-full outline-none focus:ring-2 focus:ring-[#111827] cursor-pointer"
             >
               {(sessionsList.length > 0 ? sessionsList : [{ year: '2026 - 27' }, { year: '2025 - 26' }]).map(s => (
                 <option key={s.year || s} value={s.year || s}>
@@ -384,26 +384,26 @@ export default function ReportsPlaceholder({
         {/* Search & Filter */}
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
           <div className="relative flex-1">
-            <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+            <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
             <input
               type="text"
               placeholder="Search archive students..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-9 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs md:text-sm font-medium text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-400"
+              className="w-full pl-9 pr-3.5 py-2 bg-[#F4F5F7] border border-[#E5E7EB] rounded-full text-xs md:text-sm font-medium text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#111827]"
             />
           </div>
 
-          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs">
+          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs no-scrollbar">
             {['ALL', '9th', '10th', 'FSc Part 1', 'FSc Part 2'].map(cls => (
               <button
                 key={cls}
                 type="button"
                 onClick={() => setSelectedClass(cls)}
-                className={`px-3 py-1.5 rounded-lg text-xs md:text-sm font-semibold transition-all cursor-pointer whitespace-nowrap ${
+                className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-all cursor-pointer whitespace-nowrap ${
                   selectedClass === cls
-                    ? 'bg-slate-900 text-white shadow-2xs'
-                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                    ? 'bg-[#111827] text-white shadow-xs'
+                    : 'bg-white text-slate-600 hover:bg-[#F3F4F6] border border-[#E5E7EB]'
                 }`}
               >
                 {cls}
@@ -413,19 +413,19 @@ export default function ReportsPlaceholder({
         </div>
 
         {/* Mini Archive Table */}
-        <div className="w-full min-w-0 overflow-x-auto border border-slate-100 rounded-xl">
+        <div className="w-full min-w-0 overflow-x-auto border border-[#E5E7EB] rounded-2xl overflow-hidden">
           <table className="w-full text-xs text-left min-w-[460px]">
             <thead>
-              <tr className="bg-slate-50 text-slate-600 font-bold border-b border-slate-200">
-                <th className="py-2 px-3">Roll ID</th>
-                <th className="py-2 px-3">Student Name</th>
-                <th className="py-2 px-3">Class</th>
-                <th className="py-2 px-3">Guardian</th>
-                <th className="py-2 px-3">Phone</th>
-                <th className="py-2 px-3 text-right">Fee</th>
+              <tr className="bg-[#F8F9FB] text-[#575E70] font-semibold border-b border-[#E5E7EB]">
+                <th className="py-2.5 px-3">Roll ID</th>
+                <th className="py-2.5 px-3">Student Name</th>
+                <th className="py-2.5 px-3">Class</th>
+                <th className="py-2.5 px-3">Guardian</th>
+                <th className="py-2.5 px-3">Phone</th>
+                <th className="py-2.5 px-3 text-right">Fee</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100 font-medium">
+            <tbody className="divide-y divide-[#F3F4F6] font-medium">
               {filteredArchiveStudents.length === 0 ? (
                 <tr>
                   <td colSpan={6} className="text-center py-5 text-slate-400">
@@ -434,13 +434,17 @@ export default function ReportsPlaceholder({
                 </tr>
               ) : (
                 filteredArchiveStudents.slice(0, 8).map(s => (
-                  <tr key={s.id} className="hover:bg-slate-50/70 transition-colors">
-                    <td className="py-2 px-3 font-mono text-indigo-700 font-bold">{s.id}</td>
-                    <td className="py-2 px-3 font-bold text-slate-900">{s.firstName} {s.lastName}</td>
-                    <td className="py-2 px-3">{s.studentClass} ({s.section || 'A'})</td>
-                    <td className="py-2 px-3 text-slate-600">{s.fatherName || '-'}</td>
-                    <td className="py-2 px-3 text-slate-500">{s.contactNumber || s.phone || '-'}</td>
-                    <td className="py-2 px-3 text-right font-bold text-slate-800">
+                  <tr key={s.id} className="hover:bg-[#F8F9FB]/80 transition-colors">
+                    <td className="py-2.5 px-3 font-mono text-[#111827] font-bold">{s.id}</td>
+                    <td className="py-2.5 px-3 font-bold text-slate-900">{s.firstName} {s.lastName}</td>
+                    <td className="py-2.5 px-3">
+                      <span className="px-2 py-0.5 rounded-full bg-[#F4F5F7] text-[#111827] font-semibold text-[10px] border border-[#E5E7EB]">
+                        {s.studentClass} ({s.section || 'A'})
+                      </span>
+                    </td>
+                    <td className="py-2.5 px-3 text-[#575E70]">{s.fatherName || '-'}</td>
+                    <td className="py-2.5 px-3 text-[#575E70]">{s.contactNumber || s.phone || '-'}</td>
+                    <td className="py-2.5 px-3 text-right font-bold text-slate-900 font-display">
                       Rs. {Number(s.fees || s.monthlyFee || 0).toLocaleString()}
                     </td>
                   </tr>
@@ -449,7 +453,7 @@ export default function ReportsPlaceholder({
             </tbody>
           </table>
           {filteredArchiveStudents.length > 8 && (
-            <p className="text-[11px] text-center text-slate-400 py-2 bg-slate-50/60 border-t border-slate-100">
+            <p className="text-[11px] text-center text-[#575E70] py-2 bg-[#F8F9FB] border-t border-[#E5E7EB]">
               Showing 8 of {filteredArchiveStudents.length} archive students. Use search to filter.
             </p>
           )}

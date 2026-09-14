@@ -85,16 +85,16 @@ export default function AttendanceTimingsModal({
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="px-5 py-4 bg-gradient-to-r from-indigo-700 via-indigo-600 to-brand-700 text-white flex items-center justify-between shrink-0 shadow-sm">
+        <div className="px-5 py-4 bg-[#111827] text-white flex items-center justify-between shrink-0 border-b border-slate-800">
           <div className="flex items-center gap-2.5">
-            <div className="w-10 h-10 rounded-2xl bg-white/15 backdrop-blur-md flex items-center justify-center border border-white/20 shadow-inner">
-              <Clock className="w-5 h-5 text-amber-300" />
+            <div className="w-10 h-10 rounded-2xl bg-white/10 backdrop-blur-sm flex items-center justify-center border border-white/10">
+              <Clock className="w-5 h-5 text-white" />
             </div>
             <div>
               <h2 className="text-base font-extrabold tracking-tight flex items-center gap-1.5">
                 <span>Class Arrival Timings</span>
               </h2>
-              <p className="text-xs text-indigo-100 font-medium">
+              <p className="text-xs text-slate-300 font-medium">
                 Configure class start & expected arrival times for students
               </p>
             </div>
@@ -114,7 +114,7 @@ export default function AttendanceTimingsModal({
           <div className="bg-white p-4 rounded-2xl border border-slate-200/90 shadow-xs space-y-3">
             <div className="flex items-center justify-between border-b border-slate-100 pb-2.5">
               <div className="flex items-center gap-2">
-                <div className="w-7 h-7 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center">
+                <div className="w-7 h-7 rounded-full bg-slate-100 text-slate-700 flex items-center justify-center">
                   <Users className="w-4 h-4" />
                 </div>
                 <div>
@@ -134,7 +134,7 @@ export default function AttendanceTimingsModal({
                   onChange={(e) => setTimings(prev => ({ ...prev, recordStudentArrival: e.target.checked }))}
                   className="sr-only peer"
                 />
-                <div className="w-9 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-600"></div>
+                <div className="w-9 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-[#111827]"></div>
               </label>
             </div>
 
@@ -162,10 +162,10 @@ export default function AttendanceTimingsModal({
                           type="time"
                           value={timings.classStartTimes?.[cls] || '08:00'}
                           onChange={(e) => handleClassTimeChange(cls, e.target.value)}
-                          className="w-28 pl-7 pr-2 py-1.5 rounded-lg border border-slate-200 bg-white font-bold text-slate-900 text-xs focus:ring-2 focus:ring-emerald-100 focus:border-emerald-500"
+                          className="w-28 pl-7 pr-2 py-1.5 rounded-full border border-slate-200 bg-white font-bold text-slate-900 text-xs focus:ring-2 focus:ring-slate-200 focus:border-slate-400 outline-none"
                           required
                         />
-                        <Clock className="w-3 h-3 text-slate-400 absolute left-2 top-2 pointer-events-none" />
+                        <Clock className="w-3 h-3 text-slate-400 absolute left-2.5 top-2 pointer-events-none" />
                       </div>
                     </div>
                   ))}
@@ -183,7 +183,7 @@ export default function AttendanceTimingsModal({
             <button
               type="button"
               onClick={handleResetDefaults}
-              className="text-[11px] font-semibold text-slate-500 hover:text-slate-700 flex items-center gap-1 cursor-pointer hover:underline"
+              className="text-[11px] font-semibold text-slate-500 hover:text-slate-800 flex items-center gap-1 cursor-pointer hover:underline"
             >
               <RotateCcw className="w-3 h-3" />
               <span>Reset to Recommended Defaults</span>
@@ -195,16 +195,16 @@ export default function AttendanceTimingsModal({
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 py-2.5 px-4 rounded-xl border border-slate-200 text-slate-600 font-bold text-xs hover:bg-slate-100 transition-colors tap-active cursor-pointer"
+              className="flex-1 py-2.5 px-4 rounded-full border border-slate-200 text-slate-700 font-bold text-xs hover:bg-slate-50 transition-colors cursor-pointer"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="flex-1 py-2.5 px-4 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold text-xs shadow-md shadow-indigo-200 flex items-center justify-center gap-1.5 transition-all tap-active cursor-pointer"
+              className="flex-1 py-2.5 px-4 rounded-full bg-[#111827] hover:bg-black text-white font-bold text-xs shadow-xs flex items-center justify-center gap-1.5 transition-all cursor-pointer"
             >
               <Check className="w-4 h-4" />
-              Save Timing Settings
+              <span>Save Timing Settings</span>
             </button>
           </div>
         </form>

@@ -109,14 +109,14 @@ export default function MarksheetSection({
             placeholder="Search marksheets by test, class, or title..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full text-xs font-semibold pl-9 pr-3 py-2 rounded-xl bg-white border border-slate-200 focus:border-amber-500 focus:ring-2 focus:ring-amber-100 outline-none text-slate-800 placeholder-slate-400 shadow-2xs"
+            className="w-full text-xs font-semibold pl-9 pr-3 py-2 rounded-full bg-white border border-slate-200 focus:border-[#111827] focus:ring-1 focus:ring-slate-200 outline-none text-slate-800 placeholder-slate-400 shadow-2xs"
           />
         </div>
 
         {!readOnly && (
           <button
             onClick={() => setIsAddOpen(true)}
-            className="px-3.5 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold flex items-center gap-1.5 transition-all shadow-xs shrink-0 cursor-pointer"
+            className="px-4 py-2 rounded-full bg-[#111827] hover:bg-black active:scale-98 text-white text-xs font-bold flex items-center gap-1.5 transition-all shadow-xs shrink-0 cursor-pointer"
           >
             <Plus className="w-4 h-4" />
             <span>Add Marksheet</span>
@@ -130,10 +130,10 @@ export default function MarksheetSection({
         <div className="flex items-center gap-1.5 overflow-x-auto pb-0.5 text-xs">
           <button
             onClick={() => handleSelectClass('ALL')}
-            className={`px-3 py-1 rounded-xl font-bold transition-all shrink-0 cursor-pointer ${
+            className={`px-3.5 py-1.5 rounded-full font-bold transition-all shrink-0 cursor-pointer border ${
               selectedClass === 'ALL'
-                ? 'bg-amber-600 text-white shadow-xs'
-                : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                ? 'bg-[#111827] text-white border-[#111827] shadow-xs'
+                : 'bg-white text-slate-700 border-slate-200 hover:border-slate-300'
             }`}
           >
             All Classes
@@ -142,10 +142,10 @@ export default function MarksheetSection({
             <button
               key={cls}
               onClick={() => handleSelectClass(cls)}
-              className={`px-3 py-1 rounded-xl font-bold transition-all shrink-0 cursor-pointer ${
+              className={`px-3.5 py-1.5 rounded-full font-bold transition-all shrink-0 cursor-pointer border ${
                 selectedClass === cls
-                  ? 'bg-amber-600 text-white shadow-xs'
-                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                  ? 'bg-[#111827] text-white border-[#111827] shadow-xs'
+                  : 'bg-white text-slate-700 border-slate-200 hover:border-slate-300'
               }`}
             >
               {cls}
@@ -159,10 +159,10 @@ export default function MarksheetSection({
           <button
             type="button"
             onClick={() => setSelectedSection('ALL')}
-            className={`px-2.5 py-0.5 rounded-lg font-bold transition-all shrink-0 cursor-pointer ${
+            className={`px-3.5 py-1 rounded-full font-bold transition-all shrink-0 cursor-pointer border ${
               selectedSection === 'ALL'
-                ? 'bg-indigo-600 text-white'
-                : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                ? 'bg-[#111827] text-white border-[#111827] shadow-xs'
+                : 'bg-white text-slate-700 border-slate-200 hover:border-slate-300'
             }`}
           >
             All Sections
@@ -172,10 +172,10 @@ export default function MarksheetSection({
               key={sec}
               type="button"
               onClick={() => setSelectedSection(sec)}
-              className={`px-2.5 py-0.5 rounded-lg font-bold transition-all shrink-0 cursor-pointer ${
+              className={`px-3.5 py-1 rounded-full font-bold transition-all shrink-0 cursor-pointer border ${
                 selectedSection === sec
-                  ? 'bg-indigo-600 text-white'
-                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                  ? 'bg-[#111827] text-white border-[#111827] shadow-xs'
+                  : 'bg-white text-slate-700 border-slate-200 hover:border-slate-300'
               }`}
             >
               {sec}
@@ -296,9 +296,9 @@ export default function MarksheetSection({
                       type="button"
                       onClick={() => exportMarksheetPDF(m, students)}
                       title="Download Marksheet PDF"
-                      className="px-2.5 py-1.5 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-700 text-xs font-bold transition-colors border border-slate-200 flex items-center gap-1"
+                      className="px-3 py-1 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition-colors border border-slate-200 flex items-center gap-1 cursor-pointer"
                     >
-                      <Download className="w-3.5 h-3.5 text-slate-500" />
+                      <Download className="w-3.5 h-3.5 text-slate-600" />
                       <span>PDF</span>
                     </button>
 
@@ -306,7 +306,7 @@ export default function MarksheetSection({
                       type="button"
                       onClick={() => shareMarksheetWhatsApp(m, students)}
                       title="Share Marksheet on WhatsApp"
-                      className="px-2.5 py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-700 text-xs font-bold transition-colors border border-emerald-200 flex items-center gap-1"
+                      className="px-3 py-1 rounded-full bg-emerald-50 hover:bg-emerald-100 text-emerald-700 text-xs font-semibold transition-colors border border-emerald-200 flex items-center gap-1 cursor-pointer"
                     >
                       <MessageCircle className="w-3.5 h-3.5 text-emerald-600" />
                       <span>WhatsApp</span>
@@ -316,10 +316,10 @@ export default function MarksheetSection({
                       <button
                         type="button"
                         onClick={() => setEditingMarksheet(m)}
-                        className="px-2.5 py-1.5 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-700 text-xs font-bold transition-colors border border-slate-200 flex items-center gap-1"
+                        className="px-3 py-1 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition-colors border border-slate-200 flex items-center gap-1 cursor-pointer"
                         title="Edit Marksheet"
                       >
-                        <Pencil className="w-3.5 h-3.5 text-slate-500" />
+                        <Pencil className="w-3.5 h-3.5 text-slate-600" />
                         <span>Edit</span>
                       </button>
                     )}
@@ -327,9 +327,9 @@ export default function MarksheetSection({
                     <button
                       type="button"
                       onClick={() => setSelectedMarksheet(m)}
-                      className="px-3 py-1.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold transition-all shadow-xs flex items-center gap-1"
+                      className="px-3.5 py-1 rounded-full bg-[#111827] hover:bg-black text-white text-xs font-semibold transition-all flex items-center gap-1 cursor-pointer"
                     >
-                      <Eye className="w-3.5 h-3.5" />
+                      <Eye className="w-3.5 h-3.5 text-white" />
                       <span>View Results</span>
                     </button>
                   </div>

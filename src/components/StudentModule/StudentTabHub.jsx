@@ -39,7 +39,8 @@ export default function StudentTabHub({
   onUpdateVoucher,
   onDeleteVoucher,
   onGenerateMonthlyVouchers,
-  curriculumSubjects
+  curriculumSubjects,
+  attendanceTimings
 }) {
   const [registeringInquiry, setRegisteringInquiry] = useState(null);
 
@@ -153,6 +154,7 @@ export default function StudentTabHub({
             onSaveTeacherAttendance={onSaveTeacherAttendance}
             onUpdateTeacherAttendanceSession={onUpdateTeacherAttendanceSession}
             onDeleteTeacherAttendanceSession={onDeleteTeacherAttendanceSession}
+            attendanceTimings={attendanceTimings}
             onBack={() => setSubPage(null)}
           />
         )}

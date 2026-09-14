@@ -22,13 +22,13 @@ export default function StudentCard({ student, onView, onShowIdCard }) {
 
   return (
     <div 
-      className={`bg-white rounded-2xl p-3.5 border transition-all duration-200 shadow-xs hover:shadow-md relative overflow-hidden ${
-        isInactive ? 'border-rose-200 bg-rose-50/20 opacity-80' : 'border-slate-200/90'
+      className={`bg-white rounded-3xl p-4 border transition-all duration-200 shadow-[0_4px_24px_-2px_rgba(17,24,39,0.04)] hover:shadow-[0_8px_30px_-4px_rgba(17,24,39,0.08)] relative overflow-hidden ${
+        isInactive ? 'border-rose-200 bg-rose-50/20 opacity-80' : 'border-[#E5E7EB] hover:border-slate-300'
       }`}
     >
       <div className="flex items-center gap-3">
-        {/* Compact, fixed-size thumbnail (never expands or stretches) */}
-        <div className="w-14 h-14 min-w-[56px] min-h-[56px] max-w-[56px] max-h-[56px] rounded-xl overflow-hidden bg-slate-100 border border-slate-200 shrink-0 shadow-xs relative">
+        {/* Compact, fixed-size thumbnail */}
+        <div className="w-14 h-14 min-w-[56px] min-h-[56px] max-w-[56px] max-h-[56px] rounded-2xl overflow-hidden bg-slate-100 border border-[#E5E7EB] shrink-0 shadow-2xs relative">
           <img
             src={student.pic}
             alt={student.firstName}
@@ -48,13 +48,13 @@ export default function StudentCard({ student, onView, onShowIdCard }) {
         <div className="flex-1 min-w-0">
           <div className="flex items-center justify-between gap-1">
             <div className="flex items-center gap-1.5 flex-wrap">
-              <span className="font-mono text-[10px] font-bold text-indigo-700 bg-indigo-50 border border-indigo-100 px-1.5 py-0.2 rounded">
+              <span className="font-mono text-[10px] font-bold text-slate-700 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded-full">
                 {student.id}
               </span>
               <span className="text-[10px] text-slate-400">•</span>
               <span className="text-[10px] font-medium text-slate-500">{student.gender}</span>
               {isInactive && (
-                <span className="bg-rose-100 text-rose-700 border border-rose-200 text-[9px] font-bold px-1.5 py-0.2 rounded-full flex items-center gap-0.5">
+                <span className="bg-rose-100 text-rose-700 border border-rose-200 text-[9px] font-bold px-2 py-0.5 rounded-full flex items-center gap-0.5">
                   <UserX className="w-2.5 h-2.5" />
                   Left Academy
                 </span>
@@ -62,21 +62,21 @@ export default function StudentCard({ student, onView, onShowIdCard }) {
             </div>
 
             {/* Actions: ID Card + View Button */}
-            <div className="flex items-center gap-1 shrink-0">
+            <div className="flex items-center gap-1.5 shrink-0">
               <button
                 type="button"
                 onClick={() => onShowIdCard(student)}
-                className="flex items-center gap-1 px-2 py-1 bg-amber-50 hover:bg-amber-100 text-amber-800 rounded-lg text-[10px] font-bold border border-amber-200 transition-all tap-active shadow-2xs"
+                className="flex items-center gap-1 px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-full text-[10px] font-bold transition-all tap-active shadow-2xs cursor-pointer"
                 title="Generate Student ID Card"
               >
-                <CreditCard className="w-3 h-3 text-amber-600" />
+                <CreditCard className="w-3 h-3 text-slate-500" />
                 <span>ID Card</span>
               </button>
 
               <button
                 type="button"
                 onClick={() => onView(student)}
-                className="flex items-center gap-1 px-2 py-1 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-lg text-[10px] font-bold border border-indigo-200 transition-all tap-active shadow-2xs"
+                className="flex items-center gap-1 px-3 py-1 bg-[#111827] hover:bg-[#1F2937] text-white rounded-full text-[10px] font-bold transition-all tap-active shadow-2xs cursor-pointer"
               >
                 <Eye className="w-3 h-3" />
                 <span>View</span>
@@ -84,19 +84,19 @@ export default function StudentCard({ student, onView, onShowIdCard }) {
             </div>
           </div>
 
-          <h3 className="font-bold text-slate-900 text-sm truncate mt-0.5">
+          <h3 className="font-bold text-slate-900 font-headline text-sm truncate mt-0.5">
             {student.firstName} {student.lastName}
           </h3>
 
-          <div className="flex items-center gap-1.5 mt-1 flex-wrap">
-            <span className={`text-[10px] font-bold px-2 py-0.5 rounded-md border ${getClassBadgeStyle(student.studentClass)}`}>
+          <div className="flex items-center gap-1.5 mt-1.5 flex-wrap">
+            <span className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full border ${getClassBadgeStyle(student.studentClass)}`}>
               {student.studentClass}
             </span>
-            <span className="text-[10px] font-semibold px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-700 border border-emerald-200">
+            <span className="text-[10px] font-semibold px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
               {student.subject}
             </span>
             {student.subjectGroup && student.subjectGroup !== student.subject && (
-              <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-indigo-50 text-indigo-700 border border-indigo-200">
+              <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200">
                 {student.subjectGroup}
               </span>
             )}

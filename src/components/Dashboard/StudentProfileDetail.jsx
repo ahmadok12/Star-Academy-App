@@ -157,17 +157,17 @@ export default function StudentProfileDetail({
         <button
           type="button"
           onClick={onBack}
-          className="flex items-center gap-1.5 px-3.5 py-2 rounded-2xl bg-white hover:bg-slate-100 text-slate-700 text-xs font-bold border border-slate-200 shadow-xs transition-all tap-active"
+          className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-white hover:bg-[#F3F4F6] text-slate-700 text-xs font-semibold border border-[#E5E7EB] shadow-2xs transition-all tap-active cursor-pointer"
         >
           <ArrowLeft className="w-4 h-4" />
           <span>Back to Students</span>
         </button>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap">
           <button
             type="button"
             onClick={() => printStudentProfile(student, { attendanceSessions, marksheets, feeVouchers, banks })}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold shadow-2xs transition-all cursor-pointer"
+            className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#111827] hover:bg-[#1F2937] text-white text-xs font-semibold shadow-sm transition-all cursor-pointer"
             title="Print Preview Complete Profile"
           >
             <Printer className="w-3.5 h-3.5" />
@@ -176,7 +176,7 @@ export default function StudentProfileDetail({
           <button
             type="button"
             onClick={() => exportStudentProfilePDF(student, { attendanceSessions, marksheets, feeVouchers, banks })}
-            className="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-white hover:bg-slate-50 text-slate-800 text-xs font-bold border border-slate-200 shadow-2xs transition-all cursor-pointer"
+            className="flex items-center gap-1 px-4 py-2 rounded-full bg-white hover:bg-[#F3F4F6] text-slate-800 text-xs font-semibold border border-[#E5E7EB] shadow-2xs transition-all cursor-pointer"
             title="Download Profile PDF"
           >
             <Download className="w-3.5 h-3.5 text-slate-600" />
@@ -185,63 +185,63 @@ export default function StudentProfileDetail({
           <button
             type="button"
             onClick={() => shareStudentProfileWhatsApp(student, { attendanceSessions, marksheets, feeVouchers, banks })}
-            className="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-2xs transition-all cursor-pointer"
+            className="flex items-center gap-1 px-4 py-2 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold shadow-sm transition-all cursor-pointer"
             title="Share Profile on WhatsApp"
           >
             <MessageCircle className="w-3.5 h-3.5" />
             <span>WhatsApp</span>
           </button>
-          <span className="px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-[11px] font-extrabold border border-blue-100">
+          <span className="px-3.5 py-1.5 rounded-full bg-[#F3F4F6] text-slate-800 text-[11px] font-bold border border-[#E5E7EB]">
             {student.academicYear || currentSession}
           </span>
         </div>
       </div>
 
       {/* Profile Header Hero Card */}
-      <div className="bg-gradient-to-br from-blue-700 via-blue-600 to-blue-800 text-white rounded-3xl p-5 shadow-md relative overflow-hidden">
-        <div className="relative z-10 flex flex-col sm:flex-row items-center sm:items-start gap-4 text-center sm:text-left">
+      <div className="bg-[#111827] text-white rounded-3xl p-6 shadow-stitch-lg relative overflow-hidden border border-[#1F2937]">
+        <div className="relative z-10 flex flex-col sm:flex-row items-center sm:items-start gap-5 text-center sm:text-left">
           <img
             src={student.pic || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=256'}
             alt={student.firstName}
-            className="w-20 h-20 rounded-3xl object-cover border-2 border-white/30 shadow-md shrink-0"
+            className="w-20 h-20 rounded-2xl object-cover border-2 border-white/20 shadow-md shrink-0"
           />
           <div className="space-y-1.5 flex-1 min-w-0">
             <div className="flex items-center justify-center sm:justify-start gap-2 flex-wrap">
-              <span className="px-2.5 py-0.5 rounded-full bg-amber-400/25 text-amber-300 border border-amber-300/40 text-[10px] font-black uppercase tracking-wider">
+              <span className="px-3 py-0.5 rounded-full bg-white/10 text-[#FF7A59] border border-white/15 text-[10px] font-bold uppercase tracking-wider font-mono">
                 {student.id}
               </span>
-              <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-extrabold flex items-center gap-1 ${
+              <span className={`px-3 py-0.5 rounded-full text-[10px] font-semibold flex items-center gap-1.5 ${
                 isActive
-                  ? 'bg-emerald-500/25 text-emerald-200 border border-emerald-400/30'
-                  : 'bg-rose-500/25 text-rose-200 border border-rose-400/30'
+                  ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-400/30'
+                  : 'bg-rose-500/20 text-rose-300 border border-rose-400/30'
               }`}>
                 <span className={`w-1.5 h-1.5 rounded-full ${isActive ? 'bg-emerald-400 animate-pulse' : 'bg-rose-400'}`}></span>
                 {isActive ? 'Active Student' : 'Inactive / Left Academy'}
               </span>
             </div>
 
-            <h2 className="text-xl font-black text-white leading-tight">
+            <h2 className="text-xl sm:text-2xl font-bold text-white leading-tight font-display">
               {student.firstName} {student.lastName}
             </h2>
 
-            <p className="text-xs text-indigo-100 font-semibold flex items-center justify-center sm:justify-start gap-1.5">
-              <GraduationCap className="w-3.5 h-3.5 text-amber-300" />
+            <p className="text-xs text-slate-300 font-medium flex items-center justify-center sm:justify-start gap-1.5">
+              <GraduationCap className="w-3.5 h-3.5 text-[#FF7A59]" />
               <span>Class {student.studentClass}</span>
               <span>•</span>
               <span>Section: {student.section || student.subject}</span>
             </p>
 
-            <div className="pt-2 flex items-center justify-center sm:justify-start gap-2 text-[11px] text-indigo-200/90 flex-wrap">
+            <div className="pt-2 flex items-center justify-center sm:justify-start gap-3 text-[11px] text-slate-300 flex-wrap">
               <span>Date of Joining: <strong className="text-white">{student.dateOfJoining || student.registeredAt || 'N/A'}</strong></span>
               <span>•</span>
-              <span>Monthly Tuition: <strong className="text-amber-300">Rs. {Number(student.fees || 0).toLocaleString()}</strong></span>
+              <span>Monthly Tuition: <strong className="text-[#FF7A59]">Rs. {Number(student.fees || 0).toLocaleString()}</strong></span>
             </div>
           </div>
         </div>
       </div>
 
       {/* Navigation Sub-Tabs */}
-      <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar text-xs">
+      <div className="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar text-xs">
         {[
           { id: 'overview', label: 'Overview & Info', icon: User },
           { id: 'attendance', label: `Attendance (${studentAttendance.percentage}%)`, icon: ClipboardCheck },
@@ -255,10 +255,10 @@ export default function StudentProfileDetail({
               key={tab.id}
               type="button"
               onClick={() => setActiveTab(tab.id)}
-              className={`px-3 py-2 rounded-2xl text-xs font-extrabold flex items-center gap-1.5 whitespace-nowrap transition-all ${
+              className={`px-4 py-2 rounded-full text-xs font-semibold flex items-center gap-2 whitespace-nowrap transition-all cursor-pointer ${
                 isCurrent
-                  ? 'bg-indigo-600 text-white shadow-sm'
-                  : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
+                  ? 'bg-[#111827] text-white shadow-sm'
+                  : 'bg-white text-[#575E70] border border-[#E5E7EB] hover:bg-[#F3F4F6]'
               }`}
             >
               <Icon className="w-3.5 h-3.5" />

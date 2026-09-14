@@ -43,13 +43,13 @@ export default function TeacherAttendanceReport({
         grandTotal++;
         const st = (r.status || 'Present').toLowerCase();
 
-        if (st === 'present') grandPresent++;
+        if (st === 'present' || st === 'late') grandPresent++;
         else if (st === 'absent') grandAbsent++;
         else grandLeave++;
 
         if (teacherStats[r.teacherId]) {
           teacherStats[r.teacherId].total++;
-          if (st === 'present') teacherStats[r.teacherId].present++;
+          if (st === 'present' || st === 'late') teacherStats[r.teacherId].present++;
           else if (st === 'absent') teacherStats[r.teacherId].absent++;
           else teacherStats[r.teacherId].leave++;
         }
@@ -165,7 +165,7 @@ export default function TeacherAttendanceReport({
         <button
           type="button"
           onClick={onBack}
-          className="flex items-center gap-1.5 px-3.5 py-2 rounded-2xl bg-white hover:bg-slate-100 text-slate-700 text-xs font-bold border border-slate-200 shadow-xs transition-all tap-active cursor-pointer"
+          className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-white hover:bg-[#F3F4F6] text-slate-700 text-xs font-semibold border border-[#E5E7EB] shadow-2xs transition-all tap-active cursor-pointer"
         >
           <ArrowLeft className="w-4 h-4" />
           <span>Back to Reports</span>
@@ -175,7 +175,7 @@ export default function TeacherAttendanceReport({
           <button
             type="button"
             onClick={handleDownloadPDF}
-            className="flex items-center gap-1.5 px-3.5 py-2 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold border border-slate-300 transition-all cursor-pointer shadow-2xs"
+            className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-white hover:bg-[#F3F4F6] text-slate-800 text-xs font-semibold border border-[#E5E7EB] transition-all cursor-pointer shadow-2xs"
           >
             <Download className="w-3.5 h-3.5 text-slate-600" />
             <span>Download PDF</span>
@@ -183,7 +183,7 @@ export default function TeacherAttendanceReport({
           <button
             type="button"
             onClick={handleShareWhatsApp}
-            className="flex items-center gap-1.5 px-3.5 py-2 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition-all shadow-2xs cursor-pointer"
+            className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold transition-all shadow-sm cursor-pointer"
           >
             <MessageCircle className="w-3.5 h-3.5" />
             <span>Share on WhatsApp</span>
@@ -193,47 +193,47 @@ export default function TeacherAttendanceReport({
 
       {/* 4 Metric Cards */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <div className="bg-white p-4 rounded-3xl border border-slate-200/90 shadow-xs">
-          <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block">Faculty Strength</span>
-          <p className="text-lg font-black text-slate-900 mt-1">{teachers.length}</p>
-          <span className="text-[10px] text-slate-500 font-bold">Active Instructors</span>
+        <div className="bg-white p-4 rounded-3xl border border-[#E5E7EB] shadow-[0_4px_24px_-2px_rgba(17,24,39,0.04)]">
+          <span className="text-[10px] text-[#575E70] font-bold uppercase tracking-wider block">Faculty Strength</span>
+          <p className="text-xl sm:text-2xl font-bold text-slate-900 mt-1 font-display">{teachers.length}</p>
+          <span className="text-[10px] text-[#575E70] font-medium">Active Instructors</span>
         </div>
 
-        <div className="bg-white p-4 rounded-3xl border border-emerald-200/90 bg-emerald-50/20 shadow-xs">
+        <div className="bg-white p-4 rounded-3xl border border-emerald-200/90 bg-emerald-50/20 shadow-[0_4px_24px_-2px_rgba(17,24,39,0.04)]">
           <span className="text-[10px] text-emerald-700 font-bold uppercase tracking-wider block">Present Total</span>
-          <p className="text-lg font-black text-emerald-700 mt-1">{attendanceData.grandPresent}</p>
-          <span className="text-[10px] text-emerald-600 font-bold">{attendanceData.overallRate}% Attendance</span>
+          <p className="text-xl sm:text-2xl font-bold text-emerald-700 mt-1 font-display">{attendanceData.grandPresent}</p>
+          <span className="text-[10px] text-emerald-600 font-semibold">{attendanceData.overallRate}% Attendance</span>
         </div>
 
-        <div className="bg-white p-4 rounded-3xl border border-rose-200/90 bg-rose-50/20 shadow-xs">
+        <div className="bg-white p-4 rounded-3xl border border-rose-200/90 bg-rose-50/20 shadow-[0_4px_24px_-2px_rgba(17,24,39,0.04)]">
           <span className="text-[10px] text-rose-700 font-bold uppercase tracking-wider block">Absences</span>
-          <p className="text-lg font-black text-rose-700 mt-1">{attendanceData.grandAbsent}</p>
-          <span className="text-[10px] text-rose-600 font-bold">Unexcused</span>
+          <p className="text-xl sm:text-2xl font-bold text-rose-700 mt-1 font-display">{attendanceData.grandAbsent}</p>
+          <span className="text-[10px] text-rose-600 font-semibold">Unexcused</span>
         </div>
 
-        <div className="bg-white p-4 rounded-3xl border border-amber-200/90 bg-amber-50/20 shadow-xs">
+        <div className="bg-white p-4 rounded-3xl border border-amber-200/90 bg-amber-50/20 shadow-[0_4px_24px_-2px_rgba(17,24,39,0.04)]">
           <span className="text-[10px] text-amber-800 font-bold uppercase tracking-wider block">Leaves</span>
-          <p className="text-lg font-black text-amber-700 mt-1">{attendanceData.grandLeave}</p>
-          <span className="text-[10px] text-amber-700 font-bold">Approved Leaves</span>
+          <p className="text-xl sm:text-2xl font-bold text-amber-700 mt-1 font-display">{attendanceData.grandLeave}</p>
+          <span className="text-[10px] text-amber-700 font-semibold">Approved Leaves</span>
         </div>
       </div>
 
       {/* Search and Table */}
-      <div className="bg-white rounded-3xl border border-slate-200/90 shadow-xs p-4 space-y-3">
+      <div className="bg-white rounded-3xl border border-[#E5E7EB] shadow-[0_4px_24px_-2px_rgba(17,24,39,0.04)] p-4 sm:p-5 space-y-3">
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
-          <h3 className="text-xs font-black text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
-            <Users className="w-4 h-4 text-teal-600" />
+          <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1.5 font-display">
+            <Users className="w-4 h-4 text-[#111827]" />
             <span>Faculty Attendance Register ({filteredTeachers.length})</span>
           </h3>
 
           <div className="relative flex-1 max-w-xs">
-            <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+            <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
             <input
               type="text"
               placeholder="Search faculty name, subject..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-8 pr-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500"
+              className="w-full pl-9 pr-3 py-2 bg-[#F8F9FB] border border-[#E5E7EB] rounded-full text-xs font-medium text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-[#111827]"
             />
           </div>
         </div>

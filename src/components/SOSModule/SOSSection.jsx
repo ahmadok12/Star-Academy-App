@@ -147,7 +147,7 @@ export default function SOSSection({
             placeholder="Search schemes by title, class, batch or group..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-9 pr-8 py-2 rounded-xl bg-white border border-slate-200 text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-rose-500 shadow-2xs font-medium"
+            className="w-full pl-9 pr-8 py-2 rounded-full bg-white border border-slate-200 text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-slate-800 shadow-2xs font-medium"
           />
           {searchQuery && (
             <button
@@ -163,7 +163,7 @@ export default function SOSSection({
           <button
             type="button"
             onClick={handleOpenAdd}
-            className="py-2 px-3.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs shadow-xs flex items-center gap-1.5 transition-all tap-active cursor-pointer shrink-0"
+            className="py-2 px-4 rounded-full bg-[#111827] hover:bg-black text-white font-bold text-xs shadow-xs flex items-center gap-1.5 transition-all tap-active cursor-pointer shrink-0"
           >
             <Plus className="w-4 h-4" />
             <span>Add Scheme</span>
@@ -175,10 +175,10 @@ export default function SOSSection({
       <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar text-xs">
         <button
           onClick={() => handleSelectClass('ALL')}
-          className={`px-3 py-1 rounded-full text-xs font-bold whitespace-nowrap transition-all cursor-pointer ${
+          className={`px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-all cursor-pointer ${
             selectedClass === 'ALL'
-              ? 'bg-rose-600 text-white shadow-xs'
-              : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
+              ? 'bg-[#111827] text-white shadow-xs'
+              : 'bg-white text-slate-700 border border-slate-200 hover:border-slate-300'
           }`}
         >
           All Classes ({schemes.length})
@@ -189,10 +189,10 @@ export default function SOSSection({
             <button
               key={cls}
               onClick={() => handleSelectClass(cls)}
-              className={`px-3 py-1 rounded-full text-xs font-bold whitespace-nowrap transition-all cursor-pointer ${
+              className={`px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-all cursor-pointer ${
                 selectedClass === cls
-                  ? 'bg-rose-600 text-white shadow-xs'
-                  : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
+                  ? 'bg-[#111827] text-white shadow-xs'
+                  : 'bg-white text-slate-700 border border-slate-200 hover:border-slate-300'
               }`}
             >
               {cls} ({count})
@@ -208,10 +208,10 @@ export default function SOSSection({
         </span>
         <button
           onClick={() => setSelectedSection('ALL')}
-          className={`px-3 py-1 rounded-full text-xs font-bold whitespace-nowrap transition-all cursor-pointer ${
+          className={`px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-all cursor-pointer ${
             selectedSection === 'ALL'
-              ? 'bg-rose-600 text-white shadow-xs'
-              : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
+              ? 'bg-[#111827] text-white shadow-xs'
+              : 'bg-white text-slate-700 border border-slate-200 hover:border-slate-300'
           }`}
         >
           All Sections
@@ -225,10 +225,10 @@ export default function SOSSection({
             <button
               key={sec}
               onClick={() => setSelectedSection(sec)}
-              className={`px-3 py-1 rounded-full text-xs font-bold whitespace-nowrap transition-all cursor-pointer ${
+              className={`px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-all cursor-pointer ${
                 selectedSection === sec
-                  ? 'bg-rose-600 text-white shadow-xs'
-                  : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
+                  ? 'bg-[#111827] text-white shadow-xs'
+                  : 'bg-white text-slate-700 border border-slate-200 hover:border-slate-300'
               }`}
             >
               {sec} ({count})
@@ -247,7 +247,7 @@ export default function SOSSection({
             <button
               type="button"
               onClick={handleOpenAdd}
-              className="text-xs font-extrabold text-rose-600 hover:text-rose-700 flex items-center gap-1"
+              className="text-xs font-bold text-slate-800 hover:text-black flex items-center gap-1 cursor-pointer"
             >
               <Plus className="w-3.5 h-3.5" />
               <span>New Scheme</span>
@@ -257,7 +257,7 @@ export default function SOSSection({
 
         {filteredSchemes.length === 0 ? (
           <div className="bg-white rounded-3xl p-8 text-center border border-dashed border-slate-200 shadow-xs space-y-3">
-            <div className="w-14 h-14 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center mx-auto shadow-sm">
+            <div className="w-14 h-14 rounded-2xl bg-slate-100 text-slate-700 flex items-center justify-center mx-auto shadow-sm">
               <BookOpen className="w-7 h-7" />
             </div>
             <div className="space-y-1">
@@ -272,7 +272,7 @@ export default function SOSSection({
               <button
                 type="button"
                 onClick={handleOpenAdd}
-                className="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-extrabold shadow-sm inline-flex items-center gap-1.5 transition-all"
+                className="px-4 py-2 rounded-full bg-[#111827] hover:bg-black text-white text-xs font-bold shadow-xs inline-flex items-center gap-1.5 transition-all cursor-pointer"
               >
                 <Plus className="w-3.5 h-3.5" />
                 <span>Create Scheme of Study</span>
@@ -290,21 +290,21 @@ export default function SOSSection({
               return (
                 <div
                   key={sch.id}
-                  className="bg-white p-4 rounded-3xl border border-slate-200 hover:border-rose-300 shadow-xs hover:shadow-md transition-all space-y-3 group"
+                  className="bg-white p-4 rounded-3xl border border-slate-200 hover:border-slate-300 shadow-xs hover:shadow-md transition-all space-y-3 group"
                 >
                   {/* Card Header */}
                   <div className="flex items-start justify-between gap-3">
                     <div className="space-y-1 min-w-0">
                       <div className="flex items-center gap-2 flex-wrap">
-                        <span className="px-2.5 py-0.5 rounded-lg bg-rose-100 text-rose-800 font-extrabold text-[11px]">
+                        <span className="px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-800 font-extrabold text-[11px] border border-slate-200">
                           {sch.studentClass}
                         </span>
-                        <span className="px-2.5 py-0.5 rounded-lg bg-indigo-50 text-indigo-700 font-extrabold text-[11px]">
+                        <span className="px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-800 font-extrabold text-[11px] border border-slate-200">
                           {sch.section}
                         </span>
                         {sch.batch && (
-                          <span className="px-2.5 py-0.5 rounded-lg bg-purple-100 text-purple-800 font-extrabold text-[11px] border border-purple-200/60 flex items-center gap-1">
-                            <Layers className="w-3 h-3 text-purple-600" />
+                          <span className="px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-800 font-extrabold text-[11px] border border-slate-200 flex items-center gap-1">
+                            <Layers className="w-3 h-3 text-slate-600" />
                             {sch.batch}
                           </span>
                         )}
@@ -315,7 +315,7 @@ export default function SOSSection({
 
                       <h3
                         onClick={() => handleOpenView(sch)}
-                        className="text-sm font-black text-slate-900 group-hover:text-rose-600 transition-colors cursor-pointer truncate"
+                        className="text-sm font-black text-slate-900 group-hover:text-slate-700 transition-colors cursor-pointer truncate"
                       >
                         {sch.title}
                       </h3>
@@ -341,12 +341,12 @@ export default function SOSSection({
 
                     <div className="bg-slate-50 p-2 rounded-xl text-center">
                       <span className="text-[10px] text-slate-400 block font-medium">Study Topics</span>
-                      <span className="text-xs font-black text-indigo-700">{studyRows.length} Topics</span>
+                      <span className="text-xs font-black text-slate-800">{studyRows.length} Topics</span>
                     </div>
 
                     <div className="bg-slate-50 p-2 rounded-xl text-center">
                       <span className="text-[10px] text-slate-400 block font-medium">Tests</span>
-                      <span className="text-xs font-black text-amber-700">{testRows.length} Tests</span>
+                      <span className="text-xs font-black text-slate-800">{testRows.length} Tests</span>
                     </div>
                   </div>
 
@@ -355,7 +355,7 @@ export default function SOSSection({
                       <Calendar className="w-3 h-3 text-slate-400 shrink-0" />
                       <span className="font-semibold text-slate-600">Months:</span>
                       {coveredMonths.map(m => (
-                        <span key={m} className="px-1.5 py-0.2 rounded bg-amber-50 text-amber-900 font-bold text-[10px]">
+                        <span key={m} className="px-1.5 py-0.2 rounded bg-slate-100 text-slate-800 font-bold text-[10px] border border-slate-200">
                           {m}
                         </span>
                       ))}
@@ -367,9 +367,9 @@ export default function SOSSection({
                     <button
                       type="button"
                       onClick={() => handleOpenView(sch)}
-                      className={`${readOnly ? 'flex-1' : 'flex-1'} py-1.5 px-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold flex items-center justify-center gap-1 transition-all min-w-[65px]`}
+                      className={`${readOnly ? 'flex-1' : 'flex-1'} py-1.5 px-3 rounded-full bg-[#111827] hover:bg-black text-white text-xs font-semibold flex items-center justify-center gap-1 transition-all min-w-[65px] cursor-pointer`}
                     >
-                      <Eye className="w-3.5 h-3.5 text-slate-500" />
+                      <Eye className="w-3.5 h-3.5 text-white/80" />
                       <span>View</span>
                     </button>
 
@@ -377,9 +377,9 @@ export default function SOSSection({
                       type="button"
                       onClick={() => printSOS(sch)}
                       title="Print Preview Scheme of Study (Landscape)"
-                      className="py-1.5 px-2.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-bold flex items-center justify-center gap-1 transition-all border border-rose-200 shadow-2xs cursor-pointer"
+                      className="py-1.5 px-3 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold flex items-center justify-center gap-1 transition-all border border-slate-200 shadow-2xs cursor-pointer"
                     >
-                      <Printer className="w-3.5 h-3.5 text-rose-600" />
+                      <Printer className="w-3.5 h-3.5 text-slate-600" />
                       <span>Print</span>
                     </button>
 
@@ -387,7 +387,7 @@ export default function SOSSection({
                       type="button"
                       onClick={() => exportSOSPDF(sch)}
                       title="Download Scheme of Study PDF"
-                      className="py-1.5 px-2.5 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-700 text-xs font-bold flex items-center justify-center gap-1 transition-all border border-slate-200 shadow-2xs cursor-pointer"
+                      className="py-1.5 px-3 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold flex items-center justify-center gap-1 transition-all border border-slate-200 shadow-2xs cursor-pointer"
                     >
                       <Download className="w-3.5 h-3.5 text-slate-600" />
                       <span>PDF</span>
@@ -397,7 +397,7 @@ export default function SOSSection({
                       type="button"
                       onClick={() => shareSOSWhatsApp(sch)}
                       title="Share Scheme of Study on WhatsApp"
-                      className="py-1.5 px-2.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-700 text-xs font-bold flex items-center justify-center gap-1 transition-all border border-emerald-200 shadow-2xs cursor-pointer"
+                      className="py-1.5 px-3 rounded-full bg-emerald-50 hover:bg-emerald-100 text-emerald-700 text-xs font-semibold flex items-center justify-center gap-1 transition-all border border-emerald-200 shadow-2xs cursor-pointer"
                     >
                       <MessageCircle className="w-3.5 h-3.5 text-emerald-600" />
                       <span>WhatsApp</span>
@@ -408,7 +408,7 @@ export default function SOSSection({
                         <button
                           type="button"
                           onClick={() => handleOpenEdit(sch)}
-                          className="flex-1 py-1.5 px-2.5 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-bold flex items-center justify-center gap-1 transition-all min-w-[65px]"
+                          className="flex-1 py-1.5 px-3 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold flex items-center justify-center gap-1 transition-all border border-slate-200 min-w-[65px] cursor-pointer"
                         >
                           <Edit className="w-3.5 h-3.5" />
                           <span>Edit</span>
@@ -417,7 +417,7 @@ export default function SOSSection({
                         <button
                           type="button"
                           onClick={() => handleOpenDelete(sch)}
-                          className="py-1.5 px-2.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-bold flex items-center justify-center gap-1 transition-all"
+                          className="py-1.5 px-3 rounded-full bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-semibold flex items-center justify-center gap-1 transition-all border border-rose-200 cursor-pointer"
                           title="Delete scheme"
                         >
                           <Trash2 className="w-3.5 h-3.5" />

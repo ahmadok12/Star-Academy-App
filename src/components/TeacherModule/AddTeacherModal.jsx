@@ -13,9 +13,12 @@ import {
   Calendar,
   BookOpen,
   Layers,
-  CheckSquare,
-  Square,
-  Clock
+  Clock,
+  Plus,
+  Trash2,
+  ChevronDown,
+  ChevronUp,
+  CheckCircle2
 } from 'lucide-react';
 import { generateNextTeacherId } from '../../utils/storage';
 import { CLASSES, CLASS_SECTIONS, TEACHER_SUBJECTS } from '../../constants/academicData';
@@ -35,10 +38,19 @@ export default function AddTeacherModal({ isOpen, onClose, onAddTeacher, existin
     secondaryContactNumber: '',
     address: '',
     department: 'Mathematics',
-    arrivalTime: '07:45',
-    assignedClasses: [],
+    arrivalTime: '15:00',
     pic: ''
   });
+
+  const [lectures, setLectures] = useState([
+    {
+      id: 'lec-1',
+      assignedClass: '',
+      subject: 'Mathematics',
+      time: '15:00',
+      isClassesExpanded: true
+    }
+  ]);
 
   const [errors, setErrors] = useState({});
   const [photoPreview, setPhotoPreview] = useState(null);
@@ -56,10 +68,18 @@ export default function AddTeacherModal({ isOpen, onClose, onAddTeacher, existin
         secondaryContactNumber: '',
         address: '',
         department: 'Mathematics',
-        arrivalTime: '07:45',
-        assignedClasses: [],
+        arrivalTime: '15:00',
         pic: ''
       });
+      setLectures([
+        {
+          id: 'lec-1',
+          assignedClass: '',
+          subject: 'Mathematics',
+          time: '15:00',
+          isClassesExpanded: true
+        }
+      ]);
       setPhotoPreview(null);
       setErrors({});
     }
@@ -91,33 +111,54 @@ export default function AddTeacherModal({ isOpen, onClose, onAddTeacher, existin
     setFormData((prev) => ({ ...prev, cnic: formatted }));
   };
 
-  // Toggle individual Class + Section checkbox
-  const toggleClassSection = (cls, sec) => {
-    const key = `${cls} (${sec})`;
-    setFormData((prev) => {
-      const current = prev.assignedClasses || [];
-      const exists = current.includes(key);
-      const updated = exists ? current.filter((k) => k !== key) : [...current, key];
-      return { ...prev, assignedClasses: updated };
+  // Manage Unified Lectures
+  const handleAddLecture = () => {
+    setLectures((prev) => [
+      ...prev,
+      {
+        id: `lec-${Date.now()}`,
+        assignedClass: '',
+        subject: formData.department || TEACHER_SUBJECTS[0] || 'Mathematics',
+        time: prev.length === 1 ? '18:00' : '16:00',
+        isClassesExpanded: true
+      }
+    ]);
+  };
+
+  const handleRemoveLecture = (lecId) => {
+    setLectures((prev) => {
+      if (prev.length <= 1) return prev;
+      return prev.filter((l) => l.id !== lecId);
     });
   };
 
-  // Toggle all sections for a class
-  const toggleAllSectionsForClass = (cls) => {
-    const sections = CLASS_SECTIONS[cls] || [];
-    const keys = sections.map((sec) => `${cls} (${sec})`);
-    setFormData((prev) => {
-      const current = prev.assignedClasses || [];
-      const allSelected = keys.every((k) => current.includes(k));
-      let updated;
-      if (allSelected) {
-        updated = current.filter((k) => !keys.includes(k));
-      } else {
-        const toAdd = keys.filter((k) => !current.includes(k));
-        updated = [...current, ...toAdd];
-      }
-      return { ...prev, assignedClasses: updated };
-    });
+  const handleUpdateLecture = (lecId, field, value) => {
+    setLectures((prev) =>
+      prev.map((l) => (l.id === lecId ? { ...l, [field]: value } : l))
+    );
+  };
+
+  const handleSelectClassForLecture = (lecId, classKey) => {
+    setLectures((prev) =>
+      prev.map((l) => {
+        if (l.id === lecId) {
+          return {
+            ...l,
+            assignedClass: classKey,
+            isClassesExpanded: false // auto collapse to reveal lecture time cleanly!
+          };
+        }
+        return l;
+      })
+    );
+  };
+
+  const handleToggleExpandClasses = (lecId) => {
+    setLectures((prev) =>
+      prev.map((l) =>
+        l.id === lecId ? { ...l, isClassesExpanded: !l.isClassesExpanded } : l
+      )
+    );
   };
 
   const validate = () => {
@@ -131,7 +172,12 @@ export default function AddTeacherModal({ isOpen, onClose, onAddTeacher, existin
     }
     if (!formData.contactNumber.trim()) errs.contactNumber = 'Mobile number is required';
     if (!formData.joinedAt) errs.joinedAt = 'Date of joining is required';
-    if (!formData.department) errs.department = 'Please select a subject';
+
+    // Check lectures: each must have an assigned class and time
+    const invalidLec = lectures.find((l) => !l.assignedClass || !l.time);
+    if (invalidLec) {
+      errs.lectures = 'Please select an assigned class and enter lecture time for all lectures.';
+    }
 
     setErrors(errs);
     return Object.keys(errs).length === 0;
@@ -145,8 +191,27 @@ export default function AddTeacherModal({ isOpen, onClose, onAddTeacher, existin
       formData.pic ||
       'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=256';
 
+    const finalTeachingSlots = lectures.map((l, idx) => ({
+      id: l.id || `slot-${idx + 1}`,
+      assignedClass: l.assignedClass,
+      subject: l.subject || formData.department || 'Mathematics',
+      time: l.time || '15:00'
+    }));
+
+    const finalAssignedClasses = Array.from(
+      new Set(lectures.map((l) => l.assignedClass).filter(Boolean))
+    );
+
+    const subjects = [...new Set(finalTeachingSlots.map((s) => s.subject))].join(', ');
+    const sortedTimes = [...finalTeachingSlots.map((s) => s.time)].sort();
+    const earliestTime = sortedTimes[0] || '15:00';
+
     const newTeacher = {
       ...formData,
+      department: subjects || formData.department || 'Mathematics',
+      arrivalTime: earliestTime,
+      teachingSlots: finalTeachingSlots,
+      assignedClasses: finalAssignedClasses,
       pic: finalPic
     };
 
@@ -157,23 +222,23 @@ export default function AddTeacherModal({ isOpen, onClose, onAddTeacher, existin
   return (
     <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-end sm:items-center justify-center p-0 sm:p-4 animate-in fade-in duration-200">
       <div
-        className="bg-white w-full max-w-lg rounded-t-3xl sm:rounded-3xl max-h-[92vh] flex flex-col shadow-2xl overflow-hidden border border-slate-200"
+        className="bg-white w-full max-w-lg rounded-t-3xl sm:rounded-3xl max-h-[92vh] flex flex-col shadow-stitch-lg overflow-hidden border border-[#E5E7EB]"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Modal Header */}
-        <div className="px-5 py-4 border-b border-slate-100 flex items-center justify-between bg-gradient-to-r from-indigo-50 via-white to-indigo-50">
-          <div className="flex items-center gap-2">
-            <div className="w-9 h-9 rounded-xl bg-indigo-600 flex items-center justify-center text-white shadow-sm">
+        <div className="px-5 py-4 border-b border-[#1F2937] flex items-center justify-between bg-[#111827] text-white">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-2xl bg-white/10 border border-white/15 flex items-center justify-center text-[#FF7A59]">
               <GraduationCap className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="text-base font-bold text-slate-800">Add New Teacher</h2>
-              <p className="text-xs text-slate-500">Register faculty member, subjects & teaching sections</p>
+              <h2 className="text-base font-bold text-white font-display">Add New Teacher</h2>
+              <p className="text-xs text-slate-400">Register faculty member, subjects & teaching sections</p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-500 transition-colors"
+            className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors cursor-pointer"
           >
             <X className="w-4 h-4" />
           </button>
@@ -185,17 +250,17 @@ export default function AddTeacherModal({ isOpen, onClose, onAddTeacher, existin
           {/* Top Row: Teacher ID & Date of Joining */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {/* Autogenerated Teacher ID */}
-            <div className="bg-indigo-50/80 border border-indigo-100 rounded-xl p-3 flex items-center justify-between">
+            <div className="bg-[#F8F9FB] border border-slate-200 rounded-2xl p-3 flex items-center justify-between">
               <div>
-                <span className="text-[10px] font-semibold text-indigo-700 uppercase tracking-wider block">
+                <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider block">
                   Teacher ID (Auto)
                 </span>
-                <span className="text-sm font-extrabold text-indigo-950 font-mono tracking-tight">
+                <span className="text-sm font-extrabold text-slate-900 font-mono tracking-tight">
                   {formData.id}
                 </span>
               </div>
-              <div className="flex items-center gap-1 bg-white px-2 py-1 rounded-md text-[10px] font-medium text-indigo-600 shadow-xs border border-indigo-100">
-                <Sparkles className="w-3 h-3 text-amber-500" />
+              <div className="flex items-center gap-1 bg-white px-2.5 py-1 rounded-full text-[10px] font-bold text-slate-700 shadow-2xs border border-slate-200">
+                <Sparkles className="w-3 h-3 text-slate-500" />
                 Serial
               </div>
             </div>
@@ -203,7 +268,7 @@ export default function AddTeacherModal({ isOpen, onClose, onAddTeacher, existin
             {/* Date of Joining */}
             <div>
               <label className="block font-semibold text-slate-700 mb-1 flex items-center gap-1">
-                <Calendar className="w-3.5 h-3.5 text-indigo-600" />
+                <Calendar className="w-3.5 h-3.5 text-slate-600" />
                 <span>Date of Joining <span className="text-rose-500">*</span></span>
               </label>
               <input
@@ -211,7 +276,7 @@ export default function AddTeacherModal({ isOpen, onClose, onAddTeacher, existin
                 value={formData.joinedAt}
                 onChange={(e) => setFormData({ ...formData, joinedAt: e.target.value })}
                 className={`w-full px-3 py-2 rounded-xl border bg-white text-xs font-semibold focus:outline-none focus:ring-2 ${
-                  errors.joinedAt ? 'border-rose-400 focus:ring-rose-200' : 'border-slate-200 focus:ring-indigo-200 focus:border-indigo-500'
+                  errors.joinedAt ? 'border-rose-400 focus:ring-rose-200' : 'border-slate-200 focus:ring-slate-200 focus:border-[#111827]'
                 }`}
               />
               {errors.joinedAt && <p className="text-rose-500 text-[10px] mt-0.5">{errors.joinedAt}</p>}
@@ -220,7 +285,7 @@ export default function AddTeacherModal({ isOpen, onClose, onAddTeacher, existin
 
           {/* Photo Attachment Placeholder */}
           <div className="bg-slate-50 border border-dashed border-slate-300 rounded-2xl p-3.5 flex items-center gap-3.5">
-            <div className="relative w-14 h-14 min-w-[56px] min-h-[56px] rounded-xl bg-white border border-indigo-100 overflow-hidden flex items-center justify-center shadow-xs shrink-0">
+            <div className="relative w-14 h-14 min-w-[56px] min-h-[56px] rounded-2xl bg-white border border-slate-200 overflow-hidden flex items-center justify-center shadow-xs shrink-0">
               {photoPreview ? (
                 <img src={photoPreview} alt="Preview" className="w-full h-full object-cover" />
               ) : (
@@ -235,7 +300,7 @@ export default function AddTeacherModal({ isOpen, onClose, onAddTeacher, existin
               <p className="text-[10px] text-slate-400 mb-2">
                 Upload passport photo or select image file
               </p>
-              <label className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-semibold cursor-pointer shadow-xs transition-colors">
+              <label className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-[#111827] hover:bg-black text-white rounded-full text-xs font-semibold cursor-pointer shadow-xs transition-colors">
                 <Upload className="w-3.5 h-3.5" />
                 <span>Upload Pic</span>
                 <input
@@ -345,111 +410,189 @@ export default function AddTeacherModal({ isOpen, onClose, onAddTeacher, existin
             </div>
           </div>
 
-          {/* Subject Dropdown & Expected Arrival Time */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <div>
-              <label className="block font-semibold text-slate-700 mb-1 flex items-center gap-1">
-                <BookOpen className="w-3.5 h-3.5 text-indigo-600" />
-                <span>Teaching Subject <span className="text-rose-500">*</span></span>
-              </label>
-              <select
-                value={formData.department}
-                onChange={(e) => setFormData({ ...formData, department: e.target.value })}
-                className={`w-full px-3 py-2 rounded-xl border bg-white text-xs font-semibold focus:outline-none focus:ring-2 ${
-                  errors.department ? 'border-rose-400 focus:ring-rose-200' : 'border-slate-200 focus:ring-indigo-200 focus:border-indigo-500'
-                } cursor-pointer`}
-              >
-                {TEACHER_SUBJECTS.map((sub) => (
-                  <option key={sub} value={sub}>
-                    {sub}
-                  </option>
-                ))}
-              </select>
-              {errors.department && <p className="text-rose-500 text-[10px] mt-0.5">{errors.department}</p>}
-            </div>
-
-            <div>
-              <label className="block font-semibold text-slate-700 mb-1 flex items-center gap-1">
-                <Clock className="w-3.5 h-3.5 text-indigo-600" />
-                <span>Expected Arrival Time <span className="text-rose-500">*</span></span>
-              </label>
-              <div className="relative">
-                <input
-                  type="time"
-                  value={formData.arrivalTime || '07:45'}
-                  onChange={(e) => setFormData({ ...formData, arrivalTime: e.target.value })}
-                  className="w-full pl-8 pr-3 py-2 rounded-xl border border-slate-200 bg-white text-xs font-bold font-mono focus:outline-none focus:ring-2 focus:ring-indigo-200 focus:border-indigo-500"
-                  required
-                />
-                <Clock className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-2.5" />
-              </div>
-            </div>
-          </div>
-
-          {/* Optional Class & Section Checkboxes (one teacher can teach multiple) */}
-          <div className="space-y-2 p-3.5 rounded-2xl bg-slate-50 border border-slate-200">
+          {/* Unified Lectures & Class Assignments Section */}
+          <div className="space-y-3 p-4 rounded-2xl bg-indigo-50/40 border border-indigo-100">
             <div className="flex items-center justify-between">
-              <label className="font-bold text-slate-800 text-xs flex items-center gap-1.5">
-                <Layers className="w-3.5 h-3.5 text-indigo-600" />
-                <span>Assigned Classes & Sections (Optional)</span>
-              </label>
-              <span className="text-[11px] font-bold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded-md border border-indigo-100">
-                {formData.assignedClasses?.length || 0} selected
-              </span>
+              <div>
+                <label className="font-bold text-slate-800 text-xs flex items-center gap-1.5">
+                  <BookOpen className="w-3.5 h-3.5 text-indigo-600" />
+                  <span>Lectures & Assigned Classes <span className="text-rose-500">*</span></span>
+                </label>
+                <p className="text-[10.5px] text-slate-500 mt-0.5">
+                  Add each lecture, select its assigned class, and set its scheduled timing.
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={handleAddLecture}
+                className="flex items-center gap-1.5 px-3.5 py-1.5 bg-[#111827] hover:bg-black text-white rounded-full text-xs font-bold shadow-xs transition-all tap-active cursor-pointer"
+              >
+                <Plus className="w-3.5 h-3.5" />
+                <span>Add Lecture</span>
+              </button>
             </div>
-            <p className="text-[10.5px] text-slate-500">
-              One teacher can teach more than one class and section. Check all applicable:
-            </p>
 
-            <div className="space-y-2.5 pt-1">
-              {CLASSES.map((cls) => {
-                const sections = CLASS_SECTIONS[cls] || [];
-                const allSelected = sections.every((sec) =>
-                  formData.assignedClasses?.includes(`${cls} (${sec})`)
-                );
-                return (
-                  <div key={cls} className="bg-white p-2.5 rounded-xl border border-slate-200/80 shadow-2xs space-y-1.5">
-                    <div className="flex items-center justify-between">
-                      <span className="font-extrabold text-slate-900 text-xs">
-                        Class {cls}
+            {errors.lectures && (
+              <p className="text-rose-500 text-[10.5px] font-semibold bg-rose-50 border border-rose-200 p-2 rounded-xl">
+                {errors.lectures}
+              </p>
+            )}
+
+            <div className="space-y-3 pt-1">
+              {lectures.map((lec, lIdx) => (
+                <div
+                  key={lec.id || lIdx}
+                  className="bg-white rounded-2xl border border-slate-200 p-3.5 shadow-2xs space-y-3 transition-all"
+                >
+                  {/* Lecture Card Header */}
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <span className="text-xs font-bold text-slate-800 bg-slate-100 border border-slate-200 px-2.5 py-0.5 rounded-full">
+                        Lecture #{lIdx + 1}
                       </span>
+                      {lec.assignedClass ? (
+                        <span className="text-[11px] font-bold text-slate-800 bg-slate-100 border border-slate-200 px-2.5 py-0.5 rounded-full flex items-center gap-1">
+                          <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+                          {lec.assignedClass}
+                        </span>
+                      ) : (
+                        <span className="text-[10px] font-bold text-amber-700 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded-full">
+                          No class selected
+                        </span>
+                      )}
+                      {lec.assignedClass && lec.time && (
+                        <span className="text-[11px] font-mono font-bold text-slate-800 bg-slate-100 border border-slate-200 px-2.5 py-0.5 rounded-full flex items-center gap-1">
+                          <Clock className="w-3 h-3 text-slate-500" />
+                          {lec.time}
+                        </span>
+                      )}
+                    </div>
+
+                    {lectures.length > 1 && (
                       <button
                         type="button"
-                        onClick={() => toggleAllSectionsForClass(cls)}
-                        className="text-[10px] font-bold text-indigo-600 hover:text-indigo-800 transition-colors cursor-pointer"
+                        onClick={() => handleRemoveLecture(lec.id)}
+                        className="p-1.5 text-rose-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer"
+                        title="Remove Lecture"
                       >
-                        {allSelected ? 'Uncheck All' : 'Select All'}
+                        <Trash2 className="w-3.5 h-3.5" />
                       </button>
-                    </div>
-
-                    <div className="flex flex-wrap gap-2 pt-0.5">
-                      {sections.map((sec) => {
-                        const key = `${cls} (${sec})`;
-                        const isChecked = formData.assignedClasses?.includes(key);
-                        return (
-                          <button
-                            key={sec}
-                            type="button"
-                            onClick={() => toggleClassSection(cls, sec)}
-                            className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-semibold transition-all border cursor-pointer ${
-                              isChecked
-                                ? 'bg-indigo-600 text-white border-indigo-600 shadow-2xs'
-                                : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
-                            }`}
-                          >
-                            {isChecked ? (
-                              <CheckSquare className="w-3.5 h-3.5 text-white" />
-                            ) : (
-                              <Square className="w-3.5 h-3.5 text-slate-400" />
-                            )}
-                            <span>{sec}</span>
-                          </button>
-                        );
-                      })}
-                    </div>
+                    )}
                   </div>
-                );
-              })}
+
+                  {/* Lecture Subject selector */}
+                  <div>
+                    <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">
+                      Subject
+                    </label>
+                    <select
+                      value={lec.subject}
+                      onChange={(e) => handleUpdateLecture(lec.id, 'subject', e.target.value)}
+                      className="w-full px-2.5 py-1.5 rounded-xl border border-slate-200 bg-white text-xs font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-100 focus:border-indigo-500"
+                    >
+                      {TEACHER_SUBJECTS.map((sub) => (
+                        <option key={sub} value={sub}>
+                          {sub}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {/* Expandable Assigned Classes Section (User makes ONE selection) */}
+                  <div className="border border-slate-200 rounded-xl overflow-hidden">
+                    <button
+                      type="button"
+                      onClick={() => handleToggleExpandClasses(lec.id)}
+                      className="w-full px-3 py-2 bg-slate-50 hover:bg-slate-100 flex items-center justify-between text-xs font-bold text-slate-800 transition-colors cursor-pointer"
+                    >
+                      <span className="flex items-center gap-1.5">
+                        <Layers className="w-3.5 h-3.5 text-indigo-600" />
+                        <span>Assigned Class (Click to {lec.isClassesExpanded ? 'Collapse' : 'Select'})</span>
+                      </span>
+                      <div className="flex items-center gap-2">
+                        <span className={`text-[11px] font-semibold ${lec.assignedClass ? 'text-emerald-700' : 'text-slate-400'}`}>
+                          {lec.assignedClass || 'Choose one class'}
+                        </span>
+                        {lec.isClassesExpanded ? (
+                          <ChevronUp className="w-4 h-4 text-slate-500" />
+                        ) : (
+                          <ChevronDown className="w-4 h-4 text-slate-500" />
+                        )}
+                      </div>
+                    </button>
+
+                    {lec.isClassesExpanded && (
+                      <div className="p-3 bg-white space-y-2.5 border-t border-slate-100 max-h-56 overflow-y-auto">
+                        <p className="text-[10px] text-slate-400 italic">
+                          Select one class & section for this lecture:
+                        </p>
+                        {CLASSES.map((cls) => {
+                          const sections = CLASS_SECTIONS[cls] || [];
+                          return (
+                            <div key={cls} className="space-y-1">
+                              <span className="text-[11px] font-extrabold text-slate-700 block">
+                                Class {cls}
+                              </span>
+                              <div className="flex flex-wrap gap-1.5">
+                                {sections.map((sec) => {
+                                  const classKey = `${cls} (${sec})`;
+                                  const isSelected = lec.assignedClass === classKey;
+                                  return (
+                                    <button
+                                      key={sec}
+                                      type="button"
+                                      onClick={() => handleSelectClassForLecture(lec.id, classKey)}
+                                      className={`px-3 py-1 rounded-full text-xs font-bold transition-all border cursor-pointer flex items-center gap-1 ${
+                                        isSelected
+                                          ? 'bg-[#111827] text-white border-[#111827] shadow-xs'
+                                          : 'bg-white hover:bg-slate-50 text-slate-700 border-slate-200'
+                                      }`}
+                                    >
+                                      {isSelected && <Check className="w-3 h-3 text-white" />}
+                                      <span>{sec}</span>
+                                    </button>
+                                  );
+                                })}
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Lecture Time Field: SHOWN ONCE ASSIGNED CLASS IS SELECTED */}
+                  {lec.assignedClass ? (
+                    <div className="p-3 bg-[#F8F9FB] border border-slate-200 rounded-2xl space-y-1.5 animate-in fade-in duration-200">
+                      <div className="flex items-center justify-between">
+                        <label className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                          <Clock className="w-3.5 h-3.5 text-slate-700" />
+                          <span>Lecture Time for {lec.assignedClass} <span className="text-rose-500">*</span></span>
+                        </label>
+                        <span className="text-[10px] font-bold text-slate-700 bg-slate-200/80 px-2.5 py-0.5 rounded-full">
+                          Scheduled Slot
+                        </span>
+                      </div>
+                      <input
+                        type="time"
+                        value={lec.time}
+                        onChange={(e) => handleUpdateLecture(lec.id, 'time', e.target.value)}
+                        className="w-full px-3 py-2 rounded-xl border border-slate-300 bg-white text-xs font-bold font-mono text-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-900 focus:border-[#111827]"
+                        required
+                      />
+                      <p className="text-[10px] text-slate-500">
+                        e.g. 15:00 for 3:00 PM or 18:00 for 6:00 PM.
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="p-2.5 bg-slate-50 rounded-xl border border-dashed border-slate-200 text-center">
+                      <p className="text-[10.5px] text-slate-400 font-medium">
+                        👉 Please select an assigned class above to set this lecture's scheduled timing.
+                      </p>
+                    </div>
+                  )}
+                </div>
+              ))}
             </div>
           </div>
 
@@ -471,17 +614,17 @@ export default function AddTeacherModal({ isOpen, onClose, onAddTeacher, existin
           </div>
 
           {/* Sticky Actions */}
-          <div className="pt-3 border-t border-slate-100 flex items-center gap-2.5">
+          <div className="pt-3 border-t border-[#E5E7EB] flex items-center gap-2.5">
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 py-2.5 px-4 rounded-xl border border-slate-200 text-slate-600 font-semibold text-xs hover:bg-slate-50 transition-colors tap-active cursor-pointer"
+              className="flex-1 py-2.5 px-4 rounded-full bg-[#F3F4F6] text-slate-700 font-semibold text-xs hover:bg-[#edeef0] transition-colors tap-active cursor-pointer"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="flex-1 py-2.5 px-4 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs shadow-md shadow-indigo-200 flex items-center justify-center gap-1.5 transition-all tap-active cursor-pointer"
+              className="flex-1 py-2.5 px-4 rounded-full bg-[#111827] hover:bg-[#1F2937] text-white font-semibold text-xs shadow-sm flex items-center justify-center gap-1.5 transition-all tap-active cursor-pointer"
             >
               <Check className="w-4 h-4" />
               Save Teacher

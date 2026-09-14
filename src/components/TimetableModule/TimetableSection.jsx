@@ -66,10 +66,10 @@ export default function TimetableSection({
             <button
               key={cls}
               onClick={() => handleSelectClass(cls)}
-              className={`px-3.5 py-1.5 rounded-xl font-bold whitespace-nowrap transition-all border cursor-pointer ${
+              className={`px-3.5 py-1.5 rounded-full font-bold whitespace-nowrap transition-all border cursor-pointer ${
                 isSelected
-                  ? 'bg-teal-600 text-white border-teal-600 shadow-xs'
-                  : 'bg-white text-slate-600 border-slate-200 hover:border-slate-300'
+                  ? 'bg-[#111827] text-white border-[#111827] shadow-xs'
+                  : 'bg-white text-slate-700 border-slate-200 hover:border-slate-300'
               }`}
             >
               {cls === 'All' ? 'All Classes' : cls}
@@ -86,10 +86,10 @@ export default function TimetableSection({
         <button
           type="button"
           onClick={() => setSelectedSection('All')}
-          className={`px-3 py-1.5 rounded-xl font-bold whitespace-nowrap transition-all border cursor-pointer ${
+          className={`px-3.5 py-1.5 rounded-full font-bold whitespace-nowrap transition-all border cursor-pointer ${
             selectedSection === 'All'
-              ? 'bg-teal-600 text-white border-teal-600 shadow-xs'
-              : 'bg-white text-slate-600 border-slate-200 hover:border-slate-300'
+              ? 'bg-[#111827] text-white border-[#111827] shadow-xs'
+              : 'bg-white text-slate-700 border-slate-200 hover:border-slate-300'
           }`}
         >
           All Sections
@@ -99,10 +99,10 @@ export default function TimetableSection({
             key={sec}
             type="button"
             onClick={() => setSelectedSection(sec)}
-            className={`px-3 py-1.5 rounded-xl font-bold whitespace-nowrap transition-all border cursor-pointer ${
+            className={`px-3.5 py-1.5 rounded-full font-bold whitespace-nowrap transition-all border cursor-pointer ${
               selectedSection === sec
-                ? 'bg-teal-600 text-white border-teal-600 shadow-xs'
-                : 'bg-white text-slate-600 border-slate-200 hover:border-slate-300'
+                ? 'bg-[#111827] text-white border-[#111827] shadow-xs'
+                : 'bg-white text-slate-700 border-slate-200 hover:border-slate-300'
             }`}
           >
             {sec}
@@ -119,7 +119,7 @@ export default function TimetableSection({
             placeholder="Search class or section..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-9 pr-3.5 py-2 bg-slate-100 hover:bg-slate-100/80 focus:bg-white text-xs rounded-xl border border-transparent focus:border-teal-500 focus:ring-2 focus:ring-teal-100 transition-all outline-none"
+            className="w-full pl-9 pr-3.5 py-2 bg-slate-100 hover:bg-slate-100/80 focus:bg-white text-xs rounded-full border border-transparent focus:border-[#111827] focus:ring-1 focus:ring-slate-200 transition-all outline-none"
           />
         </div>
 
@@ -127,7 +127,7 @@ export default function TimetableSection({
           <button
             type="button"
             onClick={onNavigateDatesheets}
-            className="px-3 py-2 rounded-xl bg-teal-50 hover:bg-teal-100 text-teal-800 border border-teal-200 text-xs font-bold transition-all shadow-xs cursor-pointer shrink-0"
+            className="px-3.5 py-2 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 text-xs font-semibold transition-all shadow-2xs cursor-pointer shrink-0"
             title="Open Exam Datesheets"
           >
             <span className="hidden sm:inline">Exam Datesheets →</span>
@@ -138,7 +138,7 @@ export default function TimetableSection({
         {!readOnly && (
           <button
             onClick={() => setIsAddOpen(true)}
-            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-teal-600 hover:bg-teal-700 active:scale-98 text-white font-bold text-xs shadow-xs transition-all shrink-0 cursor-pointer"
+            className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#111827] hover:bg-black active:scale-98 text-white font-bold text-xs shadow-xs transition-all shrink-0 cursor-pointer"
           >
             <Plus className="w-4 h-4" />
             <span>Add Timetable</span>
@@ -186,12 +186,12 @@ export default function TimetableSection({
                 {/* Badges and Actions */}
                 <div className="flex items-center justify-between pt-1 border-t border-slate-100 text-[11px] flex-wrap gap-2">
                   <div className="flex items-center gap-2">
-                    <span className="flex items-center gap-1 text-slate-600 font-semibold">
-                      <BookOpen className="w-3.5 h-3.5 text-teal-600" />
+                    <span className="flex items-center gap-1 text-slate-700 font-semibold px-2.5 py-0.5 rounded-full bg-slate-100 border border-slate-200">
+                      <BookOpen className="w-3 h-3 text-slate-500" />
                       <span>{periodsCount} Periods</span>
                     </span>
-                    <span className="flex items-center gap-1 text-amber-700 font-semibold">
-                      <Coffee className="w-3.5 h-3.5 text-amber-600" />
+                    <span className="flex items-center gap-1 text-slate-700 font-semibold px-2.5 py-0.5 rounded-full bg-slate-100 border border-slate-200">
+                      <Coffee className="w-3 h-3 text-slate-500" />
                       <span>{breaksCount} Breaks</span>
                     </span>
                   </div>
@@ -201,9 +201,9 @@ export default function TimetableSection({
                       type="button"
                       onClick={() => printTimetable(tt)}
                       title="Print Preview Timetable"
-                      className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-700 text-[11px] font-bold transition-colors border border-blue-200"
+                      className="flex items-center gap-1 px-3 py-1 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition-colors border border-slate-200 cursor-pointer"
                     >
-                      <Printer className="w-3 h-3 text-blue-600" />
+                      <Printer className="w-3 h-3 text-slate-600" />
                       <span>Print</span>
                     </button>
 
@@ -211,7 +211,7 @@ export default function TimetableSection({
                       type="button"
                       onClick={() => exportTimetablePDF(tt)}
                       title="Download Timetable PDF"
-                      className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-bold transition-colors border border-slate-200"
+                      className="flex items-center gap-1 px-3 py-1 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition-colors border border-slate-200 cursor-pointer"
                     >
                       <Download className="w-3 h-3 text-slate-600" />
                       <span>PDF</span>
@@ -221,7 +221,7 @@ export default function TimetableSection({
                       type="button"
                       onClick={() => shareTimetableWhatsApp(tt)}
                       title="Share Timetable on WhatsApp"
-                      className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-700 text-[11px] font-bold transition-colors border border-emerald-200"
+                      className="flex items-center gap-1 px-3 py-1 rounded-full bg-emerald-50 hover:bg-emerald-100 text-emerald-700 text-xs font-semibold transition-colors border border-emerald-200 cursor-pointer"
                     >
                       <MessageCircle className="w-3 h-3 text-emerald-600" />
                       <span>WhatsApp</span>
@@ -231,9 +231,9 @@ export default function TimetableSection({
                     <button
                       type="button"
                       onClick={() => setViewingTimetable(tt)}
-                      className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-teal-50 hover:bg-teal-100 text-teal-800 text-[11px] font-bold transition-colors"
+                      className="flex items-center gap-1 px-3.5 py-1 rounded-full bg-[#111827] hover:bg-black text-white text-xs font-semibold transition-colors cursor-pointer"
                     >
-                      <Eye className="w-3 h-3 text-teal-600" />
+                      <Eye className="w-3 h-3 text-white" />
                       <span>View</span>
                     </button>
                   </div>

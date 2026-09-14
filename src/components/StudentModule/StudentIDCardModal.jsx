@@ -15,35 +15,29 @@ export default function StudentIDCardModal({ student, isOpen, onClose }) {
     : '20-Aug-2026';
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-3 animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-3 animate-in fade-in duration-200">
       <div 
-        className="bg-slate-900 text-slate-100 w-full max-w-sm rounded-3xl shadow-2xl overflow-hidden border border-slate-700/80 flex flex-col"
+        className="bg-white text-slate-900 w-full max-w-sm rounded-3xl shadow-2xl overflow-hidden border border-slate-100 flex flex-col"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Modal Top Bar */}
-        <div className="px-4 py-3 border-b border-slate-800 flex items-center justify-between bg-slate-900/90">
-          <div className="flex items-center gap-2">
-            <Award className="w-4 h-4 text-amber-400" />
-            <span className="text-xs font-bold text-slate-200">Student Identity Card</span>
+        <div className="px-5 py-4 bg-[#111827] text-white flex items-center justify-between shrink-0 border-b border-slate-800">
+          <div className="flex items-center gap-2.5">
+            <div className="w-10 h-10 rounded-2xl bg-white/10 backdrop-blur-sm flex items-center justify-center border border-white/10">
+              <Award className="w-5 h-5 text-white" />
+            </div>
+            <div>
+              <h2 className="text-base font-extrabold tracking-tight">Student Identity Card</h2>
+              <p className="text-xs text-slate-300 font-medium">Preview & printable credential</p>
+            </div>
           </div>
 
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={handlePrint}
-              className="flex items-center gap-1 bg-indigo-600 hover:bg-indigo-500 text-white px-2.5 py-1 rounded-lg text-xs font-bold shadow-xs transition-colors"
-            >
-              <Printer className="w-3.5 h-3.5" />
-              <span>Print</span>
-            </button>
-
-            <button
-              onClick={onClose}
-              className="w-7 h-7 rounded-full bg-slate-800 hover:bg-slate-700 flex items-center justify-center text-slate-400 hover:text-white transition-colors"
-            >
-              <X className="w-4 h-4" />
-            </button>
-          </div>
+          <button
+            onClick={onClose}
+            className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors border border-white/15 cursor-pointer"
+          >
+            <X className="w-4 h-4" />
+          </button>
         </div>
 
         {/* Printable / Viewable ID Card Body */}
@@ -186,11 +180,11 @@ export default function StudentIDCardModal({ student, isOpen, onClose }) {
         </div>
 
         {/* Modal Footer */}
-        <div className="p-3 border-t border-slate-800 bg-slate-900/90 flex items-center gap-2">
+        <div className="p-3.5 border-t border-slate-200 bg-white flex items-center gap-2">
           <button
             type="button"
             onClick={handlePrint}
-            className="flex-1 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-md transition-colors tap-active"
+            className="flex-1 py-2.5 px-4 rounded-full bg-[#111827] hover:bg-black text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-xs transition-colors cursor-pointer"
           >
             <Printer className="w-3.5 h-3.5" />
             <span>Print ID Card</span>
@@ -198,7 +192,7 @@ export default function StudentIDCardModal({ student, isOpen, onClose }) {
           <button
             type="button"
             onClick={onClose}
-            className="flex-1 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs transition-colors tap-active"
+            className="flex-1 py-2.5 px-4 rounded-full border border-slate-200 text-slate-700 font-bold text-xs hover:bg-slate-50 transition-colors cursor-pointer"
           >
             Close
           </button>

@@ -26,6 +26,7 @@ export default function AdminTabHub({
   onAddTeacher,
   onUpdateTeacher,
   onDeleteTeacher,
+  onToggleTeacherStatus,
   // Timetables props
   timetables = [],
   onAddTimetable,
@@ -57,7 +58,8 @@ export default function AdminTabHub({
   onUpdateScheme,
   onDeleteScheme,
   currentSession = '2026 - 27',
-  batches = []
+  batches = [],
+  attendanceTimings
 }) {
   const menuItems = [
     {
@@ -155,6 +157,7 @@ export default function AdminTabHub({
               onAddTeacher={onAddTeacher}
               onUpdateTeacher={onUpdateTeacher}
               onDeleteTeacher={onDeleteTeacher}
+              onToggleTeacherStatus={onToggleTeacherStatus}
               onOpenTeacherAttendance={() => setSubPage('teacher_attendance')}
             />
           </div>
@@ -223,6 +226,7 @@ export default function AdminTabHub({
             onSaveTeacherAttendance={onSaveTeacherAttendance}
             onUpdateTeacherAttendanceSession={onUpdateTeacherAttendanceSession}
             onDeleteTeacherAttendanceSession={onDeleteTeacherAttendanceSession}
+            attendanceTimings={attendanceTimings}
             onBack={() => setSubPage(null)}
           />
         )}

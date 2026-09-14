@@ -171,24 +171,23 @@ export default function SubjectsManagerModal({
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 bg-black/60 backdrop-blur-xs animate-in fade-in duration-200">
       <div className="bg-white w-full max-w-lg rounded-3xl shadow-2xl flex flex-col max-h-[92vh] overflow-hidden border border-slate-100">
         {/* Header */}
-        <div className="px-5 py-4 bg-gradient-to-r from-indigo-700 via-indigo-600 to-brand-700 text-white flex items-center justify-between shrink-0 shadow-sm">
+        <div className="px-5 py-4 bg-[#111827] text-white flex items-center justify-between shrink-0 border-b border-slate-800">
           <div className="flex items-center gap-2.5">
-            <div className="w-10 h-10 rounded-2xl bg-white/15 backdrop-blur-md flex items-center justify-center border border-white/20 shadow-inner">
-              <BookOpen className="w-5 h-5 text-amber-300" />
+            <div className="w-10 h-10 rounded-2xl bg-white/10 backdrop-blur-sm flex items-center justify-center border border-white/10">
+              <BookOpen className="w-5 h-5 text-white" />
             </div>
             <div>
               <h2 className="text-base font-extrabold tracking-tight flex items-center gap-1.5">
                 <span>Subjects Master</span>
-                <Sparkles className="w-3.5 h-3.5 text-amber-300 fill-amber-300" />
               </h2>
-              <p className="text-xs text-indigo-100 font-medium">
+              <p className="text-xs text-slate-300 font-medium">
                 Curriculum & subjects per class & group
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors border border-white/15"
+            className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors border border-white/15 cursor-pointer"
           >
             <X className="w-4 h-4" />
           </button>
@@ -215,20 +214,20 @@ export default function SubjectsManagerModal({
           <div className="bg-white p-3 rounded-2xl border border-slate-200 shadow-xs space-y-2">
             <div className="flex items-center justify-between text-xs font-bold text-slate-700">
               <span className="flex items-center gap-1.5">
-                <GraduationCap className="w-3.5 h-3.5 text-indigo-600" />
+                <GraduationCap className="w-3.5 h-3.5 text-slate-700" />
                 Select Class
               </span>
               <span className="text-[10px] text-slate-400 font-medium">Step 1</span>
             </div>
-            <div className="grid grid-cols-4 gap-1.5 bg-slate-100 p-1 rounded-xl">
+            <div className="grid grid-cols-4 gap-1.5 bg-slate-100 p-1.5 rounded-full border border-slate-200/80">
               {CLASSES.map((cls) => (
                 <button
                   key={cls}
                   type="button"
                   onClick={() => handleClassChange(cls)}
-                  className={`py-1.5 text-xs font-bold rounded-lg transition-all text-center ${
+                  className={`py-1.5 text-xs font-bold rounded-full transition-all text-center cursor-pointer ${
                     selectedClass === cls
-                      ? 'bg-indigo-600 text-white shadow-xs'
+                      ? 'bg-[#111827] text-white shadow-xs'
                       : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'
                   }`}
                 >
@@ -242,7 +241,7 @@ export default function SubjectsManagerModal({
           <div className="bg-white p-3 rounded-2xl border border-slate-200 shadow-xs space-y-2">
             <div className="flex items-center justify-between text-xs font-bold text-slate-700">
               <span className="flex items-center gap-1.5">
-                <Layers className="w-3.5 h-3.5 text-indigo-600" />
+                <Layers className="w-3.5 h-3.5 text-slate-700" />
                 Select Section / Group
               </span>
               <span className="text-[10px] text-slate-400 font-medium">Step 2</span>
@@ -253,10 +252,10 @@ export default function SubjectsManagerModal({
                   key={sec}
                   type="button"
                   onClick={() => handleSectionChange(sec)}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
+                  className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
                     selectedSection === sec
-                      ? 'bg-amber-500 text-white shadow-xs'
-                      : 'bg-slate-100 text-slate-700 hover:bg-slate-200/80'
+                      ? 'bg-[#111827] text-white shadow-xs'
+                      : 'bg-white text-slate-700 border border-slate-200 hover:border-slate-300'
                   }`}
                 >
                   <span>{sec}</span>
@@ -271,11 +270,11 @@ export default function SubjectsManagerModal({
           {/* Current Selection Header & Subject Count */}
           <div className="flex items-center justify-between px-1">
             <div className="flex items-center gap-2">
-              <div className="w-2.5 h-2.5 rounded-full bg-indigo-600"></div>
+              <div className="w-2.5 h-2.5 rounded-full bg-[#111827]"></div>
               <h3 className="font-extrabold text-slate-900 text-sm">
                 {selectedClass} ({selectedSection})
               </h3>
-              <span className="px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-800 text-[10px] font-extrabold">
+              <span className="px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-700 border border-slate-200 text-[10px] font-bold">
                 {currentSubjects.length} {currentSubjects.length === 1 ? 'Subject' : 'Subjects'}
               </span>
             </div>
@@ -284,7 +283,7 @@ export default function SubjectsManagerModal({
               <button
                 type="button"
                 onClick={handleResetSection}
-                className="text-[11px] font-bold text-slate-500 hover:text-indigo-600 flex items-center gap-1 transition-colors"
+                className="text-[11px] font-bold text-slate-500 hover:text-slate-900 flex items-center gap-1 transition-colors cursor-pointer"
                 title="Reset this class and section to Star Academy default subjects"
               >
                 <RotateCcw className="w-3 h-3" />
@@ -294,10 +293,10 @@ export default function SubjectsManagerModal({
               <button
                 type="button"
                 onClick={handleResetAll}
-                className="text-[11px] font-bold text-amber-600 hover:text-amber-700 flex items-center gap-1 transition-colors"
+                className="text-[11px] font-bold text-slate-500 hover:text-slate-900 flex items-center gap-1 transition-colors cursor-pointer"
                 title="Reset ALL classes and sections to Star Academy master defaults"
               >
-                <Sparkles className="w-3 h-3" />
+                <RotateCcw className="w-3 h-3" />
                 <span>Reset All</span>
               </button>
             </div>
@@ -306,10 +305,10 @@ export default function SubjectsManagerModal({
           {/* Add Subject Input Bar */}
           <form
             onSubmit={handleAddSubject}
-            className="flex items-center gap-2 bg-white p-2 rounded-2xl border border-indigo-200 shadow-xs focus-within:border-indigo-600 focus-within:ring-2 focus-within:ring-indigo-100 transition-all"
+            className="flex items-center gap-2 bg-white p-1.5 pl-3 rounded-full border border-slate-200 shadow-xs focus-within:border-slate-400 focus-within:ring-2 focus-within:ring-slate-100 transition-all"
           >
-            <div className="w-7 h-7 rounded-xl bg-indigo-50 flex items-center justify-center shrink-0">
-              <Plus className="w-4 h-4 text-indigo-600" />
+            <div className="w-7 h-7 rounded-full bg-slate-100 flex items-center justify-center shrink-0">
+              <Plus className="w-4 h-4 text-slate-600" />
             </div>
             <input
               type="text"
@@ -321,7 +320,7 @@ export default function SubjectsManagerModal({
             <button
               type="submit"
               disabled={!newSubjectInput.trim()}
-              className="px-3 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 disabled:opacity-40 disabled:hover:bg-indigo-600 text-white text-xs font-bold transition-all shadow-xs shrink-0 flex items-center gap-1"
+              className="px-4 py-1.5 rounded-full bg-[#111827] hover:bg-black active:scale-98 disabled:opacity-40 disabled:hover:bg-[#111827] text-white text-xs font-bold transition-all shadow-xs shrink-0 flex items-center gap-1 cursor-pointer"
             >
               <span>Add</span>
             </button>
@@ -346,12 +345,12 @@ export default function SubjectsManagerModal({
                     key={`${subject}-${index}`}
                     className={`group bg-white rounded-2xl border transition-all duration-150 p-2.5 flex items-center justify-between gap-2 shadow-xs ${
                       isEditing
-                        ? 'border-indigo-500 ring-2 ring-indigo-100 bg-indigo-50/20'
-                        : 'border-slate-200/80 hover:border-indigo-200 hover:shadow-sm'
+                        ? 'border-slate-400 ring-2 ring-slate-100 bg-slate-50/50'
+                        : 'border-slate-200/80 hover:border-slate-300 hover:shadow-xs'
                     }`}
                   >
                     <div className="flex items-center gap-2.5 flex-1 min-w-0">
-                      <span className="w-6 h-6 rounded-lg bg-slate-100 text-slate-600 text-[10px] font-extrabold flex items-center justify-center shrink-0">
+                      <span className="w-6 h-6 rounded-full bg-slate-100 text-slate-600 text-[10px] font-extrabold flex items-center justify-center shrink-0">
                         {index + 1}
                       </span>
 
@@ -366,12 +365,12 @@ export default function SubjectsManagerModal({
                               if (e.key === 'Enter') handleSaveEdit(index);
                               if (e.key === 'Escape') handleCancelEdit();
                             }}
-                            className="w-full text-xs font-bold text-slate-900 bg-white px-2.5 py-1 rounded-lg border border-indigo-400 outline-none focus:ring-1 focus:ring-indigo-500"
+                            className="w-full text-xs font-bold text-slate-900 bg-white px-3 py-1 rounded-full border border-slate-300 outline-none focus:ring-1 focus:ring-slate-400"
                           />
                           <button
                             type="button"
                             onClick={() => handleSaveEdit(index)}
-                            className="w-7 h-7 rounded-lg bg-emerald-500 hover:bg-emerald-600 text-white flex items-center justify-center transition-colors shrink-0"
+                            className="w-7 h-7 rounded-full bg-[#111827] hover:bg-black text-white flex items-center justify-center transition-colors shrink-0 cursor-pointer"
                             title="Save changes"
                           >
                             <Check className="w-3.5 h-3.5" />
@@ -379,7 +378,7 @@ export default function SubjectsManagerModal({
                           <button
                             type="button"
                             onClick={handleCancelEdit}
-                            className="w-7 h-7 rounded-lg bg-slate-200 hover:bg-slate-300 text-slate-700 flex items-center justify-center transition-colors shrink-0"
+                            className="w-7 h-7 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center transition-colors shrink-0 cursor-pointer border border-slate-200"
                             title="Cancel"
                           >
                             <X className="w-3.5 h-3.5" />
@@ -399,7 +398,7 @@ export default function SubjectsManagerModal({
                         <button
                           type="button"
                           onClick={() => handleStartEdit(index, subject)}
-                          className="w-7 h-7 rounded-lg bg-slate-50 hover:bg-indigo-50 text-slate-500 hover:text-indigo-600 flex items-center justify-center transition-colors border border-slate-100"
+                          className="w-7 h-7 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center transition-colors border border-slate-200 cursor-pointer"
                           title="Edit subject name"
                         >
                           <Pencil className="w-3.5 h-3.5" />
@@ -407,7 +406,7 @@ export default function SubjectsManagerModal({
                         <button
                           type="button"
                           onClick={() => handleDeleteSubject(index, subject)}
-                          className="w-7 h-7 rounded-lg bg-slate-50 hover:bg-rose-50 text-slate-500 hover:text-rose-600 flex items-center justify-center transition-colors border border-slate-100"
+                          className="w-7 h-7 rounded-full bg-slate-100 hover:bg-rose-50 text-slate-500 hover:text-rose-600 flex items-center justify-center transition-colors border border-slate-200 cursor-pointer"
                           title="Delete subject"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
@@ -422,14 +421,14 @@ export default function SubjectsManagerModal({
         </div>
 
         {/* Modal Footer */}
-        <div className="p-3 bg-white border-t border-slate-200 flex items-center justify-between shrink-0">
+        <div className="p-3.5 bg-white border-t border-slate-200 flex items-center justify-between shrink-0">
           <div className="text-[11px] text-slate-500 font-medium">
             Changes are saved automatically to Star Academy database.
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition-all shadow-xs"
+            className="px-5 py-2 rounded-full bg-[#111827] hover:bg-black text-white text-xs font-bold transition-all shadow-xs cursor-pointer"
           >
             Done
           </button>

@@ -42,7 +42,7 @@ export default function SOSDeleteModal({
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition-all"
+            className="rounded-full border border-slate-200 text-slate-700 font-semibold text-xs py-2 px-4 hover:bg-slate-50 transition-all cursor-pointer"
           >
             Cancel
           </button>
@@ -52,7 +52,7 @@ export default function SOSDeleteModal({
               onConfirm(scheme.id);
               onClose();
             }}
-            className="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-black shadow-sm flex items-center gap-1.5 transition-all"
+            className="rounded-full bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold py-2 px-4 shadow-xs flex items-center gap-1.5 transition-all cursor-pointer"
           >
             <Trash2 className="w-3.5 h-3.5" />
             <span>Delete Scheme</span>

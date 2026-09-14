@@ -155,7 +155,7 @@ export default function StudentList({
               <button
                 type="button"
                 onClick={onBack}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition-all tap-active cursor-pointer shrink-0"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition-all tap-active cursor-pointer shrink-0"
                 title="Back"
               >
                 <ArrowLeft className="w-4 h-4" />
@@ -168,7 +168,7 @@ export default function StudentList({
               <button
                 type="button"
                 onClick={() => setIsAddModalOpen(true)}
-                className="flex items-center gap-1.5 bg-blue-600 hover:bg-blue-700 text-white px-3.5 py-1.5 rounded-xl text-xs font-bold shadow-xs transition-all tap-active cursor-pointer shrink-0"
+                className="flex items-center gap-1.5 bg-[#111827] hover:bg-black text-white px-4 py-2 rounded-full text-xs font-bold shadow-xs transition-all tap-active cursor-pointer shrink-0"
               >
                 <Plus className="w-4 h-4" />
                 <span>Add Student</span>
@@ -180,16 +180,16 @@ export default function StudentList({
                   setIsSearchOpen((prev) => !prev);
                   if (!isSearchOpen) setIsFilterOpen(false);
                 }}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-bold transition-all tap-active cursor-pointer ${
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-xs font-bold transition-all tap-active cursor-pointer ${
                   isSearchOpen || searchTerm
-                    ? 'bg-blue-50 text-blue-700 border-blue-200 shadow-2xs'
+                    ? 'bg-[#111827] text-white border-[#111827] shadow-2xs'
                     : 'bg-slate-100 hover:bg-slate-200 text-slate-700 border-slate-200'
                 }`}
                 title="Search Students"
               >
                 <Search className="w-3.5 h-3.5" />
                 <span>Search</span>
-                {searchTerm && <span className="w-1.5 h-1.5 rounded-full bg-blue-600"></span>}
+                {searchTerm && <span className="w-1.5 h-1.5 rounded-full bg-white"></span>}
               </button>
 
               <button
@@ -198,9 +198,9 @@ export default function StudentList({
                   setIsFilterOpen((prev) => !prev);
                   if (!isFilterOpen) setIsSearchOpen(false);
                 }}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-bold transition-all tap-active cursor-pointer ${
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-xs font-bold transition-all tap-active cursor-pointer ${
                   isFilterOpen || statusFilter !== 'active' || selectedClass !== 'All' || selectedSection !== 'All'
-                    ? 'bg-blue-50 text-blue-700 border-blue-200 shadow-2xs'
+                    ? 'bg-[#111827] text-white border-[#111827] shadow-2xs'
                     : 'bg-slate-100 hover:bg-slate-200 text-slate-700 border-slate-200'
                 }`}
                 title="Filter Students"
@@ -208,7 +208,7 @@ export default function StudentList({
                 <Filter className="w-3.5 h-3.5" />
                 <span>Filter</span>
                 {(statusFilter !== 'active' || selectedClass !== 'All' || selectedSection !== 'All') && (
-                  <span className="w-1.5 h-1.5 rounded-full bg-blue-600"></span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-white"></span>
                 )}
               </button>
             </div>
@@ -223,7 +223,7 @@ export default function StudentList({
                 placeholder="Search by name, ID, phone, section..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-9 pr-8 py-2 bg-slate-50 focus:bg-white text-xs rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none"
+                className="w-full pl-9 pr-8 py-2 bg-slate-50 focus:bg-white text-xs rounded-full border border-slate-200 focus:border-slate-800 focus:ring-1 focus:ring-slate-800 outline-none"
                 autoFocus
               />
               {searchTerm && (
@@ -242,12 +242,12 @@ export default function StudentList({
           {isFilterOpen && (
             <div className="mt-2.5 space-y-2 pt-2 border-t border-slate-100 animate-in fade-in slide-in-from-top-1 duration-150">
               {/* Status Filter Tabs */}
-              <div className="grid grid-cols-3 gap-1 bg-slate-100 p-1 rounded-xl text-[11px] font-semibold">
+              <div className="grid grid-cols-3 gap-1 bg-slate-100 p-1 rounded-full text-[11px] font-semibold">
                 <button
                   onClick={() => setStatusFilter('active')}
-                  className={`py-1 rounded-lg text-center transition-all ${
+                  className={`py-1.5 rounded-full text-center transition-all cursor-pointer ${
                     statusFilter === 'active'
-                      ? 'bg-white text-blue-700 font-bold shadow-xs'
+                      ? 'bg-[#111827] text-white font-bold shadow-xs'
                       : 'text-slate-600 hover:text-slate-800'
                   }`}
                 >
@@ -255,9 +255,9 @@ export default function StudentList({
                 </button>
                 <button
                   onClick={() => setStatusFilter('all')}
-                  className={`py-1 rounded-lg text-center transition-all ${
+                  className={`py-1.5 rounded-full text-center transition-all cursor-pointer ${
                     statusFilter === 'all'
-                      ? 'bg-white text-slate-800 font-bold shadow-xs'
+                      ? 'bg-[#111827] text-white font-bold shadow-xs'
                       : 'text-slate-600 hover:text-slate-800'
                   }`}
                 >
@@ -265,9 +265,9 @@ export default function StudentList({
                 </button>
                 <button
                   onClick={() => setStatusFilter('left')}
-                  className={`py-1 rounded-lg text-center transition-all ${
+                  className={`py-1.5 rounded-full text-center transition-all cursor-pointer ${
                     statusFilter === 'left'
-                      ? 'bg-white text-rose-700 font-bold shadow-xs'
+                      ? 'bg-[#111827] text-white font-bold shadow-xs'
                       : 'text-slate-600 hover:text-slate-800'
                   }`}
                 >
@@ -279,10 +279,10 @@ export default function StudentList({
               <div className="flex items-center gap-1.5 overflow-x-auto pb-0.5 no-scrollbar text-xs">
                 <button
                   onClick={() => handleSelectClass('All')}
-                  className={`px-3 py-1 rounded-lg text-xs font-semibold whitespace-nowrap transition-all ${
+                  className={`px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-all cursor-pointer ${
                     selectedClass === 'All'
-                      ? 'bg-blue-600 text-white shadow-xs'
-                      : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                      ? 'bg-[#111827] text-white shadow-xs'
+                      : 'bg-white text-slate-700 border border-slate-200 hover:border-slate-300'
                   }`}
                 >
                   All Classes
@@ -291,10 +291,10 @@ export default function StudentList({
                   <button
                     key={cls}
                     onClick={() => handleSelectClass(cls)}
-                    className={`px-3 py-1 rounded-lg text-xs font-semibold whitespace-nowrap transition-all ${
+                    className={`px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-all cursor-pointer ${
                       selectedClass === cls
-                        ? 'bg-blue-600 text-white shadow-xs'
-                        : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                        ? 'bg-[#111827] text-white shadow-xs'
+                        : 'bg-white text-slate-700 border border-slate-200 hover:border-slate-300'
                     }`}
                   >
                     {cls}
@@ -310,10 +310,10 @@ export default function StudentList({
                 <button
                   type="button"
                   onClick={() => handleSelectSection('All')}
-                  className={`px-3 py-1 rounded-lg text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
+                  className={`px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-all cursor-pointer ${
                     selectedSection === 'All'
-                      ? 'bg-indigo-600 text-white shadow-xs'
-                      : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                      ? 'bg-[#111827] text-white shadow-xs'
+                      : 'bg-white text-slate-700 border border-slate-200 hover:border-slate-300'
                   }`}
                 >
                   All Sections
@@ -323,10 +323,10 @@ export default function StudentList({
                     key={sec}
                     type="button"
                     onClick={() => handleSelectSection(sec)}
-                    className={`px-3 py-1 rounded-lg text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
+                    className={`px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-all cursor-pointer ${
                       selectedSection === sec
-                        ? 'bg-indigo-600 text-white shadow-xs'
-                        : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                        ? 'bg-[#111827] text-white shadow-xs'
+                        : 'bg-white text-slate-700 border border-slate-200 hover:border-slate-300'
                     }`}
                   >
                     {sec}
@@ -336,17 +336,17 @@ export default function StudentList({
 
               {/* Dynamic Individual Subjects Combination Filter */}
               {selectedSection === 'Individual Subjects' && (
-                <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar text-xs pt-1.5 border-t border-indigo-100 bg-indigo-50/60 p-2 rounded-xl">
-                  <span className="text-[11px] font-bold text-indigo-800 shrink-0 flex items-center gap-1 pl-1">
+                <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar text-xs pt-1.5 border-t border-slate-200 bg-slate-50 p-2 rounded-2xl">
+                  <span className="text-[11px] font-bold text-slate-700 shrink-0 flex items-center gap-1 pl-1">
                     Enrolled Group:
                   </span>
                   <button
                     type="button"
                     onClick={() => setSelectedSubjectGroup('All')}
-                    className={`px-2.5 py-1 rounded-lg text-xs font-bold whitespace-nowrap transition-all cursor-pointer ${
+                    className={`px-3 py-1 rounded-full text-xs font-bold whitespace-nowrap transition-all cursor-pointer ${
                       selectedSubjectGroup === 'All'
-                        ? 'bg-indigo-700 text-white shadow-xs'
-                        : 'bg-white text-indigo-900 hover:bg-indigo-100 border border-indigo-200'
+                        ? 'bg-[#111827] text-white shadow-xs'
+                        : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-200'
                     }`}
                   >
                     All Groups
@@ -365,10 +365,10 @@ export default function StudentList({
                         key={grp}
                         type="button"
                         onClick={() => setSelectedSubjectGroup(grp)}
-                        className={`px-2.5 py-1 rounded-lg text-xs font-bold whitespace-nowrap transition-all cursor-pointer ${
+                        className={`px-3 py-1 rounded-full text-xs font-bold whitespace-nowrap transition-all cursor-pointer ${
                           selectedSubjectGroup === grp
-                            ? 'bg-indigo-700 text-white shadow-xs'
-                            : 'bg-white text-indigo-900 hover:bg-indigo-100 border border-indigo-200'
+                            ? 'bg-[#111827] text-white shadow-xs'
+                            : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-200'
                         }`}
                       >
                         {grp} ({count})

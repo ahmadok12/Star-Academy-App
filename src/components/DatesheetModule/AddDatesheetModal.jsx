@@ -114,19 +114,19 @@ export default function AddDatesheetModal({
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-in fade-in duration-200">
       <div className="bg-white rounded-3xl w-full max-w-lg shadow-2xl overflow-hidden border border-slate-100 flex flex-col max-h-[92vh]">
         {/* Header */}
-        <div className="bg-gradient-to-r from-amber-600 via-orange-600 to-amber-700 p-5 text-white flex items-center justify-between shadow-md">
+        <div className="bg-[#111827] p-5 text-white flex items-center justify-between border-b border-slate-800">
           <div className="flex items-center gap-2.5">
-            <div className="w-10 h-10 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center">
+            <div className="w-10 h-10 rounded-2xl bg-white/10 backdrop-blur-sm flex items-center justify-center border border-white/10">
               <Calendar className="w-5 h-5 text-white" />
             </div>
             <div>
-              <h2 className="text-base font-black tracking-tight leading-tight">Add Exam Datesheet</h2>
-              <p className="text-[11px] text-amber-100 font-medium">Auto ID: {nextId}</p>
+              <h2 className="text-base font-display font-black tracking-tight leading-tight">Add Exam Datesheet</h2>
+              <p className="text-[11px] text-slate-400 font-medium font-mono">Auto ID: {nextId}</p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 backdrop-blur-sm flex items-center justify-center text-white transition-colors"
+            className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-sm flex items-center justify-center text-white transition-colors cursor-pointer"
           >
             <X className="w-4 h-4" />
           </button>
@@ -314,13 +314,13 @@ export default function AddDatesheetModal({
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 py-2.5 px-4 rounded-xl border border-slate-200 text-slate-700 font-bold hover:bg-slate-50 transition-colors"
+              className="flex-1 py-2.5 px-4 rounded-full border border-slate-200 text-slate-700 font-bold hover:bg-slate-50 transition-colors cursor-pointer"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="flex-1 py-2.5 px-4 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-bold shadow-md shadow-amber-200 transition-colors"
+              className="flex-1 py-2.5 px-4 rounded-full bg-[#111827] hover:bg-black text-white font-bold shadow-2xs transition-colors cursor-pointer"
             >
               Save Datesheet
             </button>

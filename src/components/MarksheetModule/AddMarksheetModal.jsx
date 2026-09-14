@@ -267,26 +267,26 @@ export default function AddMarksheetModal({
     <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-3 bg-black/60 backdrop-blur-xs animate-in fade-in duration-200">
       <div className="bg-white w-full max-w-2xl rounded-3xl shadow-2xl flex flex-col max-h-[94vh] overflow-hidden border border-slate-100">
         {/* Header */}
-        <div className="px-5 py-4 bg-gradient-to-r from-amber-600 via-amber-500 to-indigo-700 text-white flex items-center justify-between shrink-0 shadow-sm">
+        <div className="px-5 py-4 bg-[#111827] text-white flex items-center justify-between shrink-0 border-b border-slate-800">
           <div className="flex items-center gap-2.5">
-            <div className="w-10 h-10 rounded-2xl bg-white/15 backdrop-blur-md flex items-center justify-center border border-white/20 shadow-inner">
+            <div className="w-10 h-10 rounded-2xl bg-white/10 backdrop-blur-sm flex items-center justify-center border border-white/10 shadow-inner">
               <Award className="w-5 h-5 text-white" />
             </div>
             <div>
               <div className="flex items-center gap-1.5">
-                <h2 className="text-base font-extrabold tracking-tight">Create Student Marksheet</h2>
-                <span className="px-2 py-0.5 rounded-md bg-white/20 text-white text-[10px] font-bold">
+                <h2 className="text-base font-display font-extrabold tracking-tight">Create Student Marksheet</h2>
+                <span className="px-2.5 py-0.5 rounded-full bg-white/15 text-white text-[10px] font-bold">
                   {nextId}
                 </span>
               </div>
-              <p className="text-xs text-amber-100 font-medium">
+              <p className="text-xs text-slate-400 font-medium">
                 Record exam scores, auto-calculate percentages & grades
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors border border-white/15"
+            className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors cursor-pointer"
           >
             <X className="w-4 h-4" />
           </button>
@@ -664,24 +664,24 @@ export default function AddMarksheetModal({
           </div>
 
           {/* Modal Footer */}
-          <div className="p-3.5 bg-white border-t border-slate-200 flex items-center justify-between shrink-0">
+          <div className="p-4 bg-white border-t border-slate-200 flex items-center justify-between shrink-0">
             <div className="text-[11px] font-bold text-slate-600 hidden sm:block">
-              Class Avg: <span className="text-indigo-600 font-extrabold">{overallAvg}%</span> | Passed:{' '}
-              <span className="text-emerald-600 font-extrabold">{passedCount}</span> | Failed:{' '}
-              <span className="text-rose-500 font-extrabold">{failedCount}</span>
+              Class Avg: <span className="text-[#111827] font-extrabold font-display">{overallAvg}%</span> | Passed:{' '}
+              <span className="text-emerald-600 font-extrabold font-display">{passedCount}</span> | Failed:{' '}
+              <span className="text-rose-500 font-extrabold font-display">{failedCount}</span>
             </div>
             <div className="flex items-center gap-2 ml-auto">
               <button
                 type="button"
                 onClick={onClose}
-                className="px-4 py-2 rounded-xl border border-slate-200 text-slate-700 text-xs font-bold hover:bg-slate-50 transition-colors"
+                className="px-4 py-2 rounded-full border border-slate-200 text-slate-700 text-xs font-bold hover:bg-slate-50 transition-colors cursor-pointer"
               >
                 Cancel
               </button>
               <button
                 type="submit"
                 disabled={enrolledStudents.length === 0}
-                className="px-5 py-2 rounded-xl bg-gradient-to-r from-amber-600 to-indigo-600 hover:from-amber-700 hover:to-indigo-700 disabled:opacity-40 text-white text-xs font-bold transition-all shadow-md shadow-indigo-100 flex items-center gap-1.5"
+                className="px-5 py-2 rounded-full bg-[#111827] hover:bg-black disabled:opacity-40 text-white text-xs font-bold transition-all shadow-2xs flex items-center gap-1.5 cursor-pointer"
               >
                 <span>Save Marksheet</span>
                 <ArrowRight className="w-3.5 h-3.5" />

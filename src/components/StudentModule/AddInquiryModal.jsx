@@ -144,19 +144,19 @@ export default function AddInquiryModal({ isOpen, onClose, onAddInquiry, existin
         onClick={(e) => e.stopPropagation()}
       >
         {/* Modal Header */}
-        <div className="px-5 py-4 border-b border-slate-100 flex items-center justify-between bg-gradient-to-r from-amber-600 via-amber-500 to-orange-600 text-white">
-          <div className="flex items-center gap-2">
-            <div className="w-9 h-9 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center text-white shadow-sm">
+        <div className="px-5 py-4 border-b border-slate-800 flex items-center justify-between bg-[#111827] text-white">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/10 flex items-center justify-center text-white shadow-xs">
               <HelpCircle className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="text-base font-bold text-white">Record Student Inquiry</h2>
-              <p className="text-xs text-amber-100">Walk-in visitor contact & follow-up tracking</p>
+              <h2 className="text-base font-bold text-white font-display">Record Student Inquiry</h2>
+              <p className="text-xs text-slate-400">Walk-in visitor contact & follow-up tracking</p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 backdrop-blur-sm flex items-center justify-center text-white transition-colors"
+            className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-sm flex items-center justify-center text-white transition-colors cursor-pointer"
           >
             <X className="w-4 h-4" />
           </button>
@@ -165,16 +165,16 @@ export default function AddInquiryModal({ isOpen, onClose, onAddInquiry, existin
         {/* Modal Body */}
         <form onSubmit={handleSubmit} className="overflow-y-auto px-5 py-4 space-y-3.5 text-xs">
           {/* Inquiry ID Badge */}
-          <div className="bg-amber-50/80 border border-amber-200/80 rounded-xl p-3 flex items-center justify-between">
+          <div className="bg-[#F8F9FB] border border-slate-200 rounded-2xl p-3.5 flex items-center justify-between">
             <div>
-              <span className="text-[10px] font-bold text-amber-700 uppercase tracking-wider block">
+              <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">
                 Inquiry Tracking ID
               </span>
-              <span className="text-sm font-extrabold text-amber-950 font-mono">
+              <span className="text-sm font-extrabold text-slate-900 font-mono">
                 {formData.id}
               </span>
             </div>
-            <span className="px-2 py-0.5 rounded-full bg-amber-200 text-amber-900 text-[10px] font-extrabold">
+            <span className="px-2.5 py-0.5 rounded-full bg-slate-200/80 text-slate-700 text-[10px] font-bold">
               Walk-in Lead
             </span>
           </div>
@@ -192,7 +192,7 @@ export default function AddInquiryModal({ isOpen, onClose, onAddInquiry, existin
                   value={formData.studentName}
                   onChange={(e) => setFormData({ ...formData, studentName: e.target.value })}
                   className={`w-full pl-8 pr-3 py-2 rounded-xl border bg-white text-xs outline-none focus:ring-2 ${
-                    errors.studentName ? 'border-rose-400 focus:ring-rose-200' : 'border-slate-200 focus:ring-amber-200 focus:border-amber-500'
+                    errors.studentName ? 'border-rose-400 focus:ring-rose-200' : 'border-slate-200 focus:ring-slate-200 focus:border-[#111827]'
                   }`}
                 />
                 <User className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-2.5" />
@@ -204,9 +204,9 @@ export default function AddInquiryModal({ isOpen, onClose, onAddInquiry, existin
               {['Male', 'Female'].map((gender) => (
                 <label
                   key={gender}
-                  className={`flex items-center justify-center gap-1.5 py-1.5 rounded-xl border cursor-pointer font-bold text-xs transition-all ${
+                  className={`flex items-center justify-center gap-1.5 py-2 rounded-full border cursor-pointer font-bold text-xs transition-all ${
                     formData.gender === gender
-                      ? 'bg-amber-500 text-white border-amber-500 shadow-xs'
+                      ? 'bg-[#111827] text-white border-[#111827] shadow-xs'
                       : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
                   }`}
                 >
@@ -300,15 +300,15 @@ export default function AddInquiryModal({ isOpen, onClose, onAddInquiry, existin
             <label className="block font-bold text-slate-800 text-xs">
               Academic Class & Section of Interest <span className="text-rose-500">*</span>
             </label>
-            <div className="grid grid-cols-4 gap-1">
+            <div className="grid grid-cols-4 gap-1.5">
               {CLASSES.map((cls) => (
                 <button
                   key={cls}
                   type="button"
                   onClick={() => handleClassChange(cls)}
-                  className={`py-1.5 text-xs font-bold rounded-xl transition-all ${
+                  className={`py-2 text-xs font-bold rounded-full transition-all cursor-pointer ${
                     formData.studentClass === cls
-                      ? 'bg-amber-500 text-white shadow-xs'
+                      ? 'bg-[#111827] text-white shadow-xs'
                       : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-100'
                   }`}
                 >
@@ -323,9 +323,9 @@ export default function AddInquiryModal({ isOpen, onClose, onAddInquiry, existin
                   key={sec}
                   type="button"
                   onClick={() => setFormData({ ...formData, subject: sec })}
-                  className={`px-3 py-1 rounded-xl text-xs font-semibold transition-all ${
+                  className={`px-3.5 py-1 rounded-full text-xs font-semibold transition-all cursor-pointer ${
                     formData.subject === sec
-                      ? 'bg-slate-900 text-white'
+                      ? 'bg-[#111827] text-white shadow-xs'
                       : 'bg-white text-slate-700 border border-slate-200 hover:bg-slate-100'
                   }`}
                 >
@@ -339,16 +339,12 @@ export default function AddInquiryModal({ isOpen, onClose, onAddInquiry, existin
               <div className="mt-3 p-3 bg-white border border-slate-200 rounded-2xl space-y-2 animate-in fade-in duration-150 shadow-2xs">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-1.5">
-                    <BookOpen className="w-3.5 h-3.5 text-indigo-600" />
+                    <BookOpen className="w-3.5 h-3.5 text-slate-700" />
                     <label className="font-bold text-slate-800 text-xs">
                       Enrolled Subjects
                     </label>
                   </div>
-                  <span className={`text-[10px] font-extrabold px-2 py-0.5 rounded-full ${
-                    isAllSubjectsSelected 
-                      ? 'bg-indigo-100 text-indigo-800' 
-                      : 'bg-amber-100 text-amber-800'
-                  }`}>
+                  <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-700 border border-slate-200">
                     {selectedSubjects.length} of {availableCurriculumSubjects.length} {isAllSubjectsSelected ? 'All Selected' : 'Custom'}
                   </span>
                 </div>
@@ -358,14 +354,14 @@ export default function AddInquiryModal({ isOpen, onClose, onAddInquiry, existin
                 </p>
 
                 {/* Master "All Subjects" Checkbox */}
-                <label className="flex items-center gap-2 p-2 bg-slate-50 rounded-xl border border-indigo-200 cursor-pointer transition-all hover:bg-indigo-50/50 shadow-2xs">
+                <label className="flex items-center gap-2 p-2 bg-slate-50 rounded-xl border border-slate-200 cursor-pointer transition-all hover:bg-slate-100 shadow-2xs">
                   <input
                     type="checkbox"
                     checked={isAllSubjectsSelected}
                     onChange={handleToggleAllSubjects}
-                    className="w-4 h-4 text-indigo-600 rounded border-slate-300 focus:ring-indigo-500 cursor-pointer"
+                    className="w-4 h-4 text-slate-900 rounded border-slate-300 focus:ring-slate-900 cursor-pointer"
                   />
-                  <span className="font-bold text-xs text-indigo-950">
+                  <span className="font-bold text-xs text-slate-900">
                     All Subjects ({availableCurriculumSubjects.length})
                   </span>
                 </label>
@@ -379,7 +375,7 @@ export default function AddInquiryModal({ isOpen, onClose, onAddInquiry, existin
                         key={subName}
                         className={`flex items-center gap-2 p-2 rounded-xl border text-xs cursor-pointer transition-all select-none ${
                           isChecked
-                            ? 'bg-white border-indigo-300 text-slate-900 font-semibold shadow-2xs'
+                            ? 'bg-white border-slate-300 text-slate-900 font-semibold shadow-2xs'
                             : 'bg-slate-50/60 border-slate-200 text-slate-400 hover:text-slate-700'
                         }`}
                       >
@@ -387,7 +383,7 @@ export default function AddInquiryModal({ isOpen, onClose, onAddInquiry, existin
                           type="checkbox"
                           checked={isChecked}
                           onChange={() => handleToggleSingleSubject(subName)}
-                          className="w-3.5 h-3.5 text-indigo-600 rounded border-slate-300 focus:ring-indigo-500 cursor-pointer"
+                          className="w-3.5 h-3.5 text-slate-900 rounded border-slate-300 focus:ring-slate-900 cursor-pointer"
                         />
                         <span className="truncate">{subName}</span>
                       </label>
@@ -416,7 +412,7 @@ export default function AddInquiryModal({ isOpen, onClose, onAddInquiry, existin
                 type="date"
                 value={formData.followUpDate}
                 onChange={(e) => setFormData({ ...formData, followUpDate: e.target.value })}
-                className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white text-xs font-semibold text-amber-800"
+                className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white text-xs font-semibold text-slate-800"
               />
             </div>
           </div>
@@ -445,22 +441,22 @@ export default function AddInquiryModal({ isOpen, onClose, onAddInquiry, existin
               placeholder="e.g. Student visited with father, interested in evening coaching, asked for syllabus details..."
               value={formData.remarks}
               onChange={(e) => setFormData({ ...formData, remarks: e.target.value })}
-              className="w-full p-2.5 rounded-xl border border-slate-200 bg-white text-xs outline-none focus:ring-2 focus:ring-amber-200 focus:border-amber-500 resize-none"
+              className="w-full p-2.5 rounded-xl border border-slate-200 bg-white text-xs outline-none focus:ring-2 focus:ring-slate-200 focus:border-[#111827] resize-none"
             />
           </div>
 
           {/* Footer Action Bar */}
-          <div className="pt-2 border-t border-slate-100 flex items-center gap-2">
+          <div className="pt-3 border-t border-slate-100 flex items-center gap-2">
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 py-2.5 rounded-xl border border-slate-200 text-slate-600 font-semibold text-xs hover:bg-slate-50 transition-colors"
+              className="flex-1 py-2.5 rounded-full border border-slate-200 text-slate-700 font-semibold text-xs hover:bg-slate-50 transition-colors cursor-pointer"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="flex-1 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs shadow-md shadow-amber-200 flex items-center justify-center gap-1.5 transition-all"
+              className="flex-1 py-2.5 rounded-full bg-[#111827] hover:bg-black text-white font-bold text-xs shadow-xs flex items-center justify-center gap-1.5 transition-all cursor-pointer"
             >
               <Check className="w-4 h-4" />
               Save Inquiry

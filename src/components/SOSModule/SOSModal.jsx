@@ -202,17 +202,16 @@ export default function SOSModal({
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 bg-black/60 backdrop-blur-xs animate-in fade-in duration-200">
       <div className="bg-white w-full max-w-2xl rounded-3xl shadow-2xl flex flex-col max-h-[92vh] overflow-hidden border border-slate-100">
         {/* Header */}
-        <div className="px-5 py-4 bg-gradient-to-r from-rose-600 via-rose-500 to-indigo-700 text-white flex items-center justify-between shrink-0 shadow-sm">
+        <div className="px-5 py-4 bg-[#111827] text-white flex items-center justify-between shrink-0 border-b border-slate-800">
           <div className="flex items-center gap-2.5">
-            <div className="w-10 h-10 rounded-2xl bg-white/15 backdrop-blur-md flex items-center justify-center border border-white/20 shadow-inner">
-              <BookOpen className="w-5 h-5 text-amber-300" />
+            <div className="w-10 h-10 rounded-2xl bg-white/10 backdrop-blur-sm flex items-center justify-center border border-white/10 text-white">
+              <BookOpen className="w-5 h-5 text-white" />
             </div>
             <div>
-              <h2 className="text-base font-extrabold tracking-tight flex items-center gap-1.5">
+              <h2 className="text-base font-extrabold tracking-tight flex items-center gap-1.5 text-white">
                 <span>{isEditing ? 'Edit Scheme of Study' : 'Add Scheme of Study'}</span>
-                <Sparkles className="w-3.5 h-3.5 text-amber-300 fill-amber-300" />
               </h2>
-              <p className="text-xs text-rose-100 font-medium">
+              <p className="text-xs text-slate-300 font-medium">
                 Academic syllabus distribution, topic roadmap and test schedule
               </p>
             </div>
@@ -220,7 +219,7 @@ export default function SOSModal({
           <button
             type="button"
             onClick={onClose}
-            className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors border border-white/15"
+            className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors border border-white/15 cursor-pointer"
           >
             <X className="w-4 h-4" />
           </button>
@@ -241,7 +240,7 @@ export default function SOSModal({
               <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">
                 Scheme Configuration
               </span>
-              <span className="px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-700 font-extrabold text-[10.5px]">
+              <span className="px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-700 border border-slate-200 font-extrabold text-[10.5px]">
                 Session {currentSession}
               </span>
             </div>
@@ -520,7 +519,7 @@ export default function SOSModal({
             <button
               type="button"
               onClick={handleAddRow}
-              className="w-full py-2.5 rounded-2xl border-2 border-dashed border-slate-200 hover:border-rose-400 text-slate-500 hover:text-rose-600 bg-white/70 hover:bg-rose-50/50 text-xs font-bold flex items-center justify-center gap-1.5 transition-all"
+              className="w-full py-2.5 rounded-full border border-dashed border-slate-300 hover:border-slate-800 text-slate-700 hover:text-black bg-slate-50 hover:bg-slate-100 text-xs font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer"
             >
               <Plus className="w-4 h-4" />
               <span>Add Another Milestone Row</span>
@@ -532,13 +531,13 @@ export default function SOSModal({
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition-all"
+              className="rounded-full border border-slate-200 text-slate-700 font-semibold text-xs py-2.5 px-4 hover:bg-slate-50 transition-all cursor-pointer"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-5 py-2 rounded-xl bg-gradient-to-r from-rose-600 to-indigo-600 hover:from-rose-700 hover:to-indigo-700 text-white text-xs font-extrabold shadow-sm hover:shadow transition-all flex items-center gap-1.5"
+              className="rounded-full bg-[#111827] hover:bg-black text-white text-xs font-bold py-2.5 px-5 shadow-xs transition-all flex items-center gap-1.5 cursor-pointer"
             >
               <CheckCircle2 className="w-4 h-4" />
               <span>{isEditing ? 'Update Scheme of Study' : 'Save Scheme of Study'}</span>

@@ -475,6 +475,27 @@ export default function App() {
     showToast(`Faculty member ${updatedTeacher.name} updated!`);
   };
 
+  const handleToggleTeacherStatus = (teacherId, isLeft) => {
+    const updated = teachers.map((t) => {
+      if (t.id === teacherId) {
+        return {
+          ...t,
+          isLeft: isLeft,
+          isActive: !isLeft
+        };
+      }
+      return t;
+    });
+    setTeachers(updated);
+    saveTeachers(updated);
+    const target = updated.find((t) => t.id === teacherId);
+    if (isLeft) {
+      showToast(`Teacher ${target?.name} marked as Left Academy (Inactive).`);
+    } else {
+      showToast(`Teacher ${target?.name} restored to Active status.`);
+    }
+  };
+
   const handleDeleteTeacher = (teacherId) => {
     const teacherToDelete = teachers.find((t) => t.id === teacherId);
     const name = teacherToDelete ? teacherToDelete.name : teacherId;
@@ -485,10 +506,19 @@ export default function App() {
   };
 
   const handleSaveTeacherAttendance = (newSession) => {
-    const updated = [newSession, ...teacherAttendanceSessions];
+    const existingIndex = teacherAttendanceSessions.findIndex(
+      (s) => s.id === newSession.id || s.date === newSession.date
+    );
+    let updated;
+    if (existingIndex >= 0) {
+      updated = [...teacherAttendanceSessions];
+      updated[existingIndex] = newSession;
+    } else {
+      updated = [newSession, ...teacherAttendanceSessions];
+    }
     setTeacherAttendanceSessions(updated);
     saveTeacherAttendanceSessions(updated);
-    showToast(`Faculty attendance marked for ${newSession.date}!`);
+    showToast(`Faculty attendance recorded for ${newSession.date}!`);
   };
 
   const handleUpdateTeacherAttendanceSession = (updatedSession) => {
@@ -786,6 +816,7 @@ export default function App() {
           categories={expenseCategories}
           chargedExpenses={chargedExpenses}
           onChargeExpense={handleChargeExpense}
+          attendanceTimings={attendanceTimings}
         />
       )}
 
@@ -802,6 +833,8 @@ export default function App() {
           currentSession={currentSession}
           timetables={timetables}
           teachers={teachers}
+          teacherAttendanceSessions={teacherAttendanceSessions}
+          onToggleTeacherStatus={handleToggleTeacherStatus}
           datesheets={datesheets}
           tests={tests}
           schemes={schemesOfStudy}
@@ -838,6 +871,7 @@ export default function App() {
           onUpdateVoucher={handleUpdateVoucher}
           onDeleteVoucher={handleDeleteVoucher}
           onGenerateMonthlyVouchers={handleGenerateMonthlyVouchers}
+          attendanceTimings={attendanceTimings}
         />
       )}
 
@@ -849,6 +883,7 @@ export default function App() {
           onAddTeacher={handleAddTeacher}
           onUpdateTeacher={handleUpdateTeacher}
           onDeleteTeacher={handleDeleteTeacher}
+          onToggleTeacherStatus={handleToggleTeacherStatus}
           timetables={timetables}
           onAddTimetable={handleAddTimetable}
           onUpdateTimetable={handleUpdateTimetable}
@@ -876,6 +911,7 @@ export default function App() {
           onDeleteScheme={handleDeleteSchemeOfStudy}
           currentSession={currentSession}
           batches={batches}
+          attendanceTimings={attendanceTimings}
         />
       )}
 

@@ -20,14 +20,14 @@ export default function ExpenseCategoryDetailModal({
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-in fade-in duration-200">
       <div className="bg-white rounded-3xl w-full max-w-md shadow-2xl overflow-hidden border border-slate-100 flex flex-col max-h-[90vh]">
         {/* Header with EDIT AT TOP */}
-        <div className="bg-gradient-to-r from-amber-600 to-orange-600 p-5 text-white flex items-center justify-between shadow-md">
+        <div className="bg-[#111827] p-5 text-white flex items-center justify-between border-b border-slate-800">
           <div className="flex items-center gap-2.5">
-            <div className="w-10 h-10 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center">
+            <div className="w-10 h-10 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/10 flex items-center justify-center text-white">
               <Tag className="w-5 h-5 text-white" />
             </div>
             <div>
               <h2 className="text-base font-black tracking-tight leading-tight">Expense Head Details</h2>
-              <p className="text-[11px] text-amber-100 font-mono font-medium">{category.id}</p>
+              <p className="text-[11px] text-slate-400 font-mono font-medium">{category.id}</p>
             </div>
           </div>
 
@@ -38,7 +38,7 @@ export default function ExpenseCategoryDetailModal({
                 onClose();
                 onEdit(category);
               }}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white text-xs font-bold transition-colors"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/15 text-white text-xs font-semibold transition-colors cursor-pointer"
             >
               <Edit3 className="w-3.5 h-3.5" />
               <span>Edit</span>
@@ -46,7 +46,7 @@ export default function ExpenseCategoryDetailModal({
 
             <button
               onClick={onClose}
-              className="w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 backdrop-blur-sm flex items-center justify-center text-white transition-colors"
+              className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors border border-white/15 cursor-pointer"
             >
               <X className="w-4 h-4" />
             </button>
@@ -56,16 +56,16 @@ export default function ExpenseCategoryDetailModal({
         {/* Content */}
         <div className="p-5 overflow-y-auto space-y-4 text-xs">
           {/* Head Summary Card */}
-          <div className="p-4 rounded-2xl bg-amber-50 border border-amber-200/70 space-y-1">
-            <span className="text-[10px] font-bold text-amber-700 uppercase tracking-wider block">
+          <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-1">
+            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">
               Expense Head Title
             </span>
             <h3 className="text-base font-black text-slate-900 leading-snug">
               {category.name}
             </h3>
-            <div className="pt-2 border-t border-amber-200/60 flex items-center justify-between text-[11px]">
+            <div className="pt-2 border-t border-slate-200/60 flex items-center justify-between text-[11px]">
               <span className="text-slate-500">Cumulative Vouchers:</span>
-              <span className="font-bold text-amber-800">{relevantExpenses.length} charged (Rs. {totalSpent.toLocaleString()})</span>
+              <span className="font-bold text-slate-900">{relevantExpenses.length} charged (Rs. {totalSpent.toLocaleString()})</span>
             </div>
           </div>
 
@@ -95,7 +95,7 @@ export default function ExpenseCategoryDetailModal({
                 <button
                   type="button"
                   onClick={() => setConfirmDelete(false)}
-                  className="flex-1 py-1.5 px-3 rounded-xl border border-slate-200 bg-white text-slate-700 font-bold text-xs"
+                  className="flex-1 py-1.5 px-3 rounded-full border border-slate-200 bg-white text-slate-700 font-bold text-xs cursor-pointer"
                 >
                   Cancel
                 </button>
@@ -105,7 +105,7 @@ export default function ExpenseCategoryDetailModal({
                     onDelete(category.id);
                     onClose();
                   }}
-                  className="flex-1 py-1.5 px-3 rounded-xl bg-rose-600 text-white font-bold text-xs shadow-xs hover:bg-rose-700"
+                  className="flex-1 py-1.5 px-3 rounded-full bg-rose-600 text-white font-bold text-xs shadow-xs hover:bg-rose-700 cursor-pointer"
                 >
                   Confirm Delete
                 </button>
@@ -115,7 +115,7 @@ export default function ExpenseCategoryDetailModal({
             <button
               type="button"
               onClick={() => setConfirmDelete(true)}
-              className="w-full py-2.5 px-4 rounded-xl border border-rose-200 bg-rose-50/50 hover:bg-rose-100/60 text-rose-700 font-bold text-xs flex items-center justify-center gap-2 transition-colors"
+              className="w-full py-2.5 px-4 rounded-full border border-rose-200 bg-rose-50/50 hover:bg-rose-100/60 text-rose-700 font-bold text-xs flex items-center justify-center gap-2 transition-colors cursor-pointer"
             >
               <Trash2 className="w-4 h-4 text-rose-600" />
               <span>Delete Expense Head</span>

@@ -70,21 +70,21 @@ export default function SOSViewModal({
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 bg-black/60 backdrop-blur-xs animate-in fade-in duration-200">
       <div className="bg-white w-full max-w-2xl rounded-3xl shadow-2xl flex flex-col max-h-[92vh] overflow-hidden border border-slate-100">
         {/* Header */}
-        <div className="px-5 py-4 bg-gradient-to-r from-rose-600 via-rose-500 to-indigo-700 text-white flex items-center justify-between shrink-0 shadow-sm">
+        <div className="px-5 py-4 bg-[#111827] text-white flex items-center justify-between shrink-0 border-b border-slate-800">
           <div className="flex items-center gap-2.5 min-w-0">
-            <div className="w-10 h-10 rounded-2xl bg-white/15 backdrop-blur-md flex items-center justify-center border border-white/20 shadow-inner shrink-0">
-              <BookOpen className="w-5 h-5 text-amber-300" />
+            <div className="w-10 h-10 rounded-2xl bg-white/10 backdrop-blur-sm flex items-center justify-center border border-white/10 text-white shrink-0">
+              <BookOpen className="w-5 h-5 text-white" />
             </div>
             <div className="min-w-0">
               <h2 className="text-base font-extrabold tracking-tight truncate text-white">
                 {scheme.title || 'Scheme of Study'}
               </h2>
-              <div className="flex items-center gap-2 text-xs text-rose-100 font-medium flex-wrap">
+              <div className="flex items-center gap-2 text-xs text-slate-300 font-medium flex-wrap">
                 <span className="font-bold">{scheme.studentClass} ({scheme.section})</span>
                 {scheme.batch && (
                   <>
                     <span>•</span>
-                    <span className="px-2 py-0.5 rounded-full bg-white/20 text-white text-[10.5px] font-bold">
+                    <span className="px-2 py-0.5 rounded-full bg-white/10 text-white text-[10.5px] font-bold">
                       {scheme.batch}
                     </span>
                   </>
@@ -99,7 +99,7 @@ export default function SOSViewModal({
             <button
               type="button"
               onClick={onClose}
-              className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors border border-white/15"
+              className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors border border-white/15 cursor-pointer"
             >
               <X className="w-4 h-4" />
             </button>
@@ -281,16 +281,16 @@ export default function SOSViewModal({
             <button
               type="button"
               onClick={() => printSOS(scheme)}
-              className="flex-1 py-2 px-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-colors shadow-2xs cursor-pointer"
+              className="flex-1 py-2 px-3 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs flex items-center justify-center gap-1.5 transition-colors border border-slate-200 cursor-pointer shadow-2xs"
               title="Print Preview Scheme of Study (Landscape)"
             >
-              <Printer className="w-3.5 h-3.5" />
+              <Printer className="w-3.5 h-3.5 text-slate-600" />
               <span>Print Preview</span>
             </button>
             <button
               type="button"
               onClick={() => exportSOSPDF(scheme)}
-              className="flex-1 py-2 px-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs flex items-center justify-center gap-1.5 transition-colors border border-slate-300/80 cursor-pointer shadow-2xs"
+              className="flex-1 py-2 px-3 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs flex items-center justify-center gap-1.5 transition-colors border border-slate-200 cursor-pointer shadow-2xs"
             >
               <Download className="w-3.5 h-3.5 text-slate-600" />
               <span>PDF</span>
@@ -298,9 +298,9 @@ export default function SOSViewModal({
             <button
               type="button"
               onClick={() => shareSOSWhatsApp(scheme)}
-              className="flex-1 py-2 px-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-colors shadow-2xs cursor-pointer"
+              className="flex-1 py-2 px-3 rounded-full bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-semibold text-xs flex items-center justify-center gap-1.5 transition-colors border border-emerald-200 shadow-2xs cursor-pointer"
             >
-              <MessageCircle className="w-3.5 h-3.5" />
+              <MessageCircle className="w-3.5 h-3.5 text-emerald-600" />
               <span>WhatsApp</span>
             </button>
           </div>
@@ -308,7 +308,7 @@ export default function SOSViewModal({
           <button
             type="button"
             onClick={onClose}
-            className="px-5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition-all"
+            className="px-5 py-2 rounded-full border border-slate-200 text-slate-700 font-semibold text-xs hover:bg-slate-50 transition-all cursor-pointer"
           >
             Close
           </button>

@@ -10,6 +10,7 @@ export default function TeacherList({
   onAddTeacher,
   onUpdateTeacher,
   onDeleteTeacher,
+  onToggleTeacherStatus,
   onOpenTeacherAttendance
 }) {
   const [searchTerm, setSearchTerm] = useState('');
@@ -69,7 +70,7 @@ export default function TeacherList({
           <button
             type="button"
             onClick={() => setIsAddModalOpen(true)}
-            className="flex items-center gap-1.5 bg-indigo-600 hover:bg-indigo-700 text-white px-3.5 py-2 rounded-xl text-xs font-bold shadow-sm shadow-indigo-200 transition-all tap-active cursor-pointer"
+            className="flex items-center gap-1.5 bg-[#111827] hover:bg-black text-white px-4 py-2 rounded-full text-xs font-bold shadow-xs transition-all tap-active cursor-pointer"
           >
             <Plus className="w-4 h-4" />
             <span>Add Teacher</span>
@@ -84,7 +85,7 @@ export default function TeacherList({
             placeholder="Search by teacher name, ID, CNIC, phone, subject, class..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-9 pr-8 py-2 bg-slate-100 hover:bg-slate-100/80 focus:bg-white text-xs rounded-xl border border-transparent focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 transition-all outline-none"
+            className="w-full pl-9 pr-8 py-2 bg-slate-100 hover:bg-slate-100/80 focus:bg-white text-xs rounded-full border border-transparent focus:border-slate-800 focus:ring-1 focus:ring-slate-800 transition-all outline-none"
           />
           {searchTerm && (
             <button
@@ -128,13 +129,14 @@ export default function TeacherList({
         existingTeachers={teachers}
       />
 
-      {/* View Teacher Detail Modal (Edit at top, Delete at bottom) */}
+      {/* View Teacher Detail Modal (Edit at top, Delete at bottom, Left checkbox) */}
       <TeacherDetailModal
         teacher={currentViewingTeacher}
         isOpen={Boolean(currentViewingTeacher)}
         onClose={() => setViewingTeacher(null)}
         onEdit={handleStartEdit}
         onDelete={onDeleteTeacher}
+        onToggleStatus={onToggleTeacherStatus}
       />
 
       {/* Edit Teacher Modal */}

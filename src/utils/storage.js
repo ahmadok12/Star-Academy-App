@@ -368,7 +368,11 @@ export const INITIAL_TEACHERS = [
     address: 'House #12, Canal View, Lahore',
     pic: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=256',
     department: 'Mathematics & Physics',
-    arrivalTime: '07:45',
+    arrivalTime: '15:00',
+    teachingSlots: [
+      { id: 'slot-1', subject: 'Mathematics', time: '15:00' },
+      { id: 'slot-2', subject: 'Physics', time: '18:00' }
+    ],
     joinedAt: '2025-01-10'
   },
   {
@@ -380,7 +384,11 @@ export const INITIAL_TEACHERS = [
     address: 'Block C, Johar Town, Lahore',
     pic: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=256',
     department: 'Biology & Chemistry',
-    arrivalTime: '07:45',
+    arrivalTime: '15:00',
+    teachingSlots: [
+      { id: 'slot-1', subject: 'Biology', time: '15:00' },
+      { id: 'slot-2', subject: 'Chemistry', time: '17:00' }
+    ],
     joinedAt: '2025-02-01'
   },
   {
@@ -392,7 +400,10 @@ export const INITIAL_TEACHERS = [
     address: 'Model Town, Link Road, Lahore',
     pic: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=256',
     department: 'Computer Science & IT',
-    arrivalTime: '07:45',
+    arrivalTime: '16:00',
+    teachingSlots: [
+      { id: 'slot-1', subject: 'Computer Science', time: '16:00' }
+    ],
     joinedAt: '2025-03-15'
   },
   {
@@ -404,7 +415,10 @@ export const INITIAL_TEACHERS = [
     address: 'DHA Phase 3, Lahore',
     pic: 'https://images.unsplash.com/photo-1580894732444-8ecded7900cd?auto=format&fit=crop&q=80&w=256',
     department: 'English Literature',
-    arrivalTime: '07:45',
+    arrivalTime: '17:00',
+    teachingSlots: [
+      { id: 'slot-1', subject: 'English', time: '17:00' }
+    ],
     joinedAt: '2025-04-10'
   },
   {
@@ -416,7 +430,11 @@ export const INITIAL_TEACHERS = [
     address: 'Gulberg II, Lahore',
     pic: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=256',
     department: 'Physics',
-    arrivalTime: '07:45',
+    arrivalTime: '15:00',
+    teachingSlots: [
+      { id: 'slot-1', subject: 'Physics', time: '15:00' },
+      { id: 'slot-2', subject: 'Mathematics', time: '18:00' }
+    ],
     joinedAt: '2025-05-01'
   },
   {
@@ -428,7 +446,10 @@ export const INITIAL_TEACHERS = [
     address: 'Wapda Town, Lahore',
     pic: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=256',
     department: 'Urdu & Pak Studies',
-    arrivalTime: '07:45',
+    arrivalTime: '18:00',
+    teachingSlots: [
+      { id: 'slot-1', subject: 'Urdu', time: '18:00' }
+    ],
     joinedAt: '2025-06-15'
   }
 ];
@@ -438,13 +459,21 @@ export const INITIAL_TEACHER_ATTENDANCE = [
     id: 'TATT-20260908-01',
     date: '2026-09-08',
     createdAt: '2026-09-08T08:30:00Z',
-    records: INITIAL_TEACHERS.map((t, idx) => ({
-      teacherId: t.id,
-      teacherName: t.name,
-      pic: t.pic,
-      department: t.department,
-      status: idx === 3 ? 'Leave' : 'Present'
-    }))
+    records: INITIAL_TEACHERS.flatMap((t, idx) => {
+      const slots = t.teachingSlots || [{ id: 'slot-1', subject: t.department, time: t.arrivalTime || '15:00' }];
+      return slots.map((s) => ({
+        recordId: `${t.id}_${s.id}`,
+        teacherId: t.id,
+        teacherName: t.name,
+        pic: t.pic,
+        department: t.department,
+        subject: s.subject,
+        slotId: s.id,
+        slotTime: s.time,
+        expectedStartTime: s.time,
+        status: idx === 3 ? 'Leave' : 'Present'
+      }));
+    })
   }
 ];
 
@@ -455,7 +484,25 @@ export function getTeachers() {
       localStorage.setItem(STORAGE_KEYS.TEACHERS, JSON.stringify(INITIAL_TEACHERS));
       return INITIAL_TEACHERS;
     }
-    return JSON.parse(raw);
+    const parsed = JSON.parse(raw);
+    // Ensure all teachers have teachingSlots initialized if missing
+    let updated = false;
+    const migrated = parsed.map((t) => {
+      if (!t.teachingSlots || !Array.isArray(t.teachingSlots) || t.teachingSlots.length === 0) {
+        updated = true;
+        return {
+          ...t,
+          teachingSlots: [
+            { id: 'slot-1', subject: t.department || 'Mathematics', time: t.arrivalTime || '15:00' }
+          ]
+        };
+      }
+      return t;
+    });
+    if (updated) {
+      localStorage.setItem(STORAGE_KEYS.TEACHERS, JSON.stringify(migrated));
+    }
+    return migrated;
   } catch (e) {
     console.error('Failed to load teachers from localStorage', e);
     return INITIAL_TEACHERS;
@@ -1955,6 +2002,23 @@ export function saveAttendanceTimings(timings) {
   } catch (e) {
     console.error('Failed to save attendance timings', e);
   }
+}
+
+export function formatTimeTo12Hour(timeStr) {
+  if (!timeStr) return '';
+  const trimmed = String(timeStr).trim();
+  if (trimmed.toLowerCase().includes('am') || trimmed.toLowerCase().includes('pm')) {
+    return trimmed;
+  }
+  const parts = trimmed.split(':');
+  if (parts.length < 2) return trimmed;
+  let h = parseInt(parts[0], 10);
+  const m = parts[1].padStart(2, '0');
+  if (isNaN(h)) return trimmed;
+  const ampm = h >= 12 ? 'PM' : 'AM';
+  h = h % 12;
+  if (h === 0) h = 12;
+  return `${String(h).padStart(2, '0')}:${m} ${ampm}`;
 }
 
 

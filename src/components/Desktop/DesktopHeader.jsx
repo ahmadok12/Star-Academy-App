@@ -92,21 +92,21 @@ export default function DesktopHeader({
   };
 
   return (
-    <header className="bg-white border-b border-slate-200/80 px-4 py-2 flex items-center justify-between gap-2.5 select-none sticky top-0 z-30 flex-nowrap whitespace-nowrap overflow-x-auto no-scrollbar">
+    <header className="bg-white/80 backdrop-blur-xl border-b border-[#E5E7EB] px-5 py-2.5 flex items-center justify-between gap-3 select-none sticky top-0 z-30 flex-nowrap whitespace-nowrap overflow-x-auto no-scrollbar">
       {/* Left: Breadcrumbs navigation & quick search */}
-      <div className="flex items-center gap-2.5 shrink-0 whitespace-nowrap min-w-0">
-        <div className="flex items-center gap-1.5 text-xs shrink-0 whitespace-nowrap">
-          <span className="font-semibold text-slate-400 uppercase tracking-wider text-[11px] whitespace-nowrap">
+      <div className="flex items-center gap-3 shrink-0 whitespace-nowrap min-w-0">
+        <div className="flex items-center gap-2 text-xs shrink-0 whitespace-nowrap">
+          <span className="font-bold text-slate-400 uppercase tracking-wider text-[10px] whitespace-nowrap">
             Star Academy
           </span>
           <ChevronRight className="w-3.5 h-3.5 text-slate-300 shrink-0" />
-          <span className="font-bold text-slate-900 text-xs sm:text-sm whitespace-nowrap">
+          <span className="font-bold text-slate-900 font-headline text-xs sm:text-sm whitespace-nowrap">
             {tabLabels[activeTab] || 'Dashboard'}
           </span>
           {activeSubPageLabel && (
             <>
               <ChevronRight className="w-3.5 h-3.5 text-slate-300 shrink-0" />
-              <span className="font-semibold text-blue-700 bg-blue-50 border border-blue-100 px-2 py-0.2 rounded-full text-[11px] whitespace-nowrap">
+              <span className="font-semibold text-slate-800 bg-slate-100 border border-slate-200 px-2.5 py-0.5 rounded-full text-[11px] whitespace-nowrap">
                 {activeSubPageLabel}
               </span>
             </>
@@ -117,12 +117,12 @@ export default function DesktopHeader({
         <div ref={searchContainerRef} className="relative shrink-0">
           <form
             onSubmit={handleSearch}
-            className="flex items-center gap-1.5 bg-slate-100/90 hover:bg-slate-100 border border-slate-200/80 rounded-xl px-2.5 py-1 w-44 sm:w-56 lg:w-64 text-slate-400 focus-within:ring-2 focus-within:ring-blue-500/30 focus-within:border-blue-400 focus-within:bg-white transition-all whitespace-nowrap"
+            className="flex items-center gap-2 bg-white hover:bg-slate-50/80 border border-[#E5E7EB] rounded-full px-3.5 py-1 w-44 sm:w-56 lg:w-64 text-slate-400 focus-within:ring-2 focus-within:ring-slate-900/10 focus-within:border-slate-800 transition-all whitespace-nowrap shadow-2xs"
           >
             <button
               type="submit"
               title="Search students"
-              className="text-slate-400 hover:text-blue-600 transition-colors shrink-0 cursor-pointer p-0.5"
+              className="text-slate-400 hover:text-slate-900 transition-colors shrink-0 cursor-pointer p-0.5"
             >
               <Search className="w-3.5 h-3.5" />
             </button>
@@ -135,7 +135,7 @@ export default function DesktopHeader({
                 setIsDropdownOpen(true);
               }}
               onFocus={() => setIsDropdownOpen(true)}
-              className="w-full bg-transparent text-xs text-slate-700 placeholder-slate-400 focus:outline-hidden whitespace-nowrap"
+              className="w-full bg-transparent text-xs text-slate-800 placeholder:text-slate-400 focus:outline-hidden whitespace-nowrap"
             />
             {searchQuery && (
               <button
@@ -152,7 +152,7 @@ export default function DesktopHeader({
             )}
             <button
               type="submit"
-              className="px-2 py-0.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-[10px] font-bold shrink-0 cursor-pointer transition-colors shadow-2xs"
+              className="px-2.5 py-0.5 bg-[#111827] hover:bg-[#1F2937] text-white rounded-full text-[10px] font-bold shrink-0 cursor-pointer transition-colors shadow-2xs"
             >
               Search
             </button>
@@ -160,13 +160,13 @@ export default function DesktopHeader({
 
           {/* Instant live dropdown */}
           {isDropdownOpen && searchQuery.trim() && (
-            <div className="absolute left-0 top-full mt-1.5 w-72 sm:w-80 bg-white rounded-2xl shadow-xl border border-slate-200 py-1.5 z-50 animate-in fade-in slide-in-from-top-1">
-              <div className="px-3 py-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider border-b border-slate-100 flex items-center justify-between">
+            <div className="absolute left-0 top-full mt-2 w-72 sm:w-80 bg-white rounded-3xl shadow-stitch-lg border border-[#E5E7EB] py-2 z-50 animate-in fade-in slide-in-from-top-1">
+              <div className="px-3.5 py-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider border-b border-slate-100 flex items-center justify-between">
                 <span>Matching Students</span>
                 <span>{matchingStudents.length} found</span>
               </div>
               {matchingStudents.length === 0 ? (
-                <div className="px-3 py-3 text-center text-xs text-slate-500">
+                <div className="px-3.5 py-3 text-center text-xs text-slate-500">
                   No students found matching "{searchQuery}"
                 </div>
               ) : (
@@ -175,29 +175,29 @@ export default function DesktopHeader({
                     key={s.id}
                     type="button"
                     onClick={() => handleSelectStudent(s)}
-                    className="w-full px-3 py-2 text-left hover:bg-slate-50 flex items-center justify-between gap-2 border-b border-slate-50 last:border-0 transition-colors cursor-pointer"
+                    className="w-full px-3.5 py-2 text-left hover:bg-[#f8f9fb] flex items-center justify-between gap-2 border-b border-slate-50 last:border-0 transition-colors cursor-pointer"
                   >
                     <div className="flex items-center gap-2 min-w-0">
                       {s.pic ? (
-                        <img src={s.pic} alt="" className="w-6 h-6 rounded-full object-cover shrink-0" />
+                        <img src={s.pic} alt="" className="w-7 h-7 rounded-full object-cover shrink-0 border border-slate-200" />
                       ) : (
-                        <div className="w-6 h-6 rounded-full bg-blue-50 text-blue-600 font-bold text-[10px] flex items-center justify-center shrink-0">
+                        <div className="w-7 h-7 rounded-full bg-slate-100 text-slate-700 font-bold text-[10px] flex items-center justify-center shrink-0">
                           {(s.studentName || s.name || 'S').charAt(0)}
                         </div>
                       )}
                       <div className="min-w-0">
-                        <p className="text-xs font-bold text-slate-800 truncate">{s.studentName || s.name}</p>
+                        <p className="text-xs font-bold text-slate-900 truncate">{s.studentName || s.name}</p>
                         <p className="text-[10px] text-slate-400 truncate">ID: {s.id} • Class {s.studentClass || s.class}</p>
                       </div>
                     </div>
-                    <span className="text-[10px] text-blue-600 font-bold shrink-0">View →</span>
+                    <span className="text-[10px] text-[#FF7A59] font-bold shrink-0">View →</span>
                   </button>
                 ))
               )}
               <button
                 type="button"
                 onClick={handleSearch}
-                className="w-full px-3 py-1.5 bg-slate-50 hover:bg-slate-100 text-center text-[11px] font-bold text-blue-600 border-t border-slate-100 block transition-colors cursor-pointer"
+                className="w-full px-3.5 py-2 bg-slate-50 hover:bg-slate-100 text-center text-[11px] font-bold text-[#111827] border-t border-slate-100 block transition-colors cursor-pointer"
               >
                 Press Enter or click to view all in Students Directory →
               </button>
@@ -212,11 +212,11 @@ export default function DesktopHeader({
         <button
           type="button"
           onClick={() => onNavigate('students', null)}
-          className="hidden md:flex items-center gap-1.5 bg-white hover:bg-slate-50 border border-slate-200/80 px-2.5 py-1 rounded-xl text-xs text-slate-700 transition-colors cursor-pointer shadow-2xs whitespace-nowrap shrink-0"
+          className="hidden md:flex items-center gap-1.5 bg-white hover:bg-slate-50 border border-[#E5E7EB] px-3 py-1 rounded-full text-xs text-slate-700 transition-colors cursor-pointer shadow-2xs whitespace-nowrap shrink-0"
           title="View Students"
         >
-          <div className="w-4.5 h-4.5 rounded-md bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
-            <Users className="w-3 h-3" />
+          <div className="w-4 h-4 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center shrink-0">
+            <Users className="w-2.5 h-2.5" />
           </div>
           <span className="text-slate-500 font-medium text-[11px] whitespace-nowrap">Students:</span>
           <span className="font-bold text-slate-900 text-xs whitespace-nowrap">{studentCount}</span>
@@ -226,11 +226,11 @@ export default function DesktopHeader({
         <button
           type="button"
           onClick={() => onNavigate('students', 'attendance')}
-          className="hidden lg:flex items-center gap-1.5 bg-white hover:bg-slate-50 border border-slate-200/80 px-2.5 py-1 rounded-xl text-xs text-slate-700 transition-colors cursor-pointer shadow-2xs whitespace-nowrap shrink-0"
+          className="hidden lg:flex items-center gap-1.5 bg-white hover:bg-slate-50 border border-[#E5E7EB] px-3 py-1 rounded-full text-xs text-slate-700 transition-colors cursor-pointer shadow-2xs whitespace-nowrap shrink-0"
           title="View Attendance Sessions"
         >
-          <div className="w-4.5 h-4.5 rounded-md bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
-            <ClipboardCheck className="w-3 h-3" />
+          <div className="w-4 h-4 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+            <ClipboardCheck className="w-2.5 h-2.5" />
           </div>
           <span className="text-slate-500 font-medium text-[11px] whitespace-nowrap">Attendance:</span>
           <span className="font-bold text-slate-900 text-xs whitespace-nowrap">{attendanceCount}</span>
@@ -241,12 +241,12 @@ export default function DesktopHeader({
           <button
             type="button"
             onClick={() => onNavigate('reports', 'fee_paid_pending')}
-            className="hidden sm:flex items-center gap-1.5 bg-amber-50/70 hover:bg-amber-100/80 border border-amber-200/60 px-2.5 py-1 rounded-xl text-xs transition-colors cursor-pointer whitespace-nowrap shrink-0"
+            className="hidden sm:flex items-center gap-1.5 bg-amber-50/80 hover:bg-amber-100 border border-amber-200/80 px-3 py-1 rounded-full text-xs transition-colors cursor-pointer whitespace-nowrap shrink-0"
             title="View Pending Dues"
           >
             <CreditCard className="w-3 h-3 text-amber-700 shrink-0" />
-            <span className="text-amber-700 font-medium text-[11px] whitespace-nowrap">Pending:</span>
-            <span className="font-bold text-amber-900 text-xs bg-amber-200/80 px-1.5 py-0.2 rounded-full whitespace-nowrap">
+            <span className="text-amber-800 font-medium text-[11px] whitespace-nowrap">Pending:</span>
+            <span className="font-bold text-amber-900 text-xs bg-amber-200 px-1.5 py-0.2 rounded-full whitespace-nowrap">
               {pendingFeeCount}
             </span>
           </button>
@@ -255,45 +255,46 @@ export default function DesktopHeader({
         <div className="h-4 w-px bg-slate-200 hidden sm:block shrink-0"></div>
 
         {/* Today Date */}
-        <div className="hidden sm:flex items-center gap-1 text-[11px] text-slate-500 font-medium whitespace-nowrap shrink-0">
+        <div className="hidden sm:flex items-center gap-1.5 text-[11px] text-slate-500 font-medium whitespace-nowrap shrink-0 px-2">
           <Calendar className="w-3.5 h-3.5 text-slate-400 shrink-0" />
           <span className="whitespace-nowrap">{today}</span>
         </div>
 
         {/* Session Badge */}
-        <div className="inline-flex items-center gap-1 bg-blue-50 text-blue-700 border border-blue-100 px-2.5 py-0.5 rounded-lg text-[11px] font-semibold whitespace-nowrap shrink-0">
+        <div className="inline-flex items-center gap-1 bg-white text-slate-700 border border-[#E5E7EB] px-3 py-1 rounded-full text-[11px] font-semibold whitespace-nowrap shrink-0 shadow-2xs">
+          <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#FF7A59]"></span>
           <span className="whitespace-nowrap">Session {currentSession}</span>
         </div>
 
-        {/* Notification Bell */}
+        {/* Notification Bell with Coral Dot */}
         <button
           type="button"
           onClick={() => onNavigate('quick_actions', null)}
-          className="relative p-1.5 rounded-xl text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition-colors cursor-pointer border border-slate-200/80 shrink-0"
+          className="relative w-8 h-8 rounded-full bg-white hover:bg-slate-50 text-slate-600 flex items-center justify-center transition-colors cursor-pointer border border-[#E5E7EB] shrink-0 shadow-2xs"
           title="Notifications"
         >
           <Bell className="w-3.5 h-3.5" />
-          <span className="absolute top-1 right-1 w-1.5 h-1.5 rounded-full bg-rose-500 ring-2 ring-white"></span>
+          <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-[#FF7A59]"></span>
         </button>
 
         {/* Settings button */}
         <button
           type="button"
           onClick={onOpenSettings}
-          className="p-1.5 rounded-xl text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition-colors cursor-pointer border border-slate-200/80 shrink-0"
+          className="w-8 h-8 rounded-full bg-white hover:bg-slate-50 text-slate-600 flex items-center justify-center transition-colors cursor-pointer border border-[#E5E7EB] shrink-0 shadow-2xs"
           title="Academy Settings"
         >
           <Settings className="w-3.5 h-3.5" />
         </button>
 
         {/* User Profile Pill */}
-        <div className="hidden sm:flex items-center gap-2 pl-1.5 border-l border-slate-200/80 shrink-0 whitespace-nowrap">
-          <div className="w-7 h-7 rounded-full bg-blue-600 text-white font-bold text-[11px] flex items-center justify-center shadow-2xs shrink-0">
+        <div className="hidden sm:flex items-center gap-2 pl-2 border-l border-slate-200 shrink-0 whitespace-nowrap">
+          <div className="w-7 h-7 rounded-full bg-[#111827] text-white font-bold text-[11px] flex items-center justify-center shadow-2xs shrink-0">
             SI
           </div>
           <div className="hidden md:block text-left leading-tight shrink-0 whitespace-nowrap">
-            <span className="block text-xs font-bold text-slate-800 whitespace-nowrap">Salman Ijaz</span>
-            <span className="block text-[9px] text-slate-400 font-medium whitespace-nowrap">Principal Admin</span>
+            <span className="block text-xs font-bold text-slate-900 whitespace-nowrap">Salman Ijaz</span>
+            <span className="block text-[10px] text-slate-400 font-medium whitespace-nowrap">Director</span>
           </div>
         </div>
       </div>

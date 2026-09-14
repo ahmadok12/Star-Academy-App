@@ -75,19 +75,19 @@ export default function AddTransferModal({ isOpen, onClose, onAddTransfer, trans
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-in fade-in duration-200">
       <div className="bg-white rounded-3xl w-full max-w-md shadow-2xl overflow-hidden border border-slate-100 flex flex-col max-h-[90vh]">
         {/* Header */}
-        <div className="bg-gradient-to-r from-blue-600 to-indigo-700 p-5 text-white flex items-center justify-between shadow-md">
+        <div className="bg-[#111827] p-5 text-white flex items-center justify-between border-b border-slate-800">
           <div className="flex items-center gap-2.5">
-            <div className="w-10 h-10 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center">
+            <div className="w-10 h-10 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/10 flex items-center justify-center text-white">
               <ArrowRightLeft className="w-5 h-5 text-white" />
             </div>
             <div>
               <h2 className="text-base font-black tracking-tight leading-tight">Bank to Bank Transfer</h2>
-              <p className="text-[11px] text-blue-100 font-medium">Auto ID: {nextId}</p>
+              <p className="text-[11px] text-slate-400 font-medium">Auto ID: {nextId}</p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 backdrop-blur-sm flex items-center justify-center text-white transition-colors"
+            className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors border border-white/15 cursor-pointer"
           >
             <X className="w-4 h-4" />
           </button>
@@ -106,7 +106,7 @@ export default function AddTransferModal({ isOpen, onClose, onAddTransfer, trans
                 type="date"
                 value={formData.date}
                 onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-slate-200 font-medium text-xs text-slate-800 focus:ring-2 focus:ring-blue-100 focus:border-blue-500 outline-none"
+                className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-slate-200 font-medium text-xs text-slate-800 focus:ring-2 focus:ring-slate-100 focus:border-slate-400 outline-none"
               />
             </div>
             {errors.date && <p className="text-rose-500 text-[10px] mt-1">{errors.date}</p>}
@@ -121,8 +121,8 @@ export default function AddTransferModal({ isOpen, onClose, onAddTransfer, trans
               value={formData.fromBankId}
               onChange={(e) => setFormData({ ...formData, fromBankId: e.target.value })}
               className={`w-full px-3 py-2.5 rounded-xl border ${
-                errors.fromBankId ? 'border-rose-400 bg-rose-50/50' : 'border-slate-200 focus:border-blue-500'
-              } text-xs font-semibold text-slate-800 focus:ring-2 focus:ring-blue-100 outline-none`}
+                errors.fromBankId ? 'border-rose-400 bg-rose-50/50' : 'border-slate-200 focus:border-slate-400'
+              } text-xs font-semibold text-slate-800 focus:ring-2 focus:ring-slate-100 outline-none`}
             >
               <option value="">-- Select Source Bank --</option>
               {banks.map((b) => {
@@ -146,8 +146,8 @@ export default function AddTransferModal({ isOpen, onClose, onAddTransfer, trans
               value={formData.toBankId}
               onChange={(e) => setFormData({ ...formData, toBankId: e.target.value })}
               className={`w-full px-3 py-2.5 rounded-xl border ${
-                errors.toBankId ? 'border-rose-400 bg-rose-50/50' : 'border-slate-200 focus:border-blue-500'
-              } text-xs font-semibold text-slate-800 focus:ring-2 focus:ring-blue-100 outline-none`}
+                errors.toBankId ? 'border-rose-400 bg-rose-50/50' : 'border-slate-200 focus:border-slate-400'
+              } text-xs font-semibold text-slate-800 focus:ring-2 focus:ring-slate-100 outline-none`}
             >
               <option value="">-- Select Destination Bank --</option>
               {banks.map((b) => (
@@ -170,8 +170,8 @@ export default function AddTransferModal({ isOpen, onClose, onAddTransfer, trans
               value={formData.amount}
               onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
               className={`w-full px-3.5 py-2.5 rounded-xl border ${
-                errors.amount ? 'border-rose-400 bg-rose-50/50' : 'border-slate-200 focus:border-blue-500'
-              } text-xs font-bold text-slate-900 focus:ring-2 focus:ring-blue-100 outline-none`}
+                errors.amount ? 'border-rose-400 bg-rose-50/50' : 'border-slate-200 focus:border-slate-400'
+              } text-xs font-bold text-slate-900 focus:ring-2 focus:ring-slate-100 outline-none`}
             />
             {errors.amount && <p className="text-rose-500 text-[10px] mt-1">{errors.amount}</p>}
           </div>
@@ -189,8 +189,8 @@ export default function AddTransferModal({ isOpen, onClose, onAddTransfer, trans
                 value={formData.details}
                 onChange={(e) => setFormData({ ...formData, details: e.target.value })}
                 className={`w-full pl-9 pr-3 py-2 rounded-xl border ${
-                  errors.details ? 'border-rose-400 bg-rose-50/50' : 'border-slate-200 focus:border-blue-500'
-                } text-xs font-medium focus:ring-2 focus:ring-blue-100 outline-none`}
+                  errors.details ? 'border-rose-400 bg-rose-50/50' : 'border-slate-200 focus:border-slate-400'
+                } text-xs font-medium focus:ring-2 focus:ring-slate-100 outline-none`}
               />
             </div>
             {errors.details && <p className="text-rose-500 text-[10px] mt-1">{errors.details}</p>}
@@ -201,13 +201,13 @@ export default function AddTransferModal({ isOpen, onClose, onAddTransfer, trans
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 py-2.5 px-4 rounded-xl border border-slate-200 text-slate-700 font-bold hover:bg-slate-50 transition-colors"
+              className="flex-1 py-2.5 px-4 rounded-full border border-slate-200 text-slate-700 font-bold hover:bg-slate-50 transition-colors cursor-pointer"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="flex-1 py-2.5 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold shadow-md shadow-blue-200 transition-colors"
+              className="flex-1 py-2.5 px-4 rounded-full bg-[#111827] hover:bg-black text-white font-bold shadow-xs transition-colors cursor-pointer"
             >
               Transfer Funds
             </button>

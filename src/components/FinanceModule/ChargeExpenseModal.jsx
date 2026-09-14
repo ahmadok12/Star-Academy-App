@@ -80,21 +80,21 @@ export default function ChargeExpenseModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-in fade-in duration-200">
-      <div className="bg-white rounded-3xl w-full max-w-md shadow-2xl overflow-hidden border border-slate-100 flex flex-col max-h-[90vh]">
+      <div className="bg-white rounded-3xl w-full max-w-md shadow-2xl overflow-hidden border border-[#E5E7EB] flex flex-col max-h-[90vh]">
         {/* Header */}
-        <div className="bg-gradient-to-r from-rose-600 to-red-700 p-5 text-white flex items-center justify-between shadow-md">
+        <div className="bg-[#111827] px-6 py-4 text-white flex items-center justify-between border-b border-white/10">
           <div className="flex items-center gap-2.5">
-            <div className="w-10 h-10 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center">
+            <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center">
               <Receipt className="w-5 h-5 text-white" />
             </div>
             <div>
-              <h2 className="text-base font-black tracking-tight leading-tight">Charge Expense Voucher</h2>
-              <p className="text-[11px] text-rose-100 font-medium">Voucher ID: {nextId}</p>
+              <h2 className="text-base font-bold text-white font-display tracking-tight leading-tight">Charge Expense Voucher</h2>
+              <p className="text-[11px] text-slate-400 font-medium">Voucher ID: {nextId}</p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 backdrop-blur-sm flex items-center justify-center text-white transition-colors"
+            className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors cursor-pointer"
           >
             <X className="w-4 h-4" />
           </button>
@@ -104,36 +104,36 @@ export default function ChargeExpenseModal({
         <form onSubmit={handleSubmit} className="p-5 overflow-y-auto space-y-3.5 text-xs">
           {/* ID & Date Row */}
           <div className="grid grid-cols-2 gap-2">
-            <div className="p-2.5 rounded-xl bg-rose-50 border border-rose-100">
-              <span className="text-[10px] text-rose-500 font-bold block uppercase">Voucher ID</span>
-              <span className="font-mono font-bold text-xs text-rose-950">{nextId}</span>
+            <div className="p-2.5 rounded-2xl bg-[#F4F5F7] border border-[#E5E7EB]">
+              <span className="text-[10px] text-[#575E70] font-bold block uppercase">Voucher ID</span>
+              <span className="font-mono font-bold text-xs text-[#111827]">{nextId}</span>
             </div>
 
             <div>
-              <label className="block font-bold text-slate-800 mb-1">
+              <label className="block font-semibold text-slate-800 mb-1">
                 Date <span className="text-rose-500">*</span>
               </label>
               <input
                 type="date"
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
-                className="w-full px-2.5 py-2 rounded-xl border border-slate-200 font-medium text-xs text-slate-800 focus:ring-2 focus:ring-rose-100 focus:border-rose-500 outline-none"
+                className="w-full px-3 py-2 rounded-full border border-[#E5E7EB] bg-[#F8F9FB] font-medium text-xs text-slate-800 focus:ring-2 focus:ring-[#111827] outline-none"
               />
             </div>
           </div>
 
           {/* Searchable Selectable Dropdown for Expense Name */}
           <div className="relative">
-            <label className="block font-bold text-slate-800 mb-1">
+            <label className="block font-semibold text-slate-800 mb-1">
               Select Expense Category <span className="text-rose-500">*</span>
             </label>
 
             {/* Selected item display / trigger */}
             <div
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-              className={`p-3 rounded-xl border cursor-pointer flex items-center justify-between transition-all ${
-                isDropdownOpen ? 'border-rose-500 ring-2 ring-rose-100' : 'border-slate-200 hover:border-slate-300'
-              } ${errors.category ? 'border-rose-400 bg-rose-50/50' : 'bg-white'}`}
+              className={`p-3 rounded-2xl border cursor-pointer flex items-center justify-between transition-all ${
+                isDropdownOpen ? 'border-[#111827] ring-2 ring-slate-200' : 'border-[#E5E7EB] hover:border-slate-300'
+              } ${errors.category ? 'border-rose-400 bg-rose-50/50' : 'bg-[#F8F9FB]'}`}
             >
               {selectedCategory ? (
                 <div>
@@ -143,22 +143,22 @@ export default function ChargeExpenseModal({
               ) : (
                 <span className="text-slate-400">Click to search & select expense head...</span>
               )}
-              <span className="text-[10px] font-bold text-rose-600 ml-2 shrink-0">
+              <span className="text-[10px] font-bold text-[#111827] ml-2 shrink-0">
                 {isDropdownOpen ? 'Close ▲' : 'Select ▼'}
               </span>
             </div>
 
             {/* Dropdown Menu */}
             {isDropdownOpen && (
-              <div className="mt-1.5 p-2 bg-white rounded-2xl border border-slate-200 shadow-xl space-y-1.5 z-20 relative">
+              <div className="mt-1.5 p-2 bg-white rounded-2xl border border-[#E5E7EB] shadow-xl space-y-1.5 z-20 relative">
                 <div className="relative">
-                  <Search className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-2.5" />
+                  <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-2.5" />
                   <input
                     type="text"
                     placeholder="Search expense heads..."
                     value={categorySearch}
                     onChange={(e) => setCategorySearch(e.target.value)}
-                    className="w-full pl-8 pr-2.5 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-lg outline-none focus:border-rose-500"
+                    className="w-full pl-8 pr-3 py-1.5 text-xs bg-[#F4F5F7] border border-[#E5E7EB] rounded-full outline-none focus:ring-2 focus:ring-[#111827]"
                     autoFocus
                   />
                 </div>
@@ -177,15 +177,15 @@ export default function ChargeExpenseModal({
                             setIsDropdownOpen(false);
                             setCategorySearch('');
                           }}
-                          className={`p-2 rounded-lg cursor-pointer flex items-center justify-between transition-colors ${
-                            isSelected ? 'bg-rose-50 text-rose-900 font-bold' : 'hover:bg-slate-50 text-slate-700'
+                          className={`p-2 rounded-xl cursor-pointer flex items-center justify-between transition-colors ${
+                            isSelected ? 'bg-slate-100 text-slate-900 font-bold' : 'hover:bg-[#F8F9FB] text-slate-700'
                           }`}
                         >
                           <div className="min-w-0 pr-2">
                             <p className="truncate text-xs">{c.name}</p>
                             <p className="text-[9px] text-slate-400 truncate">{c.details}</p>
                           </div>
-                          {isSelected && <Check className="w-4 h-4 text-rose-600 shrink-0" />}
+                          {isSelected && <Check className="w-4 h-4 text-[#111827] shrink-0" />}
                         </div>
                       );
                     })
@@ -198,7 +198,7 @@ export default function ChargeExpenseModal({
 
           {/* Amount */}
           <div>
-            <label className="block font-bold text-slate-800 mb-1">
+            <label className="block font-semibold text-slate-800 mb-1">
               Amount to Charge (PKR) <span className="text-rose-500">*</span>
             </label>
             <input
@@ -206,24 +206,24 @@ export default function ChargeExpenseModal({
               placeholder="e.g. 15000"
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
-              className={`w-full px-3.5 py-2.5 rounded-xl border ${
-                errors.amount ? 'border-rose-400 bg-rose-50/50' : 'border-slate-200 focus:border-rose-500'
-              } text-xs font-bold text-slate-900 focus:ring-2 focus:ring-rose-100 outline-none`}
+              className={`w-full px-3.5 py-2 rounded-full border ${
+                errors.amount ? 'border-rose-400 bg-rose-50/50' : 'border-[#E5E7EB] bg-[#F8F9FB] focus:ring-2 focus:ring-[#111827]'
+              } text-xs font-bold text-slate-900 outline-none`}
             />
             {errors.amount && <p className="text-rose-500 text-[10px] mt-1">{errors.amount}</p>}
           </div>
 
           {/* Payment Account (Bank / Cash) */}
           <div>
-            <label className="block font-bold text-slate-800 mb-1">
+            <label className="block font-semibold text-slate-800 mb-1">
               Paid From (Account / Cash) <span className="text-rose-500">*</span>
             </label>
             <div className="relative">
-              <Landmark className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
+              <Landmark className="w-4 h-4 text-slate-400 absolute left-3.5 top-2.5" />
               <select
                 value={bankId}
                 onChange={(e) => setBankId(e.target.value)}
-                className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold text-slate-800 focus:ring-2 focus:ring-rose-100 focus:border-rose-500 outline-none"
+                className="w-full pl-9 pr-3.5 py-2 rounded-full border border-[#E5E7EB] bg-[#F8F9FB] text-xs font-semibold text-slate-800 focus:ring-2 focus:ring-[#111827] outline-none"
               >
                 <option value="" disabled>-- Select Payment Account / Cash --</option>
                 {banks.map((b) => (
@@ -238,7 +238,7 @@ export default function ChargeExpenseModal({
 
           {/* Details / Voucher notes */}
           <div>
-            <label className="block font-bold text-slate-800 mb-1">
+            <label className="block font-semibold text-slate-800 mb-1">
               Expense Details / Voucher Notes <span className="text-rose-500">*</span>
             </label>
             <div className="relative">
@@ -248,9 +248,9 @@ export default function ChargeExpenseModal({
                 placeholder="e.g. Bill # 49821 paid online, test series printing invoice..."
                 value={details}
                 onChange={(e) => setDetails(e.target.value)}
-                className={`w-full pl-9 pr-3 py-2 rounded-xl border ${
-                  errors.details ? 'border-rose-400 bg-rose-50/50' : 'border-slate-200 focus:border-rose-500'
-                } text-xs font-medium focus:ring-2 focus:ring-rose-100 outline-none`}
+                className={`w-full pl-9 pr-3 py-2 rounded-2xl border ${
+                  errors.details ? 'border-rose-400 bg-rose-50/50' : 'border-[#E5E7EB] bg-[#F8F9FB] focus:ring-2 focus:ring-[#111827]'
+                } text-xs font-medium outline-none`}
               />
             </div>
             {errors.details && <p className="text-rose-500 text-[10px] mt-1">{errors.details}</p>}
@@ -261,13 +261,13 @@ export default function ChargeExpenseModal({
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 py-2.5 px-4 rounded-xl border border-slate-200 text-slate-700 font-bold hover:bg-slate-50 transition-colors"
+              className="flex-1 py-2.5 px-4 rounded-full border border-[#E5E7EB] text-slate-700 font-semibold hover:bg-[#F3F4F6] transition-colors cursor-pointer"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="flex-1 py-2.5 px-4 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold shadow-md shadow-rose-200 transition-colors"
+              className="flex-1 py-2.5 px-4 rounded-full bg-[#111827] hover:bg-black text-white font-semibold shadow-sm transition-colors cursor-pointer"
             >
               Post Expense
             </button>

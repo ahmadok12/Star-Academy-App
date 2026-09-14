@@ -214,39 +214,39 @@ export default function MarkAttendanceModal({
   return (
     <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-end sm:items-center justify-center p-0 sm:p-4 animate-in fade-in duration-200">
       <div
-        className="bg-white w-full max-w-md rounded-t-3xl sm:rounded-3xl max-h-[92vh] flex flex-col shadow-2xl overflow-hidden border border-slate-200"
+        className="bg-white w-full max-w-md rounded-t-3xl sm:rounded-3xl max-h-[92vh] flex flex-col shadow-stitch-lg overflow-hidden border border-[#E5E7EB]"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Modal Header */}
-        <div className="px-5 py-4 border-b border-slate-100 flex items-center justify-between bg-gradient-to-r from-indigo-700 via-indigo-600 to-brand-700 text-white">
+        <div className="px-5 py-4 border-b border-[#1F2937] flex items-center justify-between bg-[#111827] text-white">
           <div>
-            <span className="text-[10px] font-bold tracking-wider uppercase text-amber-300">
+            <span className="text-[10px] font-bold tracking-wider uppercase text-[#FF7A59]">
               Star Academy Attendance
             </span>
-            <h2 className="text-base font-bold text-white leading-tight">
+            <h2 className="text-base font-bold text-white leading-tight font-display">
               Mark Student Attendance
             </h2>
           </div>
           <button
             onClick={onClose}
-            className="w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 backdrop-blur-sm flex items-center justify-center text-white transition-colors"
+            className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors cursor-pointer"
           >
             <X className="w-4 h-4" />
           </button>
         </div>
 
         {/* Dropdowns & Filters Section */}
-        <div className="p-4 bg-slate-50 border-b border-slate-200 space-y-3 text-xs">
+        <div className="p-4 bg-[#F8F9FB] border-b border-[#E5E7EB] space-y-3 text-xs">
           <div className="grid grid-cols-2 gap-2.5">
             {/* Class Dropdown */}
             <div>
-              <label className="block font-bold text-slate-700 mb-1">
+              <label className="block font-semibold text-slate-700 mb-1">
                 Select Class <span className="text-rose-500">*</span>
               </label>
               <select
                 value={selectedClass}
                 onChange={(e) => handleClassChange(e.target.value)}
-                className="w-full px-3 py-2 bg-white rounded-xl border border-slate-200 text-xs font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-200 focus:border-indigo-500 shadow-xs"
+                className="w-full px-3.5 py-2 bg-white rounded-full border border-[#E5E7EB] text-xs font-semibold text-slate-800 focus:outline-none focus:ring-1 focus:ring-[#111827] shadow-2xs cursor-pointer"
               >
                 <option value="" disabled>-- Select Class --</option>
                 {CLASSES.map((cls) => (
@@ -259,13 +259,13 @@ export default function MarkAttendanceModal({
 
             {/* Section Dropdown */}
             <div>
-              <label className="block font-bold text-slate-700 mb-1">
+              <label className="block font-semibold text-slate-700 mb-1">
                 Select Section <span className="text-rose-500">*</span>
               </label>
               <select
                 value={selectedSubject}
                 onChange={(e) => setSelectedSubject(e.target.value)}
-                className="w-full px-3 py-2 bg-white rounded-xl border border-slate-200 text-xs font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-200 focus:border-indigo-500 shadow-xs"
+                className="w-full px-3.5 py-2 bg-white rounded-full border border-[#E5E7EB] text-xs font-semibold text-slate-800 focus:outline-none focus:ring-1 focus:ring-[#111827] shadow-2xs cursor-pointer"
               >
                 <option value="" disabled>-- Select Section --</option>
                 {currentAvailableSubjects.map((sub) => (
@@ -279,14 +279,14 @@ export default function MarkAttendanceModal({
 
           {/* Enrolled Group Sub-Selector for Individual Subjects */}
           {selectedSubject === 'Individual Subjects' && (
-            <div className="p-2.5 rounded-xl bg-indigo-50/80 border border-indigo-200 flex items-center justify-between gap-2">
-              <span className="text-[11px] font-bold text-indigo-900 shrink-0">
+            <div className="p-2.5 rounded-2xl bg-white border border-[#E5E7EB] flex items-center justify-between gap-2 shadow-2xs">
+              <span className="text-[11px] font-bold text-slate-900 shrink-0">
                 Filter by Enrolled Group:
               </span>
               <select
                 value={selectedSubjectGroup}
                 onChange={(e) => setSelectedSubjectGroup(e.target.value)}
-                className="px-3 py-1.5 bg-white rounded-lg border border-indigo-200 text-xs font-bold text-indigo-950 focus:outline-none focus:ring-2 focus:ring-indigo-200"
+                className="px-3 py-1.5 bg-[#F8F9FB] rounded-full border border-[#E5E7EB] text-xs font-semibold text-slate-900 focus:outline-none focus:ring-1 focus:ring-[#111827]"
               >
                 <option value="All">All Groups (All {respectiveStudents.length} Students)</option>
                 {availableSubjectGroups.map((grp) => (
@@ -301,24 +301,24 @@ export default function MarkAttendanceModal({
           {/* Date Selector & Session Start Time */}
           <div className="flex items-center justify-between gap-2 pt-1 flex-wrap">
             <div className="flex items-center gap-2">
-              <div className="flex items-center gap-1.5 bg-white border border-slate-200 px-2.5 py-1.5 rounded-xl shadow-xs">
-                <span className="text-[10px] font-bold text-slate-400 uppercase">Date:</span>
+              <div className="flex items-center gap-1.5 bg-white border border-[#E5E7EB] px-3 py-1.5 rounded-full shadow-2xs">
+                <span className="text-[10px] font-bold text-[#575E70] uppercase">Date:</span>
                 <input
                   type="date"
                   value={sessionDate}
                   onChange={(e) => setSessionDate(e.target.value)}
-                  className="text-xs font-bold text-slate-700 outline-none bg-transparent"
+                  className="text-xs font-semibold text-slate-700 outline-none bg-transparent"
                 />
               </div>
 
-              <div className="flex items-center gap-1.5 bg-white border border-slate-200 px-2.5 py-1.5 rounded-xl shadow-xs">
-                <Clock className="w-3 h-3 text-indigo-500" />
-                <span className="text-[10px] font-bold text-slate-400 uppercase">Start:</span>
+              <div className="flex items-center gap-1.5 bg-white border border-[#E5E7EB] px-3 py-1.5 rounded-full shadow-2xs">
+                <Clock className="w-3 h-3 text-[#FF7A59]" />
+                <span className="text-[10px] font-bold text-[#575E70] uppercase">Start:</span>
                 <input
                   type="time"
                   value={expectedStartTime}
                   onChange={(e) => setExpectedStartTime(e.target.value)}
-                  className="text-xs font-bold text-slate-700 outline-none bg-transparent"
+                  className="text-xs font-semibold text-slate-700 outline-none bg-transparent"
                 />
               </div>
             </div>
@@ -329,14 +329,14 @@ export default function MarkAttendanceModal({
                 <button
                   type="button"
                   onClick={() => handleMarkAll(ATTENDANCE_STATUS.PRESENT)}
-                  className="px-2.5 py-1 bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 rounded-lg text-[10px] font-bold shadow-2xs transition-all tap-active"
+                  className="px-3 py-1 bg-white hover:bg-[#F3F4F6] text-slate-700 border border-[#E5E7EB] rounded-full text-[10px] font-semibold shadow-2xs transition-all tap-active cursor-pointer"
                 >
                   All Present
                 </button>
                 <button
                   type="button"
                   onClick={() => handleMarkAll(ATTENDANCE_STATUS.ABSENT)}
-                  className="px-2.5 py-1 bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 rounded-lg text-[10px] font-bold shadow-2xs transition-all tap-active"
+                  className="px-3 py-1 bg-white hover:bg-[#F3F4F6] text-slate-700 border border-[#E5E7EB] rounded-full text-[10px] font-semibold shadow-2xs transition-all tap-active cursor-pointer"
                 >
                   All Absent
                 </button>
@@ -353,46 +353,46 @@ export default function MarkAttendanceModal({
           )}
 
           {/* Live Attendance Stats Counter Pills (5 Metrics) */}
-          <div className="grid grid-cols-5 gap-1 text-center text-[11px] pt-1">
-            <div className="bg-white rounded-lg p-1.5 border border-slate-200">
-              <span className="text-slate-400 block text-[9px] uppercase font-bold">Active</span>
-              <span className="font-extrabold text-slate-800">{counts.total}</span>
+          <div className="grid grid-cols-5 gap-1.5 text-center text-[11px] pt-1">
+            <div className="bg-white rounded-2xl p-2 border border-[#E5E7EB] shadow-2xs">
+              <span className="text-[#575E70] block text-[9px] uppercase font-bold">Active</span>
+              <span className="font-bold text-slate-900 font-display text-xs">{counts.total}</span>
             </div>
-            <div className="bg-emerald-50 rounded-lg p-1.5 border border-emerald-200">
-              <span className="text-emerald-600 block text-[9px] uppercase font-bold">Present</span>
-              <span className="font-extrabold text-emerald-700">{counts.present}</span>
+            <div className="bg-emerald-50 rounded-2xl p-2 border border-emerald-200 shadow-2xs">
+              <span className="text-emerald-700 block text-[9px] uppercase font-bold">Present</span>
+              <span className="font-bold text-emerald-700 font-display text-xs">{counts.present}</span>
             </div>
-            <div className="bg-amber-50 rounded-lg p-1.5 border border-amber-200">
-              <span className="text-amber-600 block text-[9px] uppercase font-bold">Late</span>
-              <span className="font-extrabold text-amber-700">{counts.late}</span>
+            <div className="bg-amber-50 rounded-2xl p-2 border border-amber-200 shadow-2xs">
+              <span className="text-amber-700 block text-[9px] uppercase font-bold">Late</span>
+              <span className="font-bold text-amber-700 font-display text-xs">{counts.late}</span>
             </div>
-            <div className="bg-rose-50 rounded-lg p-1.5 border border-rose-200">
-              <span className="text-rose-600 block text-[9px] uppercase font-bold">Absent</span>
-              <span className="font-extrabold text-rose-700">{counts.absent}</span>
+            <div className="bg-rose-50 rounded-2xl p-2 border border-rose-200 shadow-2xs">
+              <span className="text-rose-700 block text-[9px] uppercase font-bold">Absent</span>
+              <span className="font-bold text-rose-700 font-display text-xs">{counts.absent}</span>
             </div>
-            <div className="bg-indigo-50 rounded-lg p-1.5 border border-indigo-200">
-              <span className="text-indigo-600 block text-[9px] uppercase font-bold">Leave</span>
-              <span className="font-extrabold text-indigo-700">{counts.leave}</span>
+            <div className="bg-slate-100 rounded-2xl p-2 border border-[#E5E7EB] shadow-2xs">
+              <span className="text-[#575E70] block text-[9px] uppercase font-bold">Leave</span>
+              <span className="font-bold text-slate-800 font-display text-xs">{counts.leave}</span>
             </div>
           </div>
         </div>
 
         {/* Respective Students List Body */}
-        <div className="overflow-y-auto flex-1 p-4 space-y-2.5">
+        <div className="overflow-y-auto flex-1 p-4 space-y-3">
           {respectiveStudents.length > 0 ? (
             respectiveStudents.map((student, idx) => {
               const currentStatus = attendanceMap[student.id] || ATTENDANCE_STATUS.PRESENT;
               return (
                 <div
                   key={student.id}
-                  className="bg-white rounded-2xl p-3 border border-slate-200 shadow-xs flex flex-col gap-2.5 transition-all"
+                  className="bg-white rounded-3xl p-3.5 border border-[#E5E7EB] shadow-[0_4px_20px_-2px_rgba(17,24,39,0.04)] flex flex-col gap-2.5 transition-all"
                 >
                   {/* Student basic row */}
-                  <div className="flex items-center gap-2.5">
+                  <div className="flex items-center gap-3">
                     <span className="text-xs font-bold text-slate-400 w-4 text-center">
                       {idx + 1}
                     </span>
-                    <div className="w-10 h-10 min-w-[40px] min-h-[40px] rounded-xl overflow-hidden bg-slate-100 border border-slate-200 shrink-0">
+                    <div className="w-10 h-10 min-w-[40px] min-h-[40px] rounded-2xl overflow-hidden bg-slate-100 border border-[#E5E7EB] shrink-0">
                       <img
                         src={student.pic}
                         alt={student.firstName}
@@ -405,28 +405,28 @@ export default function MarkAttendanceModal({
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-1.5">
-                        <span className="font-mono text-[10px] font-bold text-indigo-600 bg-indigo-50 px-1 rounded">
+                        <span className="font-mono text-[10px] font-bold text-[#111827] bg-[#F3F4F6] border border-[#E5E7EB] px-1.5 py-0.2 rounded-full">
                           {student.id}
                         </span>
                         <span className="text-[10px] text-slate-400">•</span>
-                        <span className="text-[10px] text-slate-500 font-medium">{student.gender}</span>
+                        <span className="text-[10px] text-[#575E70] font-medium">{student.gender}</span>
                       </div>
-                      <h4 className="font-bold text-slate-800 text-xs truncate">
+                      <h4 className="font-bold text-slate-900 text-xs truncate font-display">
                         {student.firstName} {student.lastName}
                       </h4>
                     </div>
                   </div>
 
                   {/* 4 Visually Distinct Buttons: Present, Late, Absent, Leave */}
-                  <div className="grid grid-cols-4 gap-1 pt-1 border-t border-slate-100">
+                  <div className="grid grid-cols-4 gap-1.5 pt-2 border-t border-[#E5E7EB]">
                     {/* 1. Present Button */}
                     <button
                       type="button"
                       onClick={() => handleStatusChange(student.id, ATTENDANCE_STATUS.PRESENT)}
-                      className={`flex items-center justify-center gap-1 py-1.5 px-1 rounded-xl font-bold text-[11px] transition-all tap-active ${
+                      className={`flex items-center justify-center gap-1 py-1.5 px-1 rounded-full font-semibold text-[11px] transition-all tap-active cursor-pointer ${
                         currentStatus === ATTENDANCE_STATUS.PRESENT
-                          ? 'bg-emerald-600 text-white shadow-xs ring-2 ring-emerald-500 ring-offset-1 border border-emerald-600'
-                          : 'bg-white text-slate-600 hover:bg-slate-50 border border-slate-200 shadow-2xs'
+                          ? 'bg-emerald-600 text-white shadow-xs'
+                          : 'bg-white text-slate-600 hover:bg-[#F3F4F6] border border-[#E5E7EB] shadow-2xs'
                       }`}
                     >
                       <CheckCircle2 className={`w-3 h-3 ${currentStatus === ATTENDANCE_STATUS.PRESENT ? 'text-white stroke-[2.5]' : 'text-slate-400'}`} />
@@ -437,10 +437,10 @@ export default function MarkAttendanceModal({
                     <button
                       type="button"
                       onClick={() => handleStatusChange(student.id, ATTENDANCE_STATUS.LATE)}
-                      className={`flex items-center justify-center gap-1 py-1.5 px-1 rounded-xl font-bold text-[11px] transition-all tap-active ${
+                      className={`flex items-center justify-center gap-1 py-1.5 px-1 rounded-full font-semibold text-[11px] transition-all tap-active cursor-pointer ${
                         currentStatus === ATTENDANCE_STATUS.LATE
-                          ? 'bg-amber-500 text-white shadow-xs ring-2 ring-amber-400 ring-offset-1 border border-amber-500'
-                          : 'bg-white text-slate-600 hover:bg-slate-50 border border-slate-200 shadow-2xs'
+                          ? 'bg-amber-500 text-white shadow-xs'
+                          : 'bg-white text-slate-600 hover:bg-[#F3F4F6] border border-[#E5E7EB] shadow-2xs'
                       }`}
                     >
                       <Clock className={`w-3 h-3 ${currentStatus === ATTENDANCE_STATUS.LATE ? 'text-white stroke-[2.5]' : 'text-slate-400'}`} />
@@ -451,10 +451,10 @@ export default function MarkAttendanceModal({
                     <button
                       type="button"
                       onClick={() => handleStatusChange(student.id, ATTENDANCE_STATUS.ABSENT)}
-                      className={`flex items-center justify-center gap-1 py-1.5 px-1 rounded-xl font-bold text-[11px] transition-all tap-active ${
+                      className={`flex items-center justify-center gap-1 py-1.5 px-1 rounded-full font-semibold text-[11px] transition-all tap-active cursor-pointer ${
                         currentStatus === ATTENDANCE_STATUS.ABSENT
-                          ? 'bg-rose-600 text-white shadow-xs ring-2 ring-rose-500 ring-offset-1 border border-rose-600'
-                          : 'bg-white text-slate-600 hover:bg-slate-50 border border-slate-200 shadow-2xs'
+                          ? 'bg-rose-600 text-white shadow-xs'
+                          : 'bg-white text-slate-600 hover:bg-[#F3F4F6] border border-[#E5E7EB] shadow-2xs'
                       }`}
                     >
                       <XCircle className={`w-3 h-3 ${currentStatus === ATTENDANCE_STATUS.ABSENT ? 'text-white stroke-[2.5]' : 'text-slate-400'}`} />
@@ -465,10 +465,10 @@ export default function MarkAttendanceModal({
                     <button
                       type="button"
                       onClick={() => handleStatusChange(student.id, ATTENDANCE_STATUS.LEAVE)}
-                      className={`flex items-center justify-center gap-1 py-1.5 px-1 rounded-xl font-bold text-[11px] transition-all tap-active ${
+                      className={`flex items-center justify-center gap-1 py-1.5 px-1 rounded-full font-semibold text-[11px] transition-all tap-active cursor-pointer ${
                         currentStatus === ATTENDANCE_STATUS.LEAVE
-                          ? 'bg-indigo-600 text-white shadow-xs ring-2 ring-indigo-500 ring-offset-1 border border-indigo-600'
-                          : 'bg-white text-slate-600 hover:bg-slate-50 border border-slate-200 shadow-2xs'
+                          ? 'bg-[#111827] text-white shadow-xs'
+                          : 'bg-white text-slate-600 hover:bg-[#F3F4F6] border border-[#E5E7EB] shadow-2xs'
                       }`}
                     >
                       <AlertCircle className={`w-3 h-3 ${currentStatus === ATTENDANCE_STATUS.LEAVE ? 'text-white stroke-[2.5]' : 'text-slate-400'}`} />
@@ -478,19 +478,19 @@ export default function MarkAttendanceModal({
 
                   {/* Arrival Time & Minutes Late (for Present or Late) */}
                   {(currentStatus === ATTENDANCE_STATUS.PRESENT || currentStatus === ATTENDANCE_STATUS.LATE) && (
-                    <div className="flex items-center justify-between gap-2 px-2.5 py-1.5 rounded-xl bg-slate-50 border border-slate-200 text-xs">
+                    <div className="pt-2 border-t border-[#E5E7EB] flex items-center justify-between gap-2 text-xs flex-wrap">
                       <div className="flex items-center gap-1.5">
-                        <Clock className="w-3.5 h-3.5 text-slate-400" />
-                        <span className="text-[10px] font-semibold text-slate-500 uppercase">Arrival:</span>
+                        <Clock className="w-3 h-3 text-slate-400" />
+                        <span className="text-[#575E70] text-[11px]">Arrival Time:</span>
                         <input
                           type="time"
-                          value={arrivalTimesMap[student.id] || (currentStatus === ATTENDANCE_STATUS.LATE ? '08:25' : expectedStartTime)}
+                          value={arrivalTimesMap[student.id] || expectedStartTime}
                           onChange={(e) => handleArrivalTimeChange(student.id, e.target.value)}
-                          className="px-1.5 py-0.5 bg-white border border-slate-200 rounded font-semibold text-xs text-slate-700 outline-none focus:ring-1 focus:ring-indigo-400"
+                          className="px-2 py-0.5 border border-[#E5E7EB] bg-white rounded-full text-xs font-semibold text-slate-700 outline-none"
                         />
                       </div>
                       {(currentStatus === ATTENDANCE_STATUS.LATE || (minutesLateMap[student.id] || 0) > 0) && (
-                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-amber-100 text-amber-800 border border-amber-300">
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-300">
                           {minutesLateMap[student.id] !== undefined && minutesLateMap[student.id] > 0
                             ? `${minutesLateMap[student.id]} min late`
                             : 'Late Arrival'}
@@ -502,14 +502,14 @@ export default function MarkAttendanceModal({
               );
             })
           ) : (
-            <div className="text-center py-10 px-4 bg-slate-50 rounded-2xl border border-dashed border-slate-300">
-              <div className="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-500 flex items-center justify-center mx-auto mb-2.5">
+            <div className="text-center py-10 px-4 bg-[#F8F9FB] rounded-3xl border border-dashed border-[#E5E7EB]">
+              <div className="w-10 h-10 rounded-2xl bg-white text-slate-500 flex items-center justify-center mx-auto mb-2.5 border border-[#E5E7EB]">
                 <Users className="w-5 h-5" />
               </div>
-              <h3 className="font-bold text-slate-700 text-xs">
+              <h3 className="font-bold text-slate-800 text-xs font-display">
                 No active students enrolled in {selectedClass} - {selectedSubject}
               </h3>
-              <p className="text-[11px] text-slate-400 mt-1 max-w-[240px] mx-auto">
+              <p className="text-[11px] text-[#575E70] mt-1 max-w-[240px] mx-auto">
                 Only active students can be marked for attendance.
               </p>
             </div>
@@ -517,11 +517,11 @@ export default function MarkAttendanceModal({
         </div>
 
         {/* Modal Footer / Save Action */}
-        <div className="p-4 border-t border-slate-200 bg-white flex items-center gap-2.5">
+        <div className="p-4 border-t border-[#E5E7EB] bg-white flex items-center gap-2.5">
           <button
             type="button"
             onClick={onClose}
-            className="flex-1 py-2.5 px-4 rounded-xl border border-slate-200 text-slate-600 font-semibold text-xs hover:bg-slate-50 transition-colors tap-active"
+            className="flex-1 py-2.5 px-4 rounded-full bg-[#F3F4F6] text-slate-700 font-semibold text-xs hover:bg-[#edeef0] transition-colors tap-active cursor-pointer"
           >
             Cancel
           </button>
@@ -529,12 +529,12 @@ export default function MarkAttendanceModal({
             type="button"
             disabled={respectiveStudents.length === 0}
             onClick={handleSave}
-            className={`flex-1 py-2.5 px-4 rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 transition-all tap-active ${
+            className={`flex-1 py-2.5 px-4 rounded-full font-semibold text-xs flex items-center justify-center gap-1.5 transition-all tap-active cursor-pointer ${
               saveSuccess
                 ? 'bg-emerald-600 text-white'
                 : respectiveStudents.length === 0
                 ? 'bg-slate-200 text-slate-400 cursor-not-allowed'
-                : 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-md shadow-indigo-200'
+                : 'bg-[#111827] hover:bg-[#1F2937] text-white shadow-sm'
             }`}
           >
             {saveSuccess ? (

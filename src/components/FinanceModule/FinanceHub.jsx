@@ -40,14 +40,14 @@ export default function FinanceHub({
 
   return (
     <div className="space-y-4">
-      {/* Finance Navigation Pills - ONLY current selection is colored! */}
+      {/* Finance Navigation Pills */}
       <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar text-xs">
         <button
           onClick={() => setSubTab('fees')}
-          className={`flex items-center gap-1.5 px-3.5 py-2 rounded-2xl font-bold whitespace-nowrap transition-all border ${
+          className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full font-bold whitespace-nowrap transition-all border cursor-pointer ${
             subTab === 'fees'
-              ? 'bg-emerald-600 text-white border-emerald-600 shadow-md shadow-emerald-200'
-              : 'bg-white text-slate-600 border-slate-200 hover:border-slate-300'
+              ? 'bg-[#111827] text-white border-[#111827] shadow-xs'
+              : 'bg-white text-slate-700 border-slate-200 hover:border-slate-300'
           }`}
         >
           <CreditCard className="w-3.5 h-3.5" />
@@ -56,10 +56,10 @@ export default function FinanceHub({
 
         <button
           onClick={() => setSubTab('banks')}
-          className={`flex items-center gap-1.5 px-3.5 py-2 rounded-2xl font-bold whitespace-nowrap transition-all border ${
+          className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full font-bold whitespace-nowrap transition-all border cursor-pointer ${
             subTab === 'banks'
-              ? 'bg-teal-700 text-white border-teal-700 shadow-md shadow-teal-200'
-              : 'bg-white text-slate-600 border-slate-200 hover:border-slate-300'
+              ? 'bg-[#111827] text-white border-[#111827] shadow-xs'
+              : 'bg-white text-slate-700 border-slate-200 hover:border-slate-300'
           }`}
         >
           <Landmark className="w-3.5 h-3.5" />
@@ -68,10 +68,10 @@ export default function FinanceHub({
 
         <button
           onClick={() => setSubTab('transfers')}
-          className={`flex items-center gap-1.5 px-3.5 py-2 rounded-2xl font-bold whitespace-nowrap transition-all border ${
+          className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full font-bold whitespace-nowrap transition-all border cursor-pointer ${
             subTab === 'transfers'
-              ? 'bg-blue-600 text-white border-blue-600 shadow-md shadow-blue-200'
-              : 'bg-white text-slate-600 border-slate-200 hover:border-slate-300'
+              ? 'bg-[#111827] text-white border-[#111827] shadow-xs'
+              : 'bg-white text-slate-700 border-slate-200 hover:border-slate-300'
           }`}
         >
           <ArrowRightLeft className="w-3.5 h-3.5" />
@@ -80,10 +80,10 @@ export default function FinanceHub({
 
         <button
           onClick={() => setSubTab('expenses')}
-          className={`flex items-center gap-1.5 px-3.5 py-2 rounded-2xl font-bold whitespace-nowrap transition-all border ${
+          className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full font-bold whitespace-nowrap transition-all border cursor-pointer ${
             subTab === 'expenses'
-              ? 'bg-rose-600 text-white border-rose-600 shadow-md shadow-rose-200'
-              : 'bg-white text-slate-600 border-slate-200 hover:border-slate-300'
+              ? 'bg-[#111827] text-white border-[#111827] shadow-xs'
+              : 'bg-white text-slate-700 border-slate-200 hover:border-slate-300'
           }`}
         >
           <Receipt className="w-3.5 h-3.5" />
@@ -92,10 +92,10 @@ export default function FinanceHub({
 
         <button
           onClick={() => setSubTab('payroll')}
-          className={`flex items-center gap-1.5 px-3.5 py-2 rounded-2xl font-bold whitespace-nowrap transition-all border ${
+          className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full font-bold whitespace-nowrap transition-all border cursor-pointer ${
             subTab === 'payroll'
-              ? 'bg-purple-600 text-white border-purple-600 shadow-md shadow-purple-200'
-              : 'bg-white text-slate-600 border-slate-200 hover:border-slate-300'
+              ? 'bg-[#111827] text-white border-[#111827] shadow-xs'
+              : 'bg-white text-slate-700 border-slate-200 hover:border-slate-300'
           }`}
         >
           <DollarSign className="w-3.5 h-3.5" />

@@ -145,7 +145,7 @@ export default function MonthlyFeeCollectionReport({
         <button
           type="button"
           onClick={onBack}
-          className="flex items-center gap-1.5 px-3.5 py-2 rounded-2xl bg-white hover:bg-slate-100 text-slate-700 text-xs font-bold border border-slate-200 shadow-xs transition-all tap-active cursor-pointer"
+          className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-white hover:bg-[#F3F4F6] text-slate-700 text-xs font-semibold border border-[#E5E7EB] shadow-2xs transition-all tap-active cursor-pointer"
         >
           <ArrowLeft className="w-4 h-4" />
           <span>Back to Reports</span>
@@ -155,7 +155,7 @@ export default function MonthlyFeeCollectionReport({
           <button
             type="button"
             onClick={handleDownloadPDF}
-            className="flex items-center gap-1.5 px-3.5 py-2 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold border border-slate-300 transition-all cursor-pointer shadow-2xs"
+            className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-white hover:bg-[#F3F4F6] text-slate-800 text-xs font-semibold border border-[#E5E7EB] transition-all cursor-pointer shadow-2xs"
           >
             <Download className="w-3.5 h-3.5 text-slate-600" />
             <span>Download PDF</span>
@@ -163,7 +163,7 @@ export default function MonthlyFeeCollectionReport({
           <button
             type="button"
             onClick={handleShareWhatsApp}
-            className="flex items-center gap-1.5 px-3.5 py-2 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition-all shadow-2xs cursor-pointer"
+            className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold transition-all shadow-sm cursor-pointer"
           >
             <MessageCircle className="w-3.5 h-3.5" />
             <span>Share on WhatsApp</span>
@@ -173,32 +173,32 @@ export default function MonthlyFeeCollectionReport({
 
       {/* Overview Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-        <div className="bg-white p-4 rounded-3xl border border-slate-200/90 shadow-xs">
-          <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block">Cumulative Billed</span>
-          <p className="text-lg font-black text-slate-900 mt-1">
+        <div className="bg-white p-4 rounded-3xl border border-[#E5E7EB] shadow-[0_4px_24px_-2px_rgba(17,24,39,0.04)]">
+          <span className="text-[10px] text-[#575E70] font-bold uppercase tracking-wider block">Cumulative Billed</span>
+          <p className="text-xl sm:text-2xl font-bold text-slate-900 mt-1 font-display">
             Rs. {monthlyData.overallBilled.toLocaleString()}
           </p>
-          <span className="text-[11px] text-slate-500 font-medium mt-0.5 block">
+          <span className="text-[11px] text-[#575E70] font-medium mt-0.5 block">
             Across {monthlyData.list.length} billing periods
           </span>
         </div>
 
-        <div className="bg-white p-4 rounded-3xl border border-emerald-200/90 bg-emerald-50/20 shadow-xs">
+        <div className="bg-white p-4 rounded-3xl border border-emerald-200/80 bg-emerald-50/20 shadow-[0_4px_24px_-2px_rgba(17,24,39,0.04)]">
           <span className="text-[10px] text-emerald-700 font-bold uppercase tracking-wider block">Realized Inflow</span>
-          <p className="text-lg font-black text-emerald-700 mt-1">
+          <p className="text-xl sm:text-2xl font-bold text-emerald-700 mt-1 font-display">
             Rs. {monthlyData.overallCollected.toLocaleString()}
           </p>
-          <span className="text-[11px] text-emerald-600 font-bold mt-0.5 block">
+          <span className="text-[11px] text-emerald-600 font-medium mt-0.5 block">
             Cleared to academy treasury
           </span>
         </div>
 
-        <div className="bg-white p-4 rounded-3xl border border-amber-200/90 bg-amber-50/20 shadow-xs">
+        <div className="bg-white p-4 rounded-3xl border border-amber-200/80 bg-amber-50/20 shadow-[0_4px_24px_-2px_rgba(17,24,39,0.04)]">
           <span className="text-[10px] text-amber-800 font-bold uppercase tracking-wider block">Uncollected Arrears</span>
-          <p className="text-lg font-black text-amber-700 mt-1">
+          <p className="text-xl sm:text-2xl font-bold text-amber-700 mt-1 font-display">
             Rs. {monthlyData.overallPending.toLocaleString()}
           </p>
-          <span className="text-[11px] text-amber-700 font-bold mt-0.5 block">
+          <span className="text-[11px] text-amber-700 font-medium mt-0.5 block">
             Awaiting student payments
           </span>
         </div>
@@ -207,26 +207,26 @@ export default function MonthlyFeeCollectionReport({
       {/* Month Breakdown Cards with Progress Bars */}
       <div className="space-y-3">
         {monthlyData.list.map(m => (
-          <div key={m.month} className="bg-white p-4 rounded-3xl border border-slate-200/90 shadow-xs space-y-3">
+          <div key={m.month} className="bg-white p-4 rounded-3xl border border-[#E5E7EB] shadow-[0_4px_24px_-2px_rgba(17,24,39,0.04)] space-y-3">
             <div className="flex items-center justify-between flex-wrap gap-2">
               <div>
-                <h3 className="text-sm font-black text-slate-900">{m.month}</h3>
-                <p className="text-[11px] text-slate-400 font-medium">
+                <h3 className="text-sm font-bold text-slate-900 font-display">{m.month}</h3>
+                <p className="text-[11px] text-[#575E70] font-medium">
                   {m.vouchersGenerated} Vouchers Issued • {m.paidCount} Paid • {m.pendingCount} Pending
                 </p>
               </div>
               <div className="text-right">
-                <span className="text-sm font-black text-slate-900">
-                  Rs. {m.totalCollected.toLocaleString()} <span className="text-xs text-slate-400 font-medium">/ Rs. {m.totalBilled.toLocaleString()}</span>
+                <span className="text-sm font-bold text-slate-900 font-display">
+                  Rs. {m.totalCollected.toLocaleString()} <span className="text-xs text-[#575E70] font-medium font-sans">/ Rs. {m.totalBilled.toLocaleString()}</span>
                 </span>
-                <span className={`text-[11px] font-black block ${Number(m.rate) >= 80 ? 'text-emerald-600' : 'text-amber-600'}`}>
+                <span className={`text-[11px] font-bold block ${Number(m.rate) >= 80 ? 'text-emerald-600' : 'text-amber-600'}`}>
                   {m.rate}% Collection Rate
                 </span>
               </div>
             </div>
 
             {/* Progress Bar */}
-            <div className="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden">
+            <div className="w-full bg-[#F4F5F7] h-2.5 rounded-full overflow-hidden">
               <div
                 className={`h-full rounded-full transition-all duration-500 ${
                   Number(m.rate) >= 80 ? 'bg-emerald-500' : Number(m.rate) >= 50 ? 'bg-amber-500' : 'bg-rose-500'

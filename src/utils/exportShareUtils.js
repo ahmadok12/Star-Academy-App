@@ -326,6 +326,39 @@ function getCompleteHtmlDocument(title, content, orientation = 'portrait') {
             font-size: 8.5pt;
             color: #64748b;
           }
+          /* Watermark overlay - Large, centered at the back of the screen and printed pages */
+          .watermark-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            width: 100vw;
+            height: 100vh;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            pointer-events: none !important;
+            z-index: 0 !important;
+            overflow: hidden !important;
+          }
+          .watermark-overlay img {
+            width: ${isLandscape ? '580px' : '640px'} !important;
+            height: ${isLandscape ? '580px' : '640px'} !important;
+            max-width: ${isLandscape ? '70vw' : '82vw'} !important;
+            max-height: ${isLandscape ? '78vh' : '82vh'} !important;
+            object-fit: contain !important;
+            opacity: 0.085 !important;
+            filter: grayscale(12%) contrast(110%) !important;
+            transform: scale(1.05);
+          }
+          .print-content-wrapper {
+            position: relative;
+            z-index: 1;
+          }
+          .voucher-wrapper {
+            background: rgba(255, 255, 255, 0.92) !important;
+          }
           .signature-box {
             text-align: center;
             width: 170px;
@@ -337,29 +370,36 @@ function getCompleteHtmlDocument(title, content, orientation = 'portrait') {
         </style>
       </head>
       <body>
-        <div class="header">
-          <div style="display: flex; align-items: center; gap: 14px;">
-            <img src="${STAR_ACADEMY_LOGO_BASE64}" alt="Star Academy Logo" style="width: 56px; height: 56px; object-fit: contain;" />
-            <div>
-              <h1 class="academy-title">Star Academy Lahore</h1>
-              <p class="academy-sub">Excellence in Matric & Intermediate Education</p>
-            </div>
-          </div>
-          <div class="doc-badge">
-            ${title}<br />
-            <small style="font-weight: 500; color: #64748b;">${new Date().toLocaleDateString('en-GB')}</small>
-          </div>
+        <!-- Large Background Watermark -->
+        <div class="watermark-overlay" aria-hidden="true">
+          <img src="${STAR_ACADEMY_LOGO_BASE64}" alt="Star Academy Logo Watermark" />
         </div>
 
-        ${content}
-
-        <div class="footer">
-          <div>
-            Official Star Academy Records System • Printed on ${new Date().toLocaleString('en-US')}<br />
-            System generated document. For verifications, contact Star Academy admin desk.
+        <div class="print-content-wrapper">
+          <div class="header">
+            <div style="display: flex; align-items: center; gap: 14px;">
+              <img src="${STAR_ACADEMY_LOGO_BASE64}" alt="Star Academy Logo" style="width: 56px; height: 56px; object-fit: contain;" />
+              <div>
+                <h1 class="academy-title">Star Academy Lahore</h1>
+                <p class="academy-sub">Excellence in Matric & Intermediate Education</p>
+              </div>
+            </div>
+            <div class="doc-badge">
+              ${title}<br />
+              <small style="font-weight: 500; color: #64748b;">${new Date().toLocaleDateString('en-GB')}</small>
+            </div>
           </div>
-          <div class="signature-box">
-            Authorized Signature
+
+          ${content}
+
+          <div class="footer">
+            <div>
+              Official Star Academy Records System • Printed on ${new Date().toLocaleString('en-US')}<br />
+              System generated document. For verifications, contact Star Academy admin desk.
+            </div>
+            <div class="signature-box">
+              Authorized Signature
+            </div>
           </div>
         </div>
       </body>
@@ -666,6 +706,33 @@ async function generatePdfDocument(title, bodyContent, orientation = 'portrait')
         font-size: 8.5pt;
         color: #64748b;
       }
+        #star-academy-pdf-render .watermark-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        pointer-events: none !important;
+        z-index: 0 !important;
+        overflow: hidden !important;
+      }
+      #star-academy-pdf-render .watermark-overlay img {
+        width: ${isLandscape ? '580px' : '640px'} !important;
+        height: ${isLandscape ? '580px' : '640px'} !important;
+        max-width: ${isLandscape ? '70%' : '82%'} !important;
+        max-height: ${isLandscape ? '78%' : '82%'} !important;
+        object-fit: contain !important;
+        opacity: 0.085 !important;
+        filter: grayscale(12%) contrast(110%) !important;
+        transform: scale(1.05);
+      }
+      #star-academy-pdf-render .print-content-wrapper {
+        position: relative;
+        z-index: 1;
+      }
       #star-academy-pdf-render .signature-box {
         text-align: center;
         width: 180px;
@@ -675,29 +742,36 @@ async function generatePdfDocument(title, bodyContent, orientation = 'portrait')
         color: #0f172a;
       }
     </style>
-    <div class="header">
-      <div style="display: flex; align-items: center; gap: 14px;">
-        <img src="${STAR_ACADEMY_LOGO_BASE64}" alt="Star Academy Logo" style="width: 56px; height: 56px; object-fit: contain;" />
-        <div>
-          <h1 class="academy-title">Star Academy Lahore</h1>
-          <p class="academy-sub">Excellence in Matric & Intermediate Education</p>
-        </div>
-      </div>
-      <div class="doc-badge">
-        ${title}<br />
-        <small style="font-weight: 500; color: #64748b;">${new Date().toLocaleDateString('en-GB')}</small>
-      </div>
+    <!-- Large Background Watermark -->
+    <div class="watermark-overlay" aria-hidden="true">
+      <img src="${STAR_ACADEMY_LOGO_BASE64}" alt="Star Academy Logo Watermark" />
     </div>
 
-    ${bodyContent}
-
-    <div class="footer">
-      <div>
-        Official Star Academy Records System • Generated on ${new Date().toLocaleString('en-US')}<br />
-        System generated document. For verifications, contact Star Academy admin desk.
+    <div class="print-content-wrapper">
+      <div class="header">
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <img src="${STAR_ACADEMY_LOGO_BASE64}" alt="Star Academy Logo" style="width: 56px; height: 56px; object-fit: contain;" />
+          <div>
+            <h1 class="academy-title">Star Academy Lahore</h1>
+            <p class="academy-sub">Excellence in Matric & Intermediate Education</p>
+          </div>
+        </div>
+        <div class="doc-badge">
+          ${title}<br />
+          <small style="font-weight: 500; color: #64748b;">${new Date().toLocaleDateString('en-GB')}</small>
+        </div>
       </div>
-      <div class="signature-box">
-        Authorized Signature
+
+      ${bodyContent}
+
+      <div class="footer">
+        <div>
+          Official Star Academy Records System • Generated on ${new Date().toLocaleString('en-US')}<br />
+          System generated document. For verifications, contact Star Academy admin desk.
+        </div>
+        <div class="signature-box">
+          Authorized Signature
+        </div>
       </div>
     </div>
   `;
@@ -1570,6 +1644,11 @@ export function shareMarksheetWhatsApp(marksheet, students = []) {
   shareHtmlAsPDFToWhatsApp(title, getMarksheetHtml(marksheet, students), filename);
 }
 
+export function printMarksheet(marksheet, students = []) {
+  const title = `Marksheet - ${marksheet.title || marksheet.testName} (${marksheet.studentClass} ${marksheet.section})`;
+  printHtmlAsPDF(title, getMarksheetHtml(marksheet, students));
+}
+
 // -------------------------------------------------------------
 // 5. SCHEME OF STUDY (SOS) EXPORT & SHARE
 // -------------------------------------------------------------
@@ -1695,7 +1774,7 @@ export function shareSOSWhatsApp(scheme) {
 export function getSingleFeeVoucherHtml(voucher, isStandalonePage = false) {
   const isPaid = voucher.status === 'PAID';
   return `
-    <div class="voucher-wrapper" style="border: 2px solid #312e81; border-radius: 12px; padding: 18px; background: #ffffff; margin-bottom: 20px; ${isStandalonePage ? 'page-break-after: always;' : ''}">
+    <div class="voucher-wrapper" style="border: 2px solid #312e81; border-radius: 12px; padding: 18px; background: rgba(255, 255, 255, 0.92); margin-bottom: 20px; ${isStandalonePage ? 'page-break-after: always;' : ''}">
       <!-- Voucher Top Bar -->
       <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #e2e8f0; padding-bottom: 12px; margin-bottom: 14px;">
         <div style="display: flex; align-items: center; gap: 12px;">
@@ -1837,5 +1916,219 @@ export function exportAllFeeVouchersPDF(vouchers, monthTitle = 'September 2026')
 export function printAllFeeVouchers(vouchers, monthTitle = 'September 2026') {
   const title = `All Student Fee Vouchers - ${monthTitle} (${vouchers.length} Students)`;
   printHtmlAsPDF(title, getAllFeeVouchersHtml(vouchers));
+}
+
+// -------------------------------------------------------------
+// TEACHER PROFILE EXPORT & SHARE
+// -------------------------------------------------------------
+export function getTeacherProfileHtml(teacher, extraData = {}) {
+  const { teacherAttendanceSessions = [] } = extraData;
+  const isLeft = Boolean(teacher.isLeft || teacher.isActive === false);
+  const formattedSalary = teacher.salary ? Number(teacher.salary).toLocaleString() : '60,000';
+
+  // Extract all attendance records for this teacher
+  const attendanceLogs = [];
+  let presentCount = 0;
+  let lateCount = 0;
+  let absentCount = 0;
+  let leaveCount = 0;
+  let totalLateMinutes = 0;
+
+  teacherAttendanceSessions.forEach((session) => {
+    (session.records || []).forEach((r) => {
+      if (r.teacherId === teacher.id) {
+        const st = r.status || 'Present';
+        const isLate = st === 'Late' || r.isLate;
+        const minsLate = Number(r.minutesLate) || 0;
+
+        if (st === 'Present') presentCount++;
+        else if (st === 'Late') {
+          lateCount++;
+          totalLateMinutes += minsLate;
+        } else if (st === 'Absent') absentCount++;
+        else if (st === 'Leave') leaveCount++;
+
+        attendanceLogs.push({
+          date: session.date,
+          time: r.slotTime || session.expectedStartTime || '15:00',
+          subject: r.subject || teacher.department || 'General',
+          status: st,
+          arrivalTime: r.arrivalTime || (st === 'Late' ? 'Late' : (st === 'Present' ? 'On Time' : '-')),
+          minutesLate: minsLate
+        });
+      }
+    });
+  });
+
+  attendanceLogs.sort((a, b) => new Date(b.date) - new Date(a.date));
+  const totalMarked = presentCount + lateCount + absentCount + leaveCount;
+  const complianceRate = totalMarked > 0 ? Math.round(((presentCount + lateCount) / totalMarked) * 100) : 100;
+
+  const attendanceRowsHtml = attendanceLogs.map((log, idx) => {
+    const badgeClass =
+      log.status === 'Present'
+        ? 'badge-green'
+        : log.status === 'Late'
+        ? 'badge-amber'
+        : log.status === 'Absent'
+        ? 'badge-rose'
+        : 'badge-blue';
+
+    return `
+      <tr>
+        <td style="text-align: center; font-weight: bold;">${idx + 1}</td>
+        <td><b>${log.date}</b></td>
+        <td>${log.time}</td>
+        <td><b>${log.subject}</b></td>
+        <td style="text-align: center;"><span class="badge ${badgeClass}">${log.status}</span></td>
+        <td>${log.arrivalTime}</td>
+        <td style="text-align: center;">${log.minutesLate > 0 ? `+${log.minutesLate}m` : '-'}</td>
+      </tr>
+    `;
+  }).join('');
+
+  const teachingSlotsHtml = (teacher.teachingSlots || []).map((slot) => `
+    <span class="badge badge-amber" style="margin-right: 4px; margin-bottom: 4px; display: inline-block;">
+      ${slot.subject || 'General'} at ${slot.time || '15:00'}
+    </span>
+  `).join('') || '<span style="color: #64748b;">No specific lecture slots</span>';
+
+  const assignedClassesHtml = (teacher.assignedClasses || []).map((c) => `
+    <span class="badge badge-blue" style="margin-right: 4px; margin-bottom: 4px; display: inline-block;">
+      ${c}
+    </span>
+  `).join('') || '<span style="color: #64748b;">General Faculty</span>';
+
+  return `
+    <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #0f172a; padding: 12px 16px;">
+      <!-- Profile Header -->
+      <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #3b82f6; padding-bottom: 12px; margin-bottom: 14px;">
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <img src="${teacher.pic || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=256'}" 
+               alt="${teacher.name}" 
+               style="width: 70px; height: 70px; object-fit: cover; border-radius: 12px; border: 2px solid #cbd5e1;" />
+          <div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="font-size: 8pt; font-weight: 800; background: #e0e7ff; color: #3730a3; padding: 2px 8px; border-radius: 4px; font-family: monospace;">${teacher.id}</span>
+              <span style="font-size: 8pt; font-weight: 800; background: ${isLeft ? '#fee2e2' : '#dcfce7'}; color: ${isLeft ? '#991b1b' : '#166534'}; padding: 2px 8px; border-radius: 4px;">
+                ${isLeft ? 'LEFT ACADEMY (INACTIVE)' : 'ACTIVE FACULTY'}
+              </span>
+            </div>
+            <h1 style="font-size: 16pt; font-weight: 800; margin: 4px 0 2px 0; color: #0f172a;">${teacher.name}</h1>
+            <p style="font-size: 9pt; color: #475569; margin: 0;"><b>Department:</b> ${teacher.department || 'General Faculty'}</p>
+          </div>
+        </div>
+        <div style="text-align: right;">
+          <div style="font-size: 14pt; font-weight: 900; color: #166534; font-family: monospace;">PKR ${formattedSalary}</div>
+          <div style="font-size: 7.5pt; color: #64748b; font-weight: 700; text-transform: uppercase;">Monthly Compensation</div>
+        </div>
+      </div>
+
+      <!-- Faculty Info Grid -->
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 10px 12px; margin-bottom: 14px; font-size: 8.5pt;">
+        <div><b>CNIC:</b> ${teacher.cnic || 'N/A'}</div>
+        <div><b>Mobile:</b> ${teacher.contactNumber || 'N/A'}</div>
+        <div><b>Secondary:</b> ${teacher.secondaryContactNumber || 'N/A'}</div>
+        <div><b>Joining Date:</b> ${teacher.joinedAt || 'N/A'}</div>
+        <div style="grid-column: span 2;"><b>Address:</b> ${teacher.address || 'N/A'}</div>
+        <div style="grid-column: span 3; border-top: 1px solid #e2e8f0; padding-top: 6px;">
+          <b>Assigned Classes:</b> ${assignedClassesHtml}
+        </div>
+        <div style="grid-column: span 3;">
+          <b>Lecture Timings:</b> ${teachingSlotsHtml}
+        </div>
+      </div>
+
+      <!-- Attendance Analytics KPI Grid -->
+      <h3 style="font-size: 10pt; font-weight: 800; color: #1e3a8a; margin: 12px 0 6px 0; text-transform: uppercase; letter-spacing: 0.5px;">
+        Attendance Analytics & Compliance Overview
+      </h3>
+      <table style="width: 100%; border-collapse: separate; border-spacing: 6px; margin-bottom: 14px; border: none; background: transparent;">
+        <tr>
+          <td style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px; padding: 6px 4px; text-align: center; width: 16.6%;">
+            <div style="font-size: 13pt; font-weight: 900; color: #1e40af;">${complianceRate}%</div>
+            <div style="font-size: 7pt; color: #64748b; font-weight: 700; text-transform: uppercase; margin-top: 2px;">Presence Rate</div>
+          </td>
+          <td style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px; padding: 6px 4px; text-align: center; width: 16.6%;">
+            <div style="font-size: 13pt; font-weight: 900; color: #0f172a;">${totalMarked}</div>
+            <div style="font-size: 7pt; color: #64748b; font-weight: 700; text-transform: uppercase; margin-top: 2px;">Total Marked</div>
+          </td>
+          <td style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px; padding: 6px 4px; text-align: center; width: 16.6%;">
+            <div style="font-size: 13pt; font-weight: 900; color: #166534;">${presentCount}</div>
+            <div style="font-size: 7pt; color: #64748b; font-weight: 700; text-transform: uppercase; margin-top: 2px;">Present Days</div>
+          </td>
+          <td style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px; padding: 6px 4px; text-align: center; width: 16.6%;">
+            <div style="font-size: 13pt; font-weight: 900; color: #c2410c;">${lateCount}</div>
+            <div style="font-size: 7pt; color: #64748b; font-weight: 700; text-transform: uppercase; margin-top: 2px;">Late Days (${totalLateMinutes}m)</div>
+          </td>
+          <td style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px; padding: 6px 4px; text-align: center; width: 16.6%;">
+            <div style="font-size: 13pt; font-weight: 900; color: #b91c1c;">${absentCount}</div>
+            <div style="font-size: 7pt; color: #64748b; font-weight: 700; text-transform: uppercase; margin-top: 2px;">Absent Days</div>
+          </td>
+          <td style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px; padding: 6px 4px; text-align: center; width: 16.6%;">
+            <div style="font-size: 13pt; font-weight: 900; color: #4338ca;">${leaveCount}</div>
+            <div style="font-size: 7pt; color: #64748b; font-weight: 700; text-transform: uppercase; margin-top: 2px;">Leaves</div>
+          </td>
+        </tr>
+      </table>
+
+      <!-- Complete Attendance Log Table -->
+      <h3 style="font-size: 10pt; font-weight: 800; color: #1e3a8a; margin: 12px 0 6px 0; text-transform: uppercase; letter-spacing: 0.5px;">
+        Complete Attendance Log & Records
+      </h3>
+      <table style="width: 100%; border-collapse: collapse; font-size: 8pt; border: 1px solid #cbd5e1;">
+        <thead>
+          <tr style="background: #f1f5f9; border-bottom: 2px solid #cbd5e1;">
+            <th style="padding: 6px; text-align: center; width: 30px;">#</th>
+            <th style="padding: 6px; text-align: left;">Date</th>
+            <th style="padding: 6px; text-align: left;">Slot / Time</th>
+            <th style="padding: 6px; text-align: left;">Subject</th>
+            <th style="padding: 6px; text-align: center;">Status</th>
+            <th style="padding: 6px; text-align: left;">Arrival</th>
+            <th style="padding: 6px; text-align: center;">Late (Min)</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${attendanceRowsHtml || '<tr><td colspan="7" style="text-align: center; padding: 12px; color: #64748b;">No attendance records found for this faculty member.</td></tr>'}
+        </tbody>
+      </table>
+
+      <!-- Verification Footer -->
+      <div style="margin-top: 20px; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 8px; background: #f8fafc; display: flex; align-items: center; justify-content: space-between;">
+        <div style="font-size: 8pt; color: #64748b;">
+          <b>Star Academy Lahore - Faculty Verification</b><br />
+          Generated on ${new Date().toLocaleDateString('en-GB')} • Teacher ID: <b>${teacher.id}</b>
+        </div>
+        <div style="display: flex; gap: 30px;">
+          <div style="text-align: center; width: 130px; border-top: 1.5px solid #0f172a; padding-top: 4px; font-size: 8pt; font-weight: 800;">
+            Faculty Member
+          </div>
+          <div style="text-align: center; width: 130px; border-top: 1.5px solid #0f172a; padding-top: 4px; font-size: 8pt; font-weight: 800;">
+            Principal / Director
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+export function exportTeacherProfilePDF(teacher, extraData = {}) {
+  const html = getTeacherProfileHtml(teacher, extraData);
+  downloadHtmlAsPDF(`Teacher Profile - ${teacher.name}`, html, `Teacher_Profile_${teacher.id}_${teacher.name.replace(/\s+/g, '_')}`);
+}
+
+export function printTeacherProfile(teacher, extraData = {}) {
+  const html = getTeacherProfileHtml(teacher, extraData);
+  printHtmlAsPDF(`Teacher Profile - ${teacher.name}`, html);
+}
+
+export function shareTeacherProfileWhatsApp(teacher, extraData = {}) {
+  const html = getTeacherProfileHtml(teacher, extraData);
+  shareHtmlAsPDFToWhatsApp(
+    `Teacher Profile - ${teacher.name}`,
+    html,
+    `Teacher_Profile_${teacher.id}_${teacher.name.replace(/\s+/g, '_')}`,
+    teacher.contactNumber || teacher.secondaryContactNumber || ''
+  );
 }
 

@@ -5,11 +5,66 @@
 @layer base {
   body {
     @apply antialiased select-none;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    font-family: 'DM Sans', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
+    background-color: #f8f9fb;
+    color: #191c1e;
   }
+
+  h1, h2, h3, h4, h5, h6, .font-headline, .font-display {
+    font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    letter-spacing: -0.015em;
+  }
+}
+
+/* Stitch Design System Card & Component Utilities */
+.stitch-card {
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 1.5rem; /* rounded-3xl */
+  box-shadow: 0 4px 24px -2px rgba(17, 24, 39, 0.04);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.stitch-card:hover {
+  border-color: #d1d5db;
+  box-shadow: 0 8px 30px -4px rgba(17, 24, 39, 0.08);
+}
+
+.stitch-pill {
+  border-radius: 9999px;
+  font-family: 'DM Sans', sans-serif;
+  transition: all 0.15s ease-in-out;
+}
+
+.stitch-btn-primary {
+  border-radius: 9999px;
+  background-color: #111827;
+  color: #ffffff;
+  font-weight: 600;
+  box-shadow: 0 4px 14px rgba(17, 24, 39, 0.12);
+  transition: all 0.15s ease;
+}
+
+.stitch-btn-primary:hover {
+  background-color: #1f2937;
+  box-shadow: 0 6px 18px rgba(17, 24, 39, 0.18);
+}
+
+.stitch-btn-coral {
+  border-radius: 9999px;
+  background-color: #ff7a59;
+  color: #ffffff;
+  font-weight: 600;
+  box-shadow: 0 4px 14px rgba(255, 122, 89, 0.25);
+  transition: all 0.15s ease;
+}
+
+.stitch-btn-coral:hover {
+  background-color: #f95f3b;
+  box-shadow: 0 6px 18px rgba(255, 122, 89, 0.35);
 }
 
 /* Custom scrollbars for clean mobile appearance */
@@ -114,4 +169,28 @@
 .mobile-phone-frame h2,
 .mobile-phone-frame h3 {
   letter-spacing: -0.015em;
+}
+
+/* ==========================================================================
+   Print Preview & Print Media Watermark
+   ========================================================================== */
+@media print {
+  body::before {
+    content: '';
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 540px;
+    height: 540px;
+    max-width: 80vw;
+    max-height: 80vh;
+    background-image: url('/logo.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    opacity: 0.08;
+    pointer-events: none;
+    z-index: 0;
+  }
 }

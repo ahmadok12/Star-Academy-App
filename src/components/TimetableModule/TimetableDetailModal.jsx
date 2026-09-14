@@ -18,14 +18,14 @@ export default function TimetableDetailModal({
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-in fade-in duration-200">
       <div className="bg-white rounded-3xl w-full max-w-md shadow-2xl overflow-hidden border border-slate-100 flex flex-col max-h-[90vh]">
         {/* Header with EDIT AT TOP */}
-        <div className="bg-gradient-to-r from-teal-600 to-emerald-700 p-5 text-white flex items-center justify-between shadow-md">
-          <div className="flex items-center gap-2.5">
-            <div className="w-10 h-10 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center">
+        <div className="bg-[#111827] p-5 text-white flex items-center justify-between border-b border-slate-800">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/10 flex items-center justify-center">
               <Calendar className="w-5 h-5 text-white" />
             </div>
             <div>
-              <h2 className="text-base font-black tracking-tight leading-tight">Class Timetable</h2>
-              <p className="text-[11px] text-teal-100 font-mono font-medium">{timetable.id}</p>
+              <h2 className="text-base font-bold tracking-tight leading-tight font-display">Class Timetable</h2>
+              <p className="text-[11px] text-slate-400 font-mono font-medium">{timetable.id}</p>
             </div>
           </div>
 
@@ -37,7 +37,7 @@ export default function TimetableDetailModal({
                   onClose();
                   onEdit(timetable);
                 }}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white text-xs font-bold transition-colors"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white text-xs font-bold transition-colors cursor-pointer"
               >
                 <Edit3 className="w-3.5 h-3.5" />
                 <span>Edit</span>
@@ -46,7 +46,7 @@ export default function TimetableDetailModal({
 
             <button
               onClick={onClose}
-              className="w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 backdrop-blur-sm flex items-center justify-center text-white transition-colors"
+              className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-sm flex items-center justify-center text-white transition-colors cursor-pointer"
             >
               <X className="w-4 h-4" />
             </button>
@@ -56,12 +56,12 @@ export default function TimetableDetailModal({
         {/* Content */}
         <div className="p-5 overflow-y-auto space-y-4 text-xs">
           {/* Summary Header */}
-          <div className="p-4 rounded-2xl bg-teal-50 border border-teal-200/70 space-y-1">
+          <div className="p-4 rounded-2xl bg-[#F8F9FB] border border-slate-200 space-y-1">
             <div className="flex items-center justify-between">
-              <span className="px-2 py-0.5 rounded-md bg-teal-700 text-white font-bold text-[10px]">
+              <span className="px-2.5 py-0.5 rounded-full bg-[#111827] text-white font-bold text-[10px]">
                 {timetable.studentClass}
               </span>
-              <span className="text-[11px] font-semibold text-teal-800">
+              <span className="text-[11px] font-semibold text-slate-600">
                 {timetable.days || 'Monday - Saturday'}
               </span>
             </div>
@@ -69,7 +69,7 @@ export default function TimetableDetailModal({
               {timetable.title || `${timetable.studentClass} ${timetable.section} Timetable`}
             </h3>
             <p className="text-[11px] text-slate-600 font-medium">
-              Section: <strong className="text-teal-900">{timetable.section}</strong>
+              Section: <strong className="text-slate-900">{timetable.section}</strong>
             </p>
           </div>
 
@@ -143,16 +143,16 @@ export default function TimetableDetailModal({
             <button
               type="button"
               onClick={() => printTimetable(timetable)}
-              className="flex-1 py-2 px-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-colors shadow-2xs cursor-pointer"
+              className="flex-1 py-2 px-2.5 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 font-bold text-xs flex items-center justify-center gap-1.5 transition-colors cursor-pointer shadow-2xs"
               title="Print Preview Timetable"
             >
-              <Printer className="w-3.5 h-3.5" />
-              <span>Print Preview</span>
+              <Printer className="w-3.5 h-3.5 text-slate-600" />
+              <span>Print</span>
             </button>
             <button
               type="button"
               onClick={() => exportTimetablePDF(timetable)}
-              className="flex-1 py-2 px-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs flex items-center justify-center gap-1.5 transition-colors border border-slate-300/80 cursor-pointer shadow-2xs"
+              className="flex-1 py-2 px-2.5 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs flex items-center justify-center gap-1.5 transition-colors border border-slate-200 cursor-pointer shadow-2xs"
             >
               <Download className="w-3.5 h-3.5 text-slate-600" />
               <span>PDF</span>
@@ -160,9 +160,9 @@ export default function TimetableDetailModal({
             <button
               type="button"
               onClick={() => shareTimetableWhatsApp(timetable)}
-              className="flex-1 py-2 px-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-colors shadow-2xs cursor-pointer"
+              className="flex-1 py-2 px-2.5 rounded-full bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 font-bold text-xs flex items-center justify-center gap-1.5 transition-colors shadow-2xs cursor-pointer"
             >
-              <MessageCircle className="w-3.5 h-3.5" />
+              <MessageCircle className="w-3.5 h-3.5 text-emerald-600" />
               <span>WhatsApp</span>
             </button>
           </div>
@@ -181,7 +181,7 @@ export default function TimetableDetailModal({
                   <button
                     type="button"
                     onClick={() => setConfirmDelete(false)}
-                    className="flex-1 py-1.5 px-3 rounded-xl border border-slate-200 bg-white text-slate-700 font-bold text-xs"
+                    className="flex-1 py-1.5 px-3 rounded-full border border-slate-200 bg-white text-slate-700 font-bold text-xs cursor-pointer"
                   >
                     Cancel
                   </button>
@@ -191,7 +191,7 @@ export default function TimetableDetailModal({
                       onDelete(timetable.id);
                       onClose();
                     }}
-                    className="flex-1 py-1.5 px-3 rounded-xl bg-rose-600 text-white font-bold text-xs shadow-xs hover:bg-rose-700"
+                    className="flex-1 py-1.5 px-3 rounded-full bg-rose-600 text-white font-bold text-xs shadow-xs hover:bg-rose-700 cursor-pointer"
                   >
                     Confirm Delete
                   </button>
@@ -201,7 +201,7 @@ export default function TimetableDetailModal({
               <button
                 type="button"
                 onClick={() => setConfirmDelete(true)}
-                className="w-full py-2.5 px-4 rounded-xl border border-rose-200 bg-rose-50/50 hover:bg-rose-100/60 text-rose-700 font-bold text-xs flex items-center justify-center gap-2 transition-colors"
+                className="w-full py-2.5 px-4 rounded-full border border-rose-200 bg-rose-50/50 hover:bg-rose-100/60 text-rose-700 font-bold text-xs flex items-center justify-center gap-2 transition-colors cursor-pointer"
               >
                 <Trash2 className="w-4 h-4 text-rose-600" />
                 <span>Delete Timetable</span>
@@ -211,7 +211,7 @@ export default function TimetableDetailModal({
             <button
               type="button"
               onClick={onClose}
-              className="w-full py-2 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold text-xs transition-colors"
+              className="w-full py-2 px-4 rounded-full bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold text-xs transition-colors cursor-pointer"
             >
               Close
             </button>

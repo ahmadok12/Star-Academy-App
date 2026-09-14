@@ -126,7 +126,7 @@ export default function ReceiveFeesSection({
 
   return (
     <div className="space-y-3">
-      {/* Small Compact Bar: Back, Tabs (Pending/Paid), + Receive Fee, Search, Vouchers */}
+      {/* Top sticky bar */}
       <div className="bg-white/95 backdrop-blur-md border-b border-slate-200/80 sticky top-0 z-20 shadow-xs -mx-4 md:-mx-6 px-4 md:px-6 py-2">
         <div className="max-w-6xl mx-auto flex items-center justify-between gap-2 flex-wrap sm:flex-nowrap">
           {/* Back Button */}
@@ -134,7 +134,7 @@ export default function ReceiveFeesSection({
             <button
               type="button"
               onClick={onBack}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition-all tap-active cursor-pointer shrink-0"
+              className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition-all tap-active cursor-pointer shrink-0"
               title="Back"
             >
               <ArrowLeft className="w-4 h-4" />
@@ -143,13 +143,13 @@ export default function ReceiveFeesSection({
           )}
 
           {/* Pending / Paid Switcher */}
-          <div className="flex items-center p-0.5 bg-slate-100 rounded-xl border border-slate-200/80 text-xs font-bold shrink-0">
+          <div className="flex items-center p-0.5 bg-slate-100 rounded-full border border-slate-200/80 text-xs font-bold shrink-0">
             <button
               type="button"
               onClick={() => setActiveTab('pending')}
-              className={`px-2.5 py-1.5 rounded-lg transition-all flex items-center gap-1.5 cursor-pointer ${
+              className={`px-3 py-1.5 rounded-full transition-all flex items-center gap-1.5 cursor-pointer ${
                 activeTab === 'pending'
-                  ? 'bg-amber-600 text-white shadow-xs'
+                  ? 'bg-[#111827] text-white shadow-xs'
                   : 'text-slate-600 hover:text-slate-900'
               }`}
             >
@@ -159,9 +159,9 @@ export default function ReceiveFeesSection({
             <button
               type="button"
               onClick={() => setActiveTab('paid')}
-              className={`px-2.5 py-1.5 rounded-lg transition-all flex items-center gap-1.5 cursor-pointer ${
+              className={`px-3 py-1.5 rounded-full transition-all flex items-center gap-1.5 cursor-pointer ${
                 activeTab === 'paid'
-                  ? 'bg-emerald-600 text-white shadow-xs'
+                  ? 'bg-[#111827] text-white shadow-xs'
                   : 'text-slate-600 hover:text-slate-900'
               }`}
             >
@@ -175,7 +175,7 @@ export default function ReceiveFeesSection({
             <button
               type="button"
               onClick={() => handleOpenReceiveModal()}
-              className="flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white px-3.5 py-1.5 rounded-xl text-xs font-bold shadow-xs transition-all tap-active cursor-pointer shrink-0"
+              className="rounded-full bg-[#111827] hover:bg-black active:scale-98 text-white font-bold text-xs px-4 py-2 flex items-center gap-1.5 shadow-xs transition-all tap-active cursor-pointer shrink-0"
             >
               <Plus className="w-4 h-4" />
               <span>Receive Fee</span>
@@ -184,25 +184,25 @@ export default function ReceiveFeesSection({
             <button
               type="button"
               onClick={() => setIsSearchOpen(prev => !prev)}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-bold transition-all tap-active cursor-pointer ${
+              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full border text-xs font-bold transition-all tap-active cursor-pointer ${
                 isSearchOpen || searchTerm
-                  ? 'bg-emerald-50 text-emerald-700 border-emerald-200 shadow-2xs'
+                  ? 'bg-slate-900 text-white border-slate-900 shadow-2xs'
                   : 'bg-slate-100 hover:bg-slate-200 text-slate-700 border-slate-200'
               }`}
               title="Search Fees"
             >
               <Search className="w-3.5 h-3.5" />
               <span>Search</span>
-              {searchTerm && <span className="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>}
+              {searchTerm && <span className="w-1.5 h-1.5 rounded-full bg-white"></span>}
             </button>
 
             <button
               type="button"
               onClick={() => printAllFeeVouchers(feeVouchers, 'September 2026')}
               title="Print All Vouchers (QR Code)"
-              className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold border border-slate-200 transition-all cursor-pointer"
+              className="flex items-center gap-1 px-3 py-1.5 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold border border-slate-200 transition-all cursor-pointer"
             >
-              <Printer className="w-3.5 h-3.5 text-indigo-600" />
+              <Printer className="w-3.5 h-3.5 text-slate-600" />
               <span className="hidden sm:inline">Vouchers</span>
             </button>
 
@@ -210,9 +210,9 @@ export default function ReceiveFeesSection({
               type="button"
               onClick={() => exportAllFeeVouchersPDF(feeVouchers, 'September 2026')}
               title="Download PDF containing all vouchers"
-              className="p-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 transition-all cursor-pointer"
+              className="p-1.5 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 transition-all cursor-pointer"
             >
-              <FileDown className="w-3.5 h-3.5 text-indigo-600" />
+              <FileDown className="w-3.5 h-3.5 text-slate-600" />
             </button>
           </div>
         </div>
@@ -221,7 +221,7 @@ export default function ReceiveFeesSection({
         {isSearchOpen && (
           <div className="max-w-6xl mx-auto pt-2">
             <div className="relative flex items-center">
-              <Search className="w-4 h-4 text-slate-400 absolute left-3 pointer-events-none" />
+              <Search className="w-4 h-4 text-slate-400 absolute left-3.5 pointer-events-none" />
               <input
                 type="text"
                 placeholder={
@@ -232,13 +232,13 @@ export default function ReceiveFeesSection({
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 autoFocus
-                className="w-full pl-9 pr-9 py-2 bg-slate-50 focus:bg-white text-xs rounded-xl border border-slate-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100 transition-all outline-none"
+                className="w-full pl-9 pr-9 py-2 bg-slate-50 focus:bg-white text-xs rounded-full border border-slate-200 focus:border-slate-300 focus:ring-2 focus:ring-slate-100 transition-all outline-none"
               />
               {searchTerm && (
                 <button
                   type="button"
                   onClick={() => setSearchTerm('')}
-                  className="absolute right-2.5 p-1 rounded-lg hover:bg-slate-200 text-slate-400 hover:text-slate-600 transition-colors"
+                  className="absolute right-3 p-1 rounded-full hover:bg-slate-200 text-slate-400 hover:text-slate-600 transition-colors"
                 >
                   <X className="w-3.5 h-3.5" />
                 </button>
@@ -256,7 +256,7 @@ export default function ReceiveFeesSection({
         <div className="flex items-center gap-3">
           <span>
             Total {activeTab === 'pending' ? 'Pending' : 'Collected'}:{' '}
-            <strong className={activeTab === 'pending' ? 'text-amber-700 font-bold' : 'text-emerald-700 font-bold'}>
+            <strong className="text-slate-900 font-bold">
               Rs. {(activeTab === 'pending' ? totalPendingAmount : totalCollectedAmount).toLocaleString()}
             </strong>
           </span>
@@ -264,7 +264,7 @@ export default function ReceiveFeesSection({
             <button
               type="button"
               onClick={() => onGenerateMonthlyVouchers('September 2026')}
-              className="text-[11px] text-indigo-600 hover:text-indigo-800 font-bold flex items-center gap-1 transition-colors cursor-pointer"
+              className="text-[11px] text-slate-700 hover:text-slate-900 font-bold flex items-center gap-1 transition-colors cursor-pointer"
               title="Generate vouchers for 1st of month"
             >
               <Sparkles className="w-3 h-3" />
@@ -280,7 +280,7 @@ export default function ReceiveFeesSection({
           <div className="text-center py-10 bg-white rounded-3xl border border-slate-100 p-6">
             {activeTab === 'pending' ? (
               <>
-                <CheckCircle2 className="w-10 h-10 text-emerald-400 mx-auto mb-2" />
+                <CheckCircle2 className="w-10 h-10 text-emerald-500 mx-auto mb-2" />
                 <p className="text-xs font-bold text-slate-700">No Pending Fees!</p>
                 <p className="text-[11px] text-slate-400 mt-0.5">All student vouchers are settled or match no filters.</p>
               </>
@@ -301,9 +301,7 @@ export default function ReceiveFeesSection({
             return (
               <div
                 key={voucher.id}
-                className={`p-3.5 bg-white rounded-2xl border shadow-xs transition-all space-y-2.5 ${
-                  isPending ? 'border-amber-200/90 hover:border-amber-300' : 'border-slate-200 hover:border-emerald-200'
-                }`}
+                className="p-3.5 bg-white rounded-2xl border border-slate-200 shadow-xs hover:border-slate-300 transition-all space-y-2.5"
               >
                 {/* Header row with student info */}
                 <div className="flex items-start justify-between gap-2.5">
@@ -312,10 +310,10 @@ export default function ReceiveFeesSection({
                       <img
                         src={studentObj.pic}
                         alt=""
-                        className="w-11 h-11 min-w-[44px] min-h-[44px] max-w-[44px] max-h-[44px] object-cover rounded-xl border border-slate-200"
+                        className="w-11 h-11 min-w-[44px] min-h-[44px] max-w-[44px] max-h-[44px] object-cover rounded-2xl border border-slate-200"
                       />
                     ) : (
-                      <div className="w-11 h-11 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-indigo-700 font-bold text-sm">
+                      <div className="w-11 h-11 rounded-2xl bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-700 font-bold text-sm">
                         {voucher.studentName.charAt(0)}
                       </div>
                     )}
@@ -328,7 +326,7 @@ export default function ReceiveFeesSection({
                         </span>
                       </div>
                       <p className="text-[11px] text-slate-500 truncate font-medium">
-                        Class {voucher.studentClass} • <span className="text-indigo-600 font-semibold">{voucher.section}</span>
+                        Class {voucher.studentClass} • <span className="text-slate-700 font-semibold">{voucher.section}</span>
                       </p>
                       <p className="text-[10px] text-slate-400 truncate">
                         Father: {voucher.fatherName} ({voucher.whatsappNumber || voucher.fatherContact})
@@ -340,10 +338,10 @@ export default function ReceiveFeesSection({
                     <span className="text-[10px] font-semibold text-slate-400 block uppercase">
                       {isPending ? 'Due Fee' : 'Paid Fee'}
                     </span>
-                    <span className={`font-black text-xs ${isPending ? 'text-amber-700' : 'text-emerald-700'}`}>
+                    <span className="font-black text-xs text-slate-900">
                       Rs. {Number(isPending ? voucher.feeAmount : (voucher.amountPaid || voucher.feeAmount)).toLocaleString()}
                     </span>
-                    <span className={`inline-block px-1.5 py-0.5 rounded text-[9px] font-bold mt-0.5 ${
+                    <span className={`inline-block px-2 py-0.5 rounded-full text-[9px] font-bold mt-0.5 ${
                       isPending ? 'bg-amber-100 text-amber-800' : 'bg-emerald-100 text-emerald-800'
                     }`}>
                       {voucher.status}
@@ -361,15 +359,15 @@ export default function ReceiveFeesSection({
 
                 {/* Actions row */}
                 <div className="flex items-center justify-between gap-1.5 pt-1 border-t border-slate-100 flex-wrap">
-                  <div className="flex items-center gap-1">
+                  <div className="flex items-center gap-1.5">
                     {/* Print Voucher with QR code */}
                     <button
                       type="button"
                       onClick={() => printSingleFeeVoucher(voucher)}
                       title="Print fee voucher with QR code"
-                      className="flex items-center gap-1 px-2 py-1.5 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-[11px] font-bold transition-colors"
+                      className="rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold px-3 py-1.5 border border-slate-200 cursor-pointer shadow-2xs flex items-center gap-1"
                     >
-                      <Printer className="w-3.5 h-3.5 text-indigo-600" />
+                      <Printer className="w-3.5 h-3.5 text-slate-600" />
                       <span>Print QR</span>
                     </button>
 
@@ -378,9 +376,9 @@ export default function ReceiveFeesSection({
                       type="button"
                       onClick={() => shareFeeVoucherPDFToWhatsApp(voucher)}
                       title="Send fee voucher PDF via WhatsApp"
-                      className="flex items-center gap-1 px-2 py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-800 text-[11px] font-bold transition-colors"
+                      className="rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold px-3 py-1.5 border border-slate-200 cursor-pointer shadow-2xs flex items-center gap-1"
                     >
-                      <Share2 className="w-3.5 h-3.5 text-emerald-600" />
+                      <Share2 className="w-3.5 h-3.5 text-slate-600" />
                       <span>PDF</span>
                     </button>
                   </div>
@@ -391,9 +389,9 @@ export default function ReceiveFeesSection({
                       type="button"
                       onClick={() => handleSendWhatsApp(voucher)}
                       title="Send due text reminder on WhatsApp"
-                      className="flex items-center gap-1 px-2 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-bold transition-colors"
+                      className="rounded-full bg-emerald-50 hover:bg-emerald-100 text-emerald-700 text-xs font-semibold px-3 py-1.5 border border-emerald-200 shadow-2xs cursor-pointer flex items-center gap-1"
                     >
-                      <MessageSquare className="w-3 h-3 text-slate-500" />
+                      <MessageSquare className="w-3.5 h-3.5" />
                       <span>Text</span>
                       {copiedId === voucher.id && (
                         <span className="text-[9px] text-emerald-700 bg-white px-1 rounded ml-0.5">Copied!</span>
@@ -405,7 +403,7 @@ export default function ReceiveFeesSection({
                       <button
                         type="button"
                         onClick={() => handleOpenReceiveModal(voucher)}
-                        className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-[11px] font-bold shadow-xs transition-colors"
+                        className="rounded-full bg-[#111827] hover:bg-black text-white text-xs font-semibold px-3.5 py-1.5 flex items-center gap-1 cursor-pointer transition-all shadow-xs"
                       >
                         <CreditCard className="w-3 h-3" />
                         <span>Receive</span>
@@ -416,7 +414,7 @@ export default function ReceiveFeesSection({
                     <button
                       type="button"
                       onClick={() => setViewingVoucher(voucher)}
-                      className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-bold transition-colors"
+                      className="rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold px-3.5 py-1.5 border border-slate-200 cursor-pointer shadow-2xs flex items-center gap-1"
                     >
                       <Eye className="w-3 h-3 text-slate-500" />
                       <span>View</span>
